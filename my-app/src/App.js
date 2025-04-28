@@ -1,5 +1,6 @@
 import Discount from './components/Discount';
 import ProfileBar from './components/ProfileBar';
+import ProductSearch from './components/ProductSearch';
 import './App.css';
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
   <>
     <ProfileBar/>
     <Discount />
+    <ProductSearch />
   </>
   );
 }
