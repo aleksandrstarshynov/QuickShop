@@ -1,0 +1,33 @@
+[
+    {
+      "userName": "Jon Doe",
+      "email": "jdoe@example.com",
+      "status": "aproved",
+      "role": "Admin"
+    },
+    {
+      "userName": "James Smith",
+      "email": "Smithitsme@example.com",
+      "status": "aproved",
+      "role": "seller"
+    },
+    {
+      "userName": "Emma Johnson",
+      "email": "emmaj@example.com",
+      "status": "aproved",
+      "role": "customer"
+    },
+    {
+      "userName": "William Brown",
+      "email": "William1762@example.com",
+      "status": "aproved",
+      "role": "customer"
+    },
+    {
+      "userName": "Olivia Taylor",
+      "email": "oliviataylor@example.com",
+      "status": "aproved",
+      "role": "customer"
+    }
+  ]
+  
