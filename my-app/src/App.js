@@ -1,9 +1,13 @@
 import Discount from './components/Discount';
+import ProfileBar from './components/ProfileBar';
 import './App.css';
 
 function App() {
   return (
-  <Discount />
+  <>
+    <ProfileBar/>
+    <Discount />
+  </>
   );
 }
 
