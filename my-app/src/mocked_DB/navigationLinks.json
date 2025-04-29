@@ -1,0 +1,27 @@
+[
+    {
+      "linkName": "Catalog",
+      "path": "/catalog"
+    },
+    {
+        "linkName": "Profile",
+        "path": "/profile"
+      },
+    {
+      "linkName": "About",
+      "path": "/about"
+    },
+    {
+      "linkName": "Offices",
+      "path": "/offices"
+    },
+    {
+      "linkName": "Terms and Conditions",
+      "path": "/terms-and-conditions"
+    },
+    {
+      "linkName": "Technology",
+      "path": "/technology"
+    }
+]
+  
