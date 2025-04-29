@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import ProfileBar from './components/ProfileBar';
 import Discount from './components/Discount';
+import Filters from './components/Filters';
 import ProductSearch from './components/ProductSearch';
 import Catalog from './pages/Catalog';
 import Profile from './pages/Profile';
@@ -35,6 +36,7 @@ function Home() {
   return (
     <>
       <ProfileBar />
+      <Filters />
       <Discount />
       <ProductSearch />
     </>
