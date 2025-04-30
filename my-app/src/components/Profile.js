@@ -1,8 +1,8 @@
 function Profile(props) {
     return (
-      <div>
-        <h1>{props.userName}</h1>  
-        <h2>{props.role}</h2> 
+      <div className="profile">
+        <p>{props.userName}</p>  
+        {/* <h2>{props.role}</h2>  */}
       </div>
     );
   }

@@ -35,10 +35,13 @@ export default App;
 function Home() {
   return (
     <>
-      <ProfileBar />
-      <Filters />
-      <Discount />
-      <ProductSearch />
+    <Discount />
+    <div className="main-container" >
+      {/* <ProfileBar /> */}
+       <Filters />
+       <ProductSearch />
+      </div>
+    
     </>
   );
 }

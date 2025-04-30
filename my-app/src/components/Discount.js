@@ -3,7 +3,7 @@ import promoData from './PromoData.js';
 
 function Discount() {
     return (
-        <div>
+        <div className="discount">
             <PromoHeading
                 heading={promoData.heading}
                 callToAction={promoData.callToAction}

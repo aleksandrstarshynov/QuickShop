@@ -22,7 +22,7 @@ useEffect(() => {
    }
 
   return (
-    <div>
+    <div className="user-status">
       <h2>User data is here:</h2>
       <p>Name: {user[0].userName}</p>
       <p>Email: {user[0].email}</p>

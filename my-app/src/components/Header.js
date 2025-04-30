@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import links from '../mocked_DB/navigationLinks.json';
 import CompanyLogo from '../images/CompanyLogo.jpg'; 
+import ProfileBar from './ProfileBar';
 
 function Header() {
   return (
-    <div>
+    <div className="header">
+    <>
       <Link to="/">
         <img src="{CompanyLogo}" alt="QuickShop logo" />
       </Link>
@@ -16,6 +18,8 @@ function Header() {
           </li>
         ))}
       </ul>
+      <ProfileBar />
+    </>
     </div>
   );
 }
