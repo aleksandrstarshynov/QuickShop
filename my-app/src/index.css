@@ -125,3 +125,7 @@ a:clicked{
   font-size: 20px;
   padding-bottom: 20px;
 }
+
+.Product-image {
+  max-width: 200px;
+}
