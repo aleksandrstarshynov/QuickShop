@@ -8,6 +8,7 @@ import Catalog from './pages/Catalog';
 import Profile from './pages/Profile';
 import About from './pages/About';
 import Offices from './pages/Offices';
+import PromoBlock from './components/PromoBlock';
 
 function App() {
   return (
@@ -38,8 +39,7 @@ function Home() {
     <Discount />
     <div className="main-container" >
       {/* <ProfileBar /> */}
-       <Filters />
-       <ProductSearch />
+    <PromoBlock />
       </div>
     
     </>
