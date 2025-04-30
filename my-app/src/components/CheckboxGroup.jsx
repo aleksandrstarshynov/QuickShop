@@ -10,7 +10,7 @@ const CheckboxGroup = ({ title, options, selectedValues, onChange }) => {
   };
 
   return (
-    <div className="mb-4">
+   <div className="mb-4 checkbox-group">
       <h4 className="font-bold mb-2">{title}</h4>
       {options.map(({ label, value }) => (
         <label key={value} className="block mb-1">
