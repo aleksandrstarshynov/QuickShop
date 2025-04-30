@@ -1,12 +1,25 @@
-import { useState } from 'react';
-import products from '../mocked_DB/products.json'; 
+import { useState, useEffect } from 'react';
+import { fetchProductDB } from '../controller/fetchProductDB.js'; 
 
 function ProductSearch() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [products, setProducts] = useState([]);
+  // console.log(products);
+  useEffect(() => {
+    async function loadProducts() {
+      const data = await fetchProductDB();
+      setProducts(data);
+    }
+
+    loadProducts();
+  }, []);
+
+ 
 
   const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.brand.toLowerCase().includes(searchTerm.toLowerCase())
+    product.title.toLowerCase().includes(searchTerm.toLowerCase()) 
+  // ||
+  //   product.price.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   function handleChange(event) {
