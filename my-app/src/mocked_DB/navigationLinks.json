@@ -4,10 +4,6 @@
       "path": "/catalog"
     },
     {
-        "linkName": "Profile",
-        "path": "/profile"
-      },
-    {
       "linkName": "About",
       "path": "/about"
     },
