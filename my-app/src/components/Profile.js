@@ -1,10 +1,18 @@
+import { useNavigate } from "react-router-dom";
+
 function Profile(props) {
-    return (
-      <div className="profile">
-        <p>{props.userName}</p>  
-        {/* <h2>{props.role}</h2>  */}
-      </div>
-    );
-  }
-  
-  export default Profile;
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/profile");
+  };
+
+  return (
+    <div className="profile" onClick={handleClick} style={{ cursor: "pointer" }}>
+      <p>{props.userName}</p>  
+      {/* <h2>{props.role}</h2>  */}
+    </div>
+  );
+}
+
+export default Profile;

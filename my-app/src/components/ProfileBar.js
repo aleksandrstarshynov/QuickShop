@@ -3,7 +3,7 @@ import profileData from './ProfileData.js';
 import UserStatus from './UserStatus.js';
 
 function ProfileBar() {
-    return (
+return (
         <div>
             {/* <h1>Добро пожаловать!</h1> */}
             <Profile
