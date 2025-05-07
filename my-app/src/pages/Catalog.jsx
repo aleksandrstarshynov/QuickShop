@@ -6,11 +6,13 @@ import ProductFeed from '../components/ProductFeed';
 function Catalog() {
   return (
     <>
-      <main>
+      <main className="catalog-header">
         <h1>Catalog</h1>
       </main>
+      <div className="catalog-container">
       <Filters />
       <ProductFeed />
+      </div>
     </>
   );
 }

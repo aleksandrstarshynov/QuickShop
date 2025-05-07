@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { fetchProductDB } from '../controller/fetchProductDB.js';
 import Pagination from './Pagination';
 import ProductSearch from './ProductSearch.js';
+import ProductCard from './ProductCard'; // Импортируем универсальную карточку
+import Masonry from 'react-masonry-css'; // Импортируем Masonry
 
 function ProductFeed() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     async function loadProducts() {
@@ -34,21 +36,26 @@ function ProductFeed() {
     setCurrentPage(page);
   };
 
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  };
+
   return (
     <div className="product-feed">
       <ProductSearch searchTerm={searchTerm} onChange={handleSearchChange} />
       {currentProducts.length > 0 ? (
-        <ul>
-          {currentProducts.map((product) => {
-            // console.log(product); // <-- логируем
-            return (
-              <li key={product.id}>
-                <img src={product.images[0]} alt={product.title} width={50} />
-                {product.name} ({product.brand})
-              </li>
-            );
-          })}
-        </ul>
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className="my-masonry-grid"
+          columnClassName="my-masonry-grid_column"
+        >
+          {currentProducts.map((product) => (
+            <ProductCard key={product.id} product={product} /> // Используем универсальную карточку
+          ))}
+        </Masonry>
       ) : (
         <p>No products found</p>
       )}
