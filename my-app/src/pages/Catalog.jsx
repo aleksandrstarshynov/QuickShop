@@ -1,8 +1,7 @@
 import React from 'react';
-import Header from '../components/Header';
 import Filters from '../components/Filters';
-import ProductSearch from '../components/ProductSearch';
-import ProductList from '../components/ProductList.js';
+import ProductFeed from '../components/ProductFeed';
+
 
 function Catalog() {
   return (
@@ -11,8 +10,7 @@ function Catalog() {
         <h1>Catalog</h1>
       </main>
       <Filters />
-      <ProductSearch />
-      {/* <ProductList/> */}
+      <ProductFeed />
     </>
   );
 }
