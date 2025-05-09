@@ -87,7 +87,7 @@ a{
   color:#fff;
 }
 a:hover{
-  color:#4f4f4f;
+  color:#030383;
 }
 
 a:clicked{
@@ -225,4 +225,33 @@ main {
   flex-direction: column;
   align-items: center;
 
+}
+
+button[type="submit"] {
+  width: 100%; /* Занимает всю ширину родительского контейнера */
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  display: block; 
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+
+.register-link a {
+  /* visibility: visible !important;
+  display: inline-block !important;
+  opacity: 1 !important; */
+  color: rgb(255, 255, 255);
+  display: block;    
+  margin-bottom: 20px; 
+  padding: 20px; 
+  background-color: rgb(57, 57, 249);
 }

@@ -9,6 +9,9 @@ import Profile from './pages/Profile';
 import About from './pages/About';
 import Offices from './pages/Offices';
 import PromoBlock from './components/PromoBlock';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import EditProfile from './pages/EditProfile';
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/about" element={<About />} />
         <Route path="/offices" element={<Offices />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
       </Routes>
     </Router>
   );
