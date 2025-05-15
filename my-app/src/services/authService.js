@@ -17,7 +17,7 @@ export const updateUserData = (userData, token) =>
     headers: { Authorization: `Bearer ${token}` },
   });
 
-  export const deleteUser = (token) =>
+export const deleteUser = (token) =>
     API.delete('/auth/delete', {
       headers: { Authorization: `Bearer ${token}` },
-    });
+});

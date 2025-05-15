@@ -3,6 +3,10 @@ import InputField from '../components/InputField';
 import { registerUser } from '../services/authService';
 
 const Register = () => {
+//temporary test
+  localStorage.setItem("test", "testValue2");
+//
+
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [formErrors, setFormErrors] = useState({});
   const [serverMessage, setServerMessage] = useState('');
@@ -26,6 +30,16 @@ const Register = () => {
 
     try {
       const response = await registerUser(formData);
+      console.log(response);
+  // Сохраняем в localStorage
+  if (response && response.data) {
+      localStorage.setItem("username", response.data.username);
+      // localStorage.setItem("password", response.data.password);
+      localStorage.setItem("userId", response.data.id);
+      // localStorage.setItem("token", response.data.token);
+    };
+  //
+
       setServerMessage(`Registered as ${response.data.username}`);
     } catch (err) {
       if (err.response?.status === 409) {

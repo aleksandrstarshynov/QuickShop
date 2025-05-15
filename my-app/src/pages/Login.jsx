@@ -27,7 +27,10 @@ const Login = () => {
 
     try {
       const response = await loginUser(formData); // Отправка запроса на сервер
-      localStorage.setItem('token', response.data.token); // Сохраняем токен в localStorage
+      localStorage.setItem('token_after_login', response.data.token); 
+      localStorage.setItem("username_after_login", response.data.username);
+      localStorage.setItem("userId_after_login", response.data.id);
+
       navigate('/profile'); // Перенаправляем на страницу профиля после успешного логина
     } catch (err) {
       setServerMessage('Login failed');

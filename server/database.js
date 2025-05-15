@@ -38,31 +38,45 @@
  */
 
 
-import {default as Loki} from 'lokijs'
-import {v4 as uuid} from 'uuid'
+import { default as Loki } from 'lokijs';
+import { v4 as uuid } from 'uuid';
 
 const makeInMemoryDb = () => {
-    const localDb = []
+    const localDb = [];
 
     return {
         create: (user) => {
             const storedUser = {
                 ...user,
                 id: uuid()
-            }
-
-            localDb.push(storedUser)
-
-            return storedUser
+            };
+            localDb.push(storedUser);
+            return storedUser;
         },
         getById: (id) => {
-            return localDb.find(user => user.id === id) || undefined
+            return localDb.find(user => user.id === id) || undefined;
         },
         getByUsername: (username) => {
-            return localDb.find(user => user.username === username) || undefined
+            return localDb.find(user => user.username === username) || undefined;
+        },
+        update: (updatedUser) => {
+            const index = localDb.findIndex(user => user.id === updatedUser.id);
+            if (index !== -1) {
+                localDb[index] = updatedUser;
+                return updatedUser;
+            }
+            return undefined;
+        },
+        delete: (id) => {
+            const index = localDb.findIndex(user => user.id === id);
+            if (index !== -1) {
+                localDb.splice(index, 1);
+                return true;
+            }
+            return false;
         }
-    }
-}
+    };
+};
 
 const makeNewLokiDatabase = () => {
     const db = new Loki('sandbox.db');
@@ -73,35 +87,40 @@ const makeNewLokiDatabase = () => {
             const storedUser = {
                 ...user,
                 id: uuid()
-            }
-
-            users.insert(storedUser)
-
-            return storedUser
+            };
+            users.insert(storedUser);
+            return storedUser;
         },
         getById: (id) => {
-            return users.findOne({id}) || undefined
-        }, 
+            return users.findOne({ id }) || undefined;
+        },
         getByUsername: (username) => {
-            return users.findOne({username}) || undefined
+            return users.findOne({ username }) || undefined;
+        },
+        update: (updatedUser) => {
+            const existing = users.findOne({ id: updatedUser.id });
+            if (existing) {
+                Object.assign(existing, updatedUser);
+                users.update(existing);
+                return existing;
+            }
+            return undefined;
+        },
+        delete: (id) => {
+            const existing = users.findOne({ id });
+            if (existing) {
+                users.remove(existing);
+                return true;
+            }
+            return false;
         }
-    }
-}
+    };
+};
 
-/**
- * Db factory
- *
- * @param isPersistent should it return a LokiJS based implementation or array based one?
- * @returns {{
- *              create: (function(*): *&{id: string}),
- *              getById: (function(id: string): {id: string}&*),
- *              getByUsername: (function(username: string): {username: string}&*)
- *          }}
- */
-const makeDatabase = ({isPersistent} = {isPersistent: false}) =>
-    isPersistent ? makeNewLokiDatabase() : makeInMemoryDb()
+const makeDatabase = ({ isPersistent } = { isPersistent: false }) =>
+    isPersistent ? makeNewLokiDatabase() : makeInMemoryDb();
 
-export default makeDatabase
+export default makeDatabase;
 
 // TESTS ########################################################
 
