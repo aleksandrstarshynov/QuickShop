@@ -4,6 +4,7 @@ import { updateUserData } from '../services/authService';
 const EditProfile = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -11,12 +12,30 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Проверяем наличие токена
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('Token is missing. Please log in again.');
+      return;
+    }
+
+console.log('Updating profile with data:', formData);
+const response = await updateUserData(formData, token);
+console.log('Response from server:', response);
+
+
     try {
-      const token = localStorage.getItem('token'); // или где ты его хранишь
       const response = await updateUserData(formData, token);
-      setMessage('Profile updated successfully');
+      if (response.status === 200) {
+        setMessage('Profile updated successfully');
+        setError('');  // Clear any previous error message
+      } else {
+        setError('Failed to update profile.');
+      }
     } catch (err) {
-      setMessage('Error updating profile');
+      console.error("Error updating profile:", err);
+      setError('Error updating profile. Please try again later.');
     }
   };
 
@@ -40,7 +59,9 @@ const EditProfile = () => {
         />
         <button type="submit">Save Changes</button>
       </form>
-      {message && <p>{message}</p>}
+      
+      {message && <p style={{ color: 'green' }}>{message}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };
