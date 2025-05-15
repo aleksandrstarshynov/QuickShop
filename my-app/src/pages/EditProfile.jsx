@@ -25,18 +25,29 @@ const response = await updateUserData(formData, token);
 console.log('Response from server:', response);
 
 
-    try {
-      const response = await updateUserData(formData, token);
-      if (response.status === 200) {
-        setMessage('Profile updated successfully');
-        setError('');  // Clear any previous error message
-      } else {
-        setError('Failed to update profile.');
-      }
-    } catch (err) {
-      console.error("Error updating profile:", err);
-      setError('Error updating profile. Please try again later.');
+try {
+  const response = await updateUserData(formData, token);
+  if (response.status === 200) {
+    setMessage('Profile updated successfully');
+    setError('');
+
+    // Обновляем localStorage значениями из формы, так как сервер не возвращает обновлённые данные
+    if (formData.username) {
+      localStorage.setItem('username_after_login', formData.username);
     }
+    if (formData.email) {
+      localStorage.setItem('email_after_login', formData.email); // если есть email
+    }
+    // и так далее для других полей...
+
+  } else {
+    setError('Failed to update profile.');
+  }
+} catch (err) {
+  console.error("Error updating profile:", err);
+  setError('Error updating profile. Please try again later.');
+}
+
   };
 
   return (
