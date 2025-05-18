@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import links from '../mocked_DB/navigationLinks.json';
 import CompanyLogo from '../images/CompanyLogo.jpg'; 
 import ProfileBar from './ProfileBar';
+import { useAuth } from '../context/authContext.js'; 
 
 function Header() {
+  const { isLoggedIn, user, logout } = useAuth();
   return (
     <div className="header">
     <>
@@ -18,7 +20,21 @@ function Header() {
           </li>
         ))}
       </ul>
-      <ProfileBar />
+            <nav>
+        {isLoggedIn ? (
+          <>
+            <Link to="/profile">
+              <img src="./images/default_avatar.png" alt="avatar"  className="profile-avatar" />
+            <span className="profile-name">{user?.name}</span>
+            </Link>
+            {/* <button onClick={logout}>Выйти</button> */}
+          </>
+        ) : (
+          <Link to="/login">
+            <button>Войти</button>
+          </Link>
+        )}
+      </nav>
     </>
     </div>
   );
