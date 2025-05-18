@@ -8,16 +8,12 @@
       "path": "/about"
     },
     {
-      "linkName": "Offices",
+      "linkName": "About the project",
       "path": "/offices"
     },
     {
-      "linkName": "Terms and Conditions",
-      "path": "/terms-and-conditions"
-    },
-    {
-      "linkName": "Technology",
-      "path": "/technology"
+      "linkName": "Profile",
+      "path": "/profile"
     }
 ]
   

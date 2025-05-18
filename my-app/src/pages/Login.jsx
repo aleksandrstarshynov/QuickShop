@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../services/authService'; // Функция для отправки запроса на сервер
+import { loginUser } from '../services/authService';
+import { useAuth } from '../context/authContext'; 
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth(); 
+
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [formErrors, setFormErrors] = useState({});
   const [serverMessage, setServerMessage] = useState('');
@@ -26,10 +29,11 @@ const Login = () => {
     }
 
     try {
-      const response = await loginUser(formData); // Отправка запроса на сервер
-      localStorage.setItem('token', response.data.token); 
+      const response = await loginUser(formData); 
+      const token = response.data.token;
 
-      navigate('/catalog'); // Перенаправляем на страницу профиля после успешного логина
+      login(token); 
+      navigate('/catalog');
     } catch (err) {
       setServerMessage('Login failed');
     }
