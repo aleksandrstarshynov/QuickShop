@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { fetchProductDB } from '../controller/fetchProductDB.js';
 import Pagination from './Pagination';
 import ProductSearch from './ProductSearch.js';
-import ProductCard from './ProductCard'; // Импортируем универсальную карточку
-import Masonry from 'react-masonry-css'; // Импортируем Masonry
+import ProductCard from './ProductCard'; 
+import Masonry from 'react-masonry-css'; 
 
 function ProductFeed() {
   const [products, setProducts] = useState([]);

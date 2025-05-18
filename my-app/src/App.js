@@ -12,6 +12,7 @@ import PromoBlock from './components/PromoBlock';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import EditProfile from './pages/EditProfile';
+import ProductPage from './pages/ProductPage';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/edit-profile" element={<EditProfile />} />
+        <Route path="/product/:id" element={<ProductPage />} />
       </Routes>
     </Router>
   );
