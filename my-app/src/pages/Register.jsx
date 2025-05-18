@@ -4,7 +4,7 @@ import { registerUser } from '../services/authService';
 
 const Register = () => {
 //temporary test
-  localStorage.setItem("test", "testValue2");
+  // localStorage.setItem("test", "testValue2");
 //
 
   const [formData, setFormData] = useState({ username: '', password: '' });
@@ -33,9 +33,9 @@ const Register = () => {
       console.log(response);
   // Сохраняем в localStorage
   if (response && response.data) {
-      localStorage.setItem("username", response.data.username);
+      // localStorage.setItem("username", response.data.username);
       // localStorage.setItem("password", response.data.password);
-      localStorage.setItem("userId", response.data.id);
+      // localStorage.setItem("userId", response.data.id);
       // localStorage.setItem("token", response.data.token);
     };
   //
@@ -55,22 +55,27 @@ const Register = () => {
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <InputField
-          label="Username"
+          // label="Username"
           name="username"
           value={formData.username}
           onChange={handleChange}
           error={formErrors.username}
+          placeholder="Username"
         />
         <InputField
-          label="Password"
+          // label="Password"
           type="password"
           name="password"
           value={formData.password}
           onChange={handleChange}
           error={formErrors.password}
+          placeholder="Password"
         />
         <button type="submit">Register</button>
       </form>
+      <p className="login-link">
+      Already have an account? <a href="/login">Login</a>
+      </p>
       {serverMessage && <p>{serverMessage}</p>}
     </div>
   );
