@@ -47,8 +47,8 @@ function Profile() {
           <Link to="/register">Registration form</Link>
           <Link to="/login">Login form</Link>
           <Link to="/edit-profile">Edit Profile</Link>
-          <button onClick={handleDelete} className="delete-button">Delete Profile</button>
-          <button onClick={handleLogout} className="logout-button">Logout</button>
+          <button onClick={handleDelete} className="red-button">Delete Profile</button>
+          <button onClick={handleLogout} className="red-button">Logout</button>
         </div>
       </main>
     </>
