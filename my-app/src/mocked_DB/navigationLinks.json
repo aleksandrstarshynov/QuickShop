@@ -4,16 +4,7 @@
       "path": "/catalog"
     },
     {
-      "linkName": "About",
-      "path": "/about"
-    },
-    {
       "linkName": "About the project",
-      "path": "/offices"
-    },
-    {
-      "linkName": "Profile",
-      "path": "/profile"
+      "path": "/about"
     }
 ]
-  
