@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../ProductCard.css';
+import '../index.css';
 
 const ProductCard = ({ product, onAddToCart }) => {
   const handleAddToCartClick = (e) => {
@@ -16,7 +16,7 @@ const ProductCard = ({ product, onAddToCart }) => {
         <h3>{product.name}</h3>
         <p>{product.brand}</p>
 
-        <button onClick={handleAddToCartClick}>В корзину</button>
+        <button className="custom-button" onClick={handleAddToCartClick}>В корзину</button>
       </div>
     </Link>
   );

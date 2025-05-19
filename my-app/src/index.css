@@ -39,12 +39,13 @@ body{
 }
 
 .filters{
+  margin-top: 20px;
   width:20%;
   padding-top: 20px;
   padding-left:15px;
   border-radius: 16px;
-  background-color: #fbb9f4;
-  border-color: #a00291;
+  background-color: #affaf4;
+  border-color: #026567;
 }
 
 .profile{
@@ -53,7 +54,7 @@ body{
   /* padding-right:15px;  */
   border-radius: 16px;
   font-size: larger;
-  background-color: #fbb9f4;
+  background-color: #adfbfc;
 }
 
 .user-status {
@@ -61,12 +62,12 @@ body{
   padding-top: 20px;
   padding-right:15px;
   border-radius: 16px;
-  background-color: #fbb9f4;
-  border-color: #a00291;
+  background-color: #adfbfc;
+  border-color: #026567;
 }
 
 .discount {
-  background-color: #a00291;
+  background-color: #026567;
   width:90%;
   margin: auto;
   margin-bottom: 10px;
@@ -87,7 +88,7 @@ a{
   color:#fff;
 }
 a:hover{
-  color:#030383;
+  color:#fff;
 }
 
 a:clicked{
@@ -108,7 +109,7 @@ a:clicked{
   display:flex;
   flex-direction: column;
   gap: 30px;
-  background-color:#fff;
+  background-color:#adfbfc;
 }
 
 .promo-block a {
@@ -143,7 +144,7 @@ a:clicked{
   margin-bottom: 10px;
 }
 
-/* ProductCard.css */
+/* ProductCard.css
 .product-card {
   background: #fff;
   border-radius: 8px;
@@ -165,7 +166,7 @@ a:clicked{
 .product-card p {
   color: #555;
   font-size: 14px;
-}
+} */
 
 /* ProductFeed.css */
 .product-feed {
@@ -188,11 +189,12 @@ a:clicked{
 }
 
 .product-card {
-  background: #fff;
+  background: #adfbfc;
+  border: 1px solid #026567;
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 16px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); */
   transition: transform 0.2s;
 }
 
@@ -200,7 +202,7 @@ a:clicked{
   width: 100%;
   height: auto;
   border-radius: 6px;
-  object-fit: cover;
+    object-fit: cover;
 }
 
 .product-card h3 {
@@ -209,7 +211,7 @@ a:clicked{
 }
 
 .product-card p {
-  color: #555;
+  color: #026567;
   font-size: 14px;
 }
 
@@ -231,7 +233,7 @@ button[type="submit"] {
   width: 100%; /* Занимает всю ширину родительского контейнера */
   padding: 10px 15px;
   font-size: 16px;
-  background-color: #007bff;
+  background-color: #026567;
   color: white;
   border: none;
   border-radius: 5px;
@@ -241,7 +243,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #0056b3;
+  background-color: #013d3e;
 }
 
 
@@ -253,7 +255,7 @@ button[type="submit"]:hover {
   display: block;    
   margin-bottom: 20px; 
   padding: 20px; 
-  background-color: rgb(57, 57, 249);
+  background-color: #026567;
 }
 
 .profile-avatar {
@@ -307,7 +309,7 @@ background-color: rgb(204, 206, 206);
 .form-wrapper button {
   width: 100%;
   padding: 12px;
-  background-color: #007bff;
+  background-color: #026567;
   color: white;
   font-size: 16px;
   border: none;
@@ -317,7 +319,7 @@ background-color: rgb(204, 206, 206);
 }
 
 .form-wrapper button:hover {
-  background-color: #0056b3;
+  background-color: #013d3e;
 }
 
 .login-link {
@@ -327,7 +329,7 @@ background-color: rgb(204, 206, 206);
 }
 
 .login-link a {
-  color: #007bff;
+  color: #026567;
   text-decoration: none;
 }
 
@@ -335,3 +337,102 @@ background-color: rgb(204, 206, 206);
   text-decoration: underline;
 }
 
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.profile-name {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #026567;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 0;
+  margin-top: 8px;
+  z-index: 1000;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column; 
+}
+
+.dropdown-menu li {
+  width: 100%;
+}
+
+.dropdown-menu a {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+  background-color: #013d3e;
+}
+
+.catalog-search-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.custom-button {
+  all: unset; 
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #026567; 
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-button:hover {
+  background-color: #013334; 
+}
+
+.red-button {
+  all: unset; 
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #d32c03; 
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.red-button:hover {
+  background-color: #8e1e02; 
+}
