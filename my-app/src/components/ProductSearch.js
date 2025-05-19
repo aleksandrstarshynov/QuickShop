@@ -5,7 +5,6 @@ function ProductSearch({ searchTerm, onChange }) {
       placeholder="Search products..."
       value={searchTerm}
       onChange={onChange}
-      className="catalog-search-input"
     />
   );
 }

@@ -71,7 +71,7 @@ const Register = () => {
           error={formErrors.password}
           placeholder="Password"
         />
-        <button type="submit" className="custom-button">Register</button>
+        <button type="submit">Register</button>
       </form>
       <p className="login-link">
       Already have an account? <a href="/login">Login</a>

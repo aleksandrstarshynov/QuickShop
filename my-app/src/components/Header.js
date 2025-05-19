@@ -3,7 +3,6 @@ import links from '../mocked_DB/navigationLinks.json';
 import CompanyLogo from '../images/CompanyLogo.jpg'; 
 import ProfileBar from './ProfileBar';
 import { useAuth } from '../context/authContext.js'; 
-import UserDropdown from './MenuDropdown.jsx'; 
 
 function Header() {
   const { isLoggedIn, user, logout } = useAuth();
@@ -24,7 +23,10 @@ function Header() {
             <nav>
         {isLoggedIn ? (
           <>
-          <UserDropdown user={user} />
+            <Link to="/profile">
+              <img src="./images/default_avatar.png" alt="avatar"  className="profile-avatar" />
+            <span className="profile-name">{user?.name}</span>
+            </Link>
             {/* <button onClick={logout}>Выйти</button> */}
           </>
         ) : (

@@ -68,7 +68,7 @@ try {
           value={formData.password}
           onChange={handleChange}
         />
-        <button type="submit"  className="custom-button">Save Changes</button>
+        <button type="submit">Save Changes</button>
       </form>
       
       {message && <p style={{ color: 'green' }}>{message}</p>}

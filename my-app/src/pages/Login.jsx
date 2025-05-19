@@ -57,7 +57,7 @@ const Login = () => {
           value={formData.password}
           onChange={handleChange}
         />
-        <button type="submit" className="custom-button">Login</button>
+        <button type="submit">Login</button>
       </form>
             <p className="login-link">
       Have no account? <a href="/register">Register</a>

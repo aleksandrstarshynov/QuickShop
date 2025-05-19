@@ -7,7 +7,7 @@ function Catalog() {
   return (
     <>
       <main className="catalog-header">
-        {/* <h1>Catalog</h1> */}
+        <h1>Catalog</h1>
       </main>
       <div className="catalog-container">
       <Filters />
