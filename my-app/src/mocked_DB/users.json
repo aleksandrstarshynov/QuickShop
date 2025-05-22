@@ -1,33 +1,53 @@
 [
     {
-      "userName": "Jon Doe",
-      "email": "jdoe@example.com",
+      "userName": "Oleksandr Starshynov",
+      "email": "starshynov@example.com",
       "status": "aproved",
-      "role": "Admin"
+      "role": "Admin",
+      "lastVisit": "2025-10-01T12:00:00Z",
+      "Country": "The Netherland",
+      "City": "Amsterdam",
+      "Skills": "Full stack developer"
     },
     {
       "userName": "James Smith",
       "email": "Smithitsme@example.com",
       "status": "aproved",
-      "role": "seller"
+      "role": "seller",
+      "last visit": "2025-10-01T12:00:00Z",
+      "Country": "The Netherland",
+      "City": "Amsterdam",
+      "Skills": "Full stack developer"
     },
     {
       "userName": "Emma Johnson",
       "email": "emmaj@example.com",
       "status": "aproved",
-      "role": "customer"
+      "role": "customer",
+      "last visit": "2025-10-01T12:00:00Z",
+      "Country": "The Netherland",
+      "City": "Amsterdam",
+      "Skills": "Full stack developer"
     },
     {
       "userName": "William Brown",
       "email": "William1762@example.com",
       "status": "aproved",
-      "role": "customer"
+      "role": "customer",
+      "last visit": "2025-10-01T12:00:00Z",
+      "Country": "The Netherland",
+      "City": "Amsterdam",
+      "Skills": "Full stack developer"
     },
     {
       "userName": "Olivia Taylor",
       "email": "oliviataylor@example.com",
       "status": "aproved",
-      "role": "customer"
+      "role": "customer",
+      "last visit": "2025-10-01T12:00:00Z",
+      "Country": "The Netherland",
+      "City": "Amsterdam",
+      "Skills": "Full stack developer"
     }
   ]
   
