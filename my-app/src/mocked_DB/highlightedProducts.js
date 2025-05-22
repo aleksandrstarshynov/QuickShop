@@ -1,0 +1,1 @@
+export const highlightedProductIds = [2, 5, 7, 13, 17];

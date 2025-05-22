@@ -198,6 +198,16 @@ a:clicked{
   transition: transform 0.2s;
 }
 
+.product-card.tall-card {
+  background: #e8fab7;
+  border: 1px solid #d1f003;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  transition: transform 0.2s;
+  height: 450px;
+}
+
 .product-card img {
   width: 100%;
   height: auto;
