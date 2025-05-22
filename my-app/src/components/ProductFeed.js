@@ -4,6 +4,7 @@ import Pagination from './Pagination';
 import ProductSearch from './ProductSearch.js';
 import ProductCard from './ProductCard'; 
 import Masonry from 'react-masonry-css'; 
+import { highlightedProductIds } from '../mocked_DB/highlightedProducts';
 
 function ProductFeed() {
   const [products, setProducts] = useState([]);
@@ -53,7 +54,12 @@ function ProductFeed() {
           columnClassName="my-masonry-grid_column"
         >
           {currentProducts.map((product) => (
-            <ProductCard key={product.id} product={product} /> // Используем универсальную карточку
+          <ProductCard
+            key={product.id}
+            product={product}
+            // onAddToCart={onAddToCart}
+            highlightedIds={highlightedProductIds} 
+        />
           ))}
         </Masonry>
       ) : (
