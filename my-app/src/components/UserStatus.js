@@ -23,11 +23,16 @@ useEffect(() => {
 
   return (
     <div className="user-status">
-      <h2>User data is here:</h2>
+      <h2>User data</h2>
       <p>Name: {user[0].userName}</p>
       <p>Email: {user[0].email}</p>
       <p>UserStatus: {user[0].status}</p>
       <p>Role: {user[0].role}</p>
+      <p>Last visit: {user[0].lastVisit}</p>
+       <p>Country: {user[0].Country}</p>
+      <p>City: {user[0].City}</p>
+      <p>Skills: {user[0].Skills}</p>
+
     </div>
   );
 
