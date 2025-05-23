@@ -3,9 +3,26 @@ import LanguageFilter from "./LanguageFilter.js";
  import FileFormatFilter from "./FileFormatFilter.js";
 // import DeliveryFilter from "./DeliveryFilter.js";
 import CategoryFilter from './CategoryFilter.js';
+import AvailabilityFilter from './AvailabilityFilter';
+import React, { useState } from 'react';
 
 
-function Filters({ tempCategory, setTempCategory }) {  
+function Filters({
+  tempCategory,
+  setTempCategory,
+  tempAvailability,
+  setTempAvailability
+}) {  
+const [availability, setAvailability] = useState('');
+
+  const handleCheckboxChange = (slug) => {
+    if (tempCategory.includes(slug)) {
+      setTempCategory(tempCategory.filter(c => c !== slug));
+    } else {
+      setTempCategory([...tempCategory, slug]);
+    }
+  };
+
   
   return (
     <div className="filters">
@@ -19,6 +36,10 @@ function Filters({ tempCategory, setTempCategory }) {
         selectedValues={tempCategory}
         setSelectedValues={setTempCategory}
       />
+  <AvailabilityFilter
+    availability={tempAvailability}
+    setAvailability={setTempAvailability}
+  />
     </>
     </div>
   );

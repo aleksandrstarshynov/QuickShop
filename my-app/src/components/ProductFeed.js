@@ -6,11 +6,12 @@ import ProductCard from './ProductCard';
 import Masonry from 'react-masonry-css'; 
 import { highlightedProductIds } from '../mocked_DB/highlightedProducts';
 
-function ProductFeed({ category = [] }) {
+function ProductFeed({ category = [], availability }) {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+      const [availabilityState, setAvailabilityState] = useState(availability ?? '');
 
 useEffect(() => {
   async function loadProducts() {
@@ -21,19 +22,26 @@ useEffect(() => {
 }, [category]);
 
 const filteredProducts = products.filter(product => {
-  if (!category || category.length === 0) return true;
-  return category.includes(product.category);
-});
+    const categoryMatch =
+      !category || category.length === 0 || category.includes(product.category);
+
+    const availabilityMatch =
+      availabilityState === '' ||
+      (availabilityState === 'in_stock' && product.availability === 'in_stock') ||
+      (availabilityState === 'preorder' && product.availability === 'preorder');
+
+    return categoryMatch && availabilityMatch;
+  });
 
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
-  };
+const handleSearchChange = (e) => {
+  setSearchTerm(e.target.value);
+  setCurrentPage(1);
+};
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
