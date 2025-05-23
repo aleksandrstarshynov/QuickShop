@@ -1,28 +1,30 @@
 import { useState, useEffect } from 'react';
-import { fetchProductDB } from '../controller/fetchProductDB.js';
+import { fetchProductDB, fetchProductById } from '../controller/fetchProductDB';
 import Pagination from './Pagination';
 import ProductSearch from './ProductSearch.js';
 import ProductCard from './ProductCard'; 
 import Masonry from 'react-masonry-css'; 
 import { highlightedProductIds } from '../mocked_DB/highlightedProducts';
 
-function ProductFeed() {
+function ProductFeed({ category = [] }) {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    async function loadProducts() {
-      const data = await fetchProductDB();
-      setProducts(data);
-    }
-    loadProducts();
-  }, []);
+useEffect(() => {
+  async function loadProducts() {
+    const data = await fetchProductDB({ category });
+    setProducts(data);
+  }
+  loadProducts();
+}, [category]);
 
-  const filteredProducts = products.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+const filteredProducts = products.filter(product => {
+  if (!category || category.length === 0) return true;
+  return category.includes(product.category);
+});
+
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;

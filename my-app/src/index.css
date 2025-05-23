@@ -39,14 +39,20 @@ body{
 }
 
 .filters{
+  width:100%;
+}
+
+.filter-side-block{
   margin-top: 20px;
-  width:20%;
+  width:40%;
   padding-top: 20px;
   padding-left:15px;
   border-radius: 16px;
   background-color: #affaf4;
   border-color: #026567;
+
 }
+
 
 .profile{
   /* width:40%; */
@@ -246,7 +252,7 @@ a:clicked{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  gap: 50px;
+  gap: 10px;
 }
 
 main {
@@ -696,4 +702,9 @@ background-color: rgb(204, 206, 206);
 
 .back-button:hover {
   background-color: #ddd;
+}
+
+.category-checkbox {
+  display: block;
+  margin-bottom: 4px;
 }
