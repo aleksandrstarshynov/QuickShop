@@ -10,21 +10,26 @@ const ProductCard = ({ product, onAddToCart, highlightedIds = [] }) => {
     onAddToCart(product);
   };
 
-    console.log('highlightedIds:', highlightedIds);
-  console.log('product.id:', product.id);
-  console.log('product.id type:', typeof product.id);
-
+  // console.log('highlightedIds:', highlightedIds);
+  // console.log('product.id:', product.id);
+  // console.log('product.id type:', typeof product.id);
+  const discountedPrice = (product.price * (1 - product.discountPercentage / 100)).toFixed(2);
   
   const isTall = highlightedIds.includes(Number(product.id));
 
   return (
     <Link to={`/product/${product.id}`} className="product-card-link">
-      <div className={`product-card ${isTall ? 'tall-card' : ''}`}>
-        <img src={product.images[0]} alt={product.title} />
+      <div className={`product-card ${isTall ? 'tall-card' : ''}`}
+            >
         <h3>{product.name}</h3>
-        <p>id: {product.id} — {isTall ? 'TALL' : 'normal'}</p>
+        <img src={product.images[0]} alt={product.title} />
+        {/* <p>id: {product.id} — {isTall ? 'TALL' : 'normal'}</p> */}
         <p>{product.brand}</p>
+        <p style={{ color: "red", fontSize: "20px", fontWeight: "bold" }}>
+          €{discountedPrice}
+        </p>
         <button className="custom-button" onClick={handleAddToCartClick}>Add to Basket</button>
+        <p><strong>In stock:</strong> {product.stock} pieces</p>
       </div>
     </Link>
   );
