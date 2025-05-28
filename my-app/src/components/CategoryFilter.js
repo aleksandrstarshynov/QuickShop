@@ -21,7 +21,7 @@ function CategoryFilter({ selectedValues = [], setSelectedValues }) {
 
   return (
     <div className="category-filter">
-      <h3>Категории</h3>
+      <h3>Categories</h3>
       {categories.map(category => (
         <label key={category.slug} style={{ display: 'block', marginBottom: '0.5rem' }}>
           <input

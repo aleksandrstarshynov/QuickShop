@@ -13,6 +13,9 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import EditProfile from './pages/EditProfile';
 import ProductPage from './pages/ProductPage';
+import ProductCard from './components/ProductCard';
+import { useState, useEffect } from 'react';
+
 
 function App() {
   return (
@@ -40,16 +43,29 @@ function App() {
 
 export default App;
 
-// Компонент главной страницы с дополнительными компонентами
 function Home() {
+  const [purchases, setPurchases] = useState([]);
+
   return (
     <>
-    <Discount />
-    <div className="main-container" >
-      {/* <ProfileBar /> */}
-    <PromoBlock />
+      <Discount />
+      <div className="main-container">
+        {/* <ProfileBar /> */}
+        <PromoBlock />
       </div>
-    
+      <div className="best-feed">
+        <h2>Best sellers of the week</h2>
+        <div className="best-card-grid">
+          {purchases.length > 0 ? (
+            purchases.map(product => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          ) : (
+            <p>Loading...</p>
+          )}
+        </div>
+      </div>
     </>
   );
 }
+

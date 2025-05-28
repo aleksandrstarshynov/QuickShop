@@ -27,7 +27,7 @@ const [availability, setAvailability] = useState('');
   return (
     <div className="filters">
     <>
-        <h2>Filters</h2>
+        <h2 style={{ marginBottom: '20px' }}>Filters</h2>
         {/* <CategoriesFilter /> */}
         {/* <LanguageFilter />
         <FileFormatFilter /> */}
@@ -35,7 +35,7 @@ const [availability, setAvailability] = useState('');
         <CategoryFilter
         selectedValues={tempCategory}
         setSelectedValues={setTempCategory}
-      />
+        />
   <AvailabilityFilter
     availability={tempAvailability}
     setAvailability={setTempAvailability}

@@ -80,6 +80,7 @@ const handleSearchChange = (e) => {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
+        buttonClassName="custom-button"
       />
     </div>
   );
