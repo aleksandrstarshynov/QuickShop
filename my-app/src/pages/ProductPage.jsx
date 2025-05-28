@@ -28,7 +28,7 @@ const ProductPage = () => {
     <div className="product-details">
 <div className="product-header">
   <button onClick={() => navigate(-1)} className="back-button">
-    ← Назад
+    Back
   </button>
   <h1 className="product-title">{product.title || product.name}</h1>
 </div>

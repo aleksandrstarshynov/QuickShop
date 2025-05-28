@@ -7,13 +7,26 @@ const Register = () => {
   // localStorage.setItem("test", "testValue2");
 //
 
-  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [formData, setFormData] = useState({
+  username: '',
+  password: '',
+  firstname: '',
+  lastname: '',
+  dateofbirth: '',
+  email: '',
+  phone: ''
+});
   const [formErrors, setFormErrors] = useState({});
   const [serverMessage, setServerMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const submitData = {
+  ...formData,
+  dateofbirth: new Date(formData.dateofbirth)
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,26 +41,18 @@ const Register = () => {
       return;
     }
 
-    try {
-      const response = await registerUser(formData);
-      console.log(response);
-  // Сохраняем в localStorage
-  if (response && response.data) {
-      // localStorage.setItem("username", response.data.username);
-      // localStorage.setItem("password", response.data.password);
-      // localStorage.setItem("userId", response.data.id);
-      // localStorage.setItem("token", response.data.token);
-    };
-  //
-
-      setServerMessage(`Registered as ${response.data.username}`);
-    } catch (err) {
-      if (err.response?.status === 409) {
-        setServerMessage('User already exists');
-      } else {
-        setServerMessage('Registration failed');
-      }
-    }
+try {
+  const response = await registerUser(submitData);
+  console.log('Ответ от сервера:', response);
+  
+  setServerMessage(response.data.message);
+} catch (err) {
+  if (err.response?.status === 409) {
+    setServerMessage('User already exists');
+  } else {
+    setServerMessage('Registration failed');
+  }
+}
   };
 
   return (
@@ -71,6 +76,47 @@ const Register = () => {
           error={formErrors.password}
           placeholder="Password"
         />
+        <InputField
+    name="firstname"
+    value={formData.firstname}
+    onChange={handleChange}
+    error={formErrors.firstname}
+    placeholder="First name"
+  />
+
+  <InputField
+    name="lastname"
+    value={formData.lastname}
+    onChange={handleChange}
+    error={formErrors.lastname}
+    placeholder="Last name"
+  />
+
+  <InputField
+    name="dateofbirth"
+    type="date"
+    value={formData.dateofbirth}
+    onChange={handleChange}
+    error={formErrors.dateofbirth}
+    placeholder="Date of Birth"
+  />
+
+  <InputField
+    name="email"
+    type="email"
+    value={formData.email}
+    onChange={handleChange}
+    error={formErrors.email}
+    placeholder="Email"
+  />
+
+  <InputField
+    name="phone"
+    value={formData.phone}
+    onChange={handleChange}
+    error={formErrors.phone}
+    placeholder="Phone"
+  />
         <button type="submit">Register</button>
       </form>
       <p className="login-link">

@@ -2,8 +2,8 @@ import React from 'react';
 
 function AvailabilityFilter({ availability, setAvailability }) {
   return (
-    <div className="availability-filter">
-      <h3>Наличие</h3>
+    <div className="availability-filter" style={{ marginTop: '20px'}}>
+      <h3>Availability</h3>
 
       <label style={{ display: 'block', marginBottom: '0.5rem' }}>
         <input
@@ -13,7 +13,7 @@ function AvailabilityFilter({ availability, setAvailability }) {
           checked={availability === ''}
           onChange={() => setAvailability('')}
         />
-        Все
+        All products
       </label>
 
       <label style={{ display: 'block', marginBottom: '0.5rem' }}>
@@ -24,7 +24,7 @@ function AvailabilityFilter({ availability, setAvailability }) {
           checked={availability === 'in_stock'}
           onChange={() => setAvailability('in_stock')}
         />
-        В наличии
+        In Stock
       </label>
 
       <label style={{ display: 'block' }}>
@@ -35,7 +35,7 @@ function AvailabilityFilter({ availability, setAvailability }) {
           checked={availability === 'preorder'}
           onChange={() => setAvailability('preorder')}
         />
-        Под заказ
+        To order
       </label>
     </div>
   );

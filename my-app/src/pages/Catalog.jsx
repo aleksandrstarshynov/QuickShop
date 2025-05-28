@@ -23,9 +23,10 @@ function Catalog() {
   tempAvailability={tempAvailability}
   setTempAvailability={setTempAvailability}
 />
-<button onClick={() => {
+<button className="custom-button" style={{ marginTop: '30px' }} onClick={() => {
   setCategory(tempCategory);
   setAvailability(tempAvailability);
+  
 }}>
   Apply
 </button>
