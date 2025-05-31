@@ -7,10 +7,29 @@ import { useState, useEffect } from 'react';
 import { fetchProductById } from '../controller/fetchProductDB';
 import ProductCard from '../components/ProductCard';
 import avatar404 from '../images/404.png';
+import AddProduct from './addProduct';
+import { addProduct } from '../services/productService';
+
+
+
+
+
+const token = localStorage.getItem('token');
 
 function Profile() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('profile');
+
+  const [formData, setFormData] = useState({
+  productName: '',
+  productBrand: '',
+  newPrice: '',
+  imageURL: ''
+});
+const [formErrors, setFormErrors] = useState({});
+const [serverMessage, setServerMessage] = useState('');
+
+
 
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete your profile?')) return;
@@ -35,6 +54,33 @@ function Profile() {
       alert('Logout failed');
     }
   };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setFormErrors({});
+  setServerMessage('');
+
+  const errors = {};
+  if (!formData.productName) errors.productName = 'Product name is required';
+  if (!formData.productBrand) errors.productBrand = 'Brand is required';
+  if (!formData.newPrice) errors.newPrice = 'New price is required';
+  if (!formData.imageURL) errors.imageURL = 'Main image URL is required';
+
+  if (Object.keys(errors).length > 0) {
+    setFormErrors(errors);
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem('token'); 
+    const response = await addProduct(formData, token);
+    console.log('Product added:', response);
+    setServerMessage('Product added successfully');
+  } catch (err) {
+    console.error(err);
+    setServerMessage('Failed to add product');
+  }
+};
 
   const [purchases, setPurchases] = useState([]);
 
@@ -123,17 +169,19 @@ useEffect(() => {
         <div className="tab-content">
           {activeTab === 'profile' && (
             <div className="profile">
+              <div>
             <div className="profile-data">
               <div className="profile-data_left">
                 {/* <img src="./images/404.png" alt="user avatar" /> */}
                 <img alt="user avatar" src={avatar404} />
                 </div>
+                
               <div className="profile-data_right">              
               <UserStatus />
               </div>
+              
             </div>
-            <div className="profile-settings">
-              <div className="register-link">
+                <div className="register-link">
                 <h2>User settings</h2>
                 <Link to="/register">Register</Link>
                 <Link to="/login">Login</Link>
@@ -142,6 +190,21 @@ useEffect(() => {
                 <button onClick={handleDelete} className="red-button">Detete user</button>
                 <button onClick={handleLogout} className="red-button">Log out</button>
               </div>
+            </div>
+            {/* <div className="profile-settings"> */}
+            <div className="product-conteiner">  
+              <div className="product-adding">
+                {/* <h2>Add new product for selling</h2> */}
+                <AddProduct 
+                  onSubmit={handleSubmit}
+                  formData={formData}
+                  setFormData={setFormData}
+                  formErrors={formErrors}
+                  serverMessage={serverMessage}
+                />
+                {/* <button onClick={handleAddProduct} className="custom-button">Add product</button> */}
+              </div>
+              {/* </div> */}
             </div>
             </div>
           )}
