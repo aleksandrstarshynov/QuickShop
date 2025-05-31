@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 // import { User } from './models/Users.js';
-// import mongoose from 'mongoose'; для продуктов понадобится
+import mongoose from 'mongoose'; 
 import bcrypt from 'bcrypt';
 import { getDecodedUser } from './utils/getDecodedUser.js'; 
 import dotenv from 'dotenv';
@@ -13,6 +13,7 @@ import {
   updateUser,
   deleteUser
 } from './utils/userQueries.js'; 
+import productRoutes from './routes/productRoutes.js';
 
 dotenv.config(); 
 
@@ -155,11 +156,31 @@ app.post('/auth/logout', (req, res) => {
   res.status(200).json({ message: "User logged out" });
 });
 
+
+// PRODUCTS
+ app.use('/products', productRoutes);
+// mongoose.connect(process.env.MONGODB_URI, {
+//   // useNewUrlParser: true,
+//   // useUnifiedTopology: true,
+// })
+// .then(() => console.log('MongoDB connected'))
+// .catch(err => console.error('MongoDB connection error:', err));
+
+
+
 // Статическая папка для фронтенда
-app.use(express.static('client'));
+app.use(express.static('my-app'));
 
 
 // Запуск сервера
-app.listen(4000, () => {
-  console.log('🚀 Сервер запущен на порту 4000');
-});
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('MongoDB connected');
+
+    app.listen(4000, () => {
+      console.log('🚀 Сервер запущен на порту 4000');
+    });
+  })
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+  });

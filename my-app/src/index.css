@@ -279,6 +279,15 @@ button[type="submit"]:hover {
   background-color: #013d3e;
 }
 
+.register-link{
+  margin-top: 10px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  text-align: center;
+}
+
 
 .register-link a {
   /* visibility: visible !important;
@@ -487,8 +496,19 @@ background-color: rgb(204, 206, 206);
   padding: 20px;
   background-color: #ffffff;
   border: 1px solid #ffffff;
-  border-radius: 12px
+  border-radius: 12px;
+  /* align-items: top; */
 }
+
+.product-conteiner{
+  position: relative;
+  flex: 1; /* или задай фиксированную ширину, например width: 200px */
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 12px;
+}
+
 
 .profile-data{
     display: flex; 
@@ -496,12 +516,13 @@ background-color: rgb(204, 206, 206);
 }
 
 .profile-data_left{
-  width: 30%;  
+  width: 40%;  
+  padding-top: 30px;
   /* background-color: #d32c03; */
 }
 
 .profile-data_right{
-  width: 70%;  
+  width: 60%;  
   /* background-color: #6103d3; */
 }
 
@@ -734,4 +755,13 @@ background-color: rgb(204, 206, 206);
   margin: auto;
   padding-top: 50px;
   text-align: center;
+}
+
+.product-adding{
+  width: 120%;
+  position: absolute;
+  /* top: 50%;*/
+  transform: translateY(-20%); 
+left: -10%;
+  
 }
