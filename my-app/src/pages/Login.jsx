@@ -1,15 +1,22 @@
 // src/pages/Login.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/authContext.js';
+
+const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:4000/api/login', {
+      const response = await fetch(`${baseUrl}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -21,8 +28,16 @@ function Login() {
       if (response.ok) {
         alert('Успешный вход!');
         // Перенаправление или сохранение токена
+        
+        // Сохраняем токен в localStorage (или sessionStorage)
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        login(data.token);
+
+        // Можно перенаправить пользователя на страницу профиля или домой
+        navigate('/catalog'); // если используешь react-router-dom v6
       } else {
-        alert(data.error || 'Ошибка входа');
+        alert(data.message || data.error || 'Ошибка входа');
       }
     } catch (error) {
       console.error('Ошибка при входе:', error);

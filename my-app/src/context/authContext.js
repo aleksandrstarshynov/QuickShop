@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const decoded = jwtDecode(token);
+        const decoded = jwtDecode(token.token);
         setIsLoggedIn(true);
         setUser(decoded); // decoded.username или decoded.name
       } catch (err) {

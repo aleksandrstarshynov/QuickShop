@@ -21,11 +21,18 @@ const saltRounds = 12;
 const SECRET = process.env.JWT_SECRET; 
 const app = express();
 
+// middleware
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.url}`);
+  next();
+});
+
 // Настроить CORS
 app.use(cors({
   origin: 'http://localhost:3000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  credentials: true,
+  // methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  // allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
@@ -75,13 +82,21 @@ app.post('/auth/login', async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    console.log('Введённое имя:', username);
+    console.log('Введённый пароль:', password);
+    console.log('Найден пользователь:', user);
+    console.log('Хэш из базы:', user.password);
+    console.log('Перед сравнением пароля');
     const correctPassword = await bcrypt.compare(password, user.password);
     if (!correctPassword) {
       return res.status(401).json({ message: "Invalid username/password" });
     }
 
+    console.log('Пароль совпадает?', correctPassword);
+
     const token = jsonwebtoken.sign({ id: user.id, name: user.username }, SECRET);
     res.status(201).json({ token });
+    console.log('Токен создан:', token);
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ message: "Internal server error" });
@@ -173,7 +188,7 @@ app.use(express.static('my-app'));
 
 
 // Запуск сервера
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('MongoDB connected');
 

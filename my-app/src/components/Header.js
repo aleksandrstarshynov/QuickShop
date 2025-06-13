@@ -11,7 +11,7 @@ function Header() {
     <div className="header">
     <>
       <Link to="/">
-        <img src="{CompanyLogo}" alt="QuickShop logo" />
+        <img src={CompanyLogo} alt="QuickShop logo" />
       </Link>
       
       <ul>
