@@ -9,7 +9,7 @@ import ProductCard from '../components/ProductCard';
 import avatar404 from '../images/404.png';
 import AddProduct from './addProduct';
 import { addProduct } from '../services/productService';
-
+import ProductActions from '../components/ProductSettings';
 
 
 
@@ -205,6 +205,9 @@ useEffect(() => {
                 {/* <button onClick={handleAddProduct} className="custom-button">Add product</button> */}
               </div>
               {/* </div> */}
+              <div>
+                <ProductActions />
+              </div>
             </div>
             </div>
           )}

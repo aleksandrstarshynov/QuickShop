@@ -507,6 +507,12 @@ background-color: rgb(204, 206, 206);
   background-color: #ffffff;
   border: 1px solid #ffffff;
   border-radius: 12px;
+  display: flex;
+  flex-direction: column; 
+  /* gap: 20px;   */
+  flex-direction: column; 
+  align-items: center;   
+  justify-content: flex-start; 
 }
 
 
@@ -759,7 +765,7 @@ background-color: rgb(204, 206, 206);
 
 .product-adding{
   width: 120%;
-  position: absolute;
+  /* position: absolute; */
   /* top: 50%;*/
   transform: translateY(-20%); 
 left: -10%;
