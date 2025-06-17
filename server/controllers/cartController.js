@@ -77,11 +77,21 @@ export const updateCartItem = async (req, res) => {
     return res.status(400).json({ message: 'Missing userId, productId or quantity' });
   }
 
-  if (quantity <= 0) {
-    return res.status(400).json({ message: 'Quantity must be greater than 0' });
-  }
-
   try {
+    if (quantity === 0) {
+      // Удаляем товар из корзины
+      await pool.query(
+        `DELETE FROM cart_items WHERE user_id = $1 AND product_id = $2`,
+        [userId, productId]
+      );
+      return res.json({ message: 'Cart item deleted' });
+    }
+
+    if (quantity < 0) {
+      return res.status(400).json({ message: 'Quantity must be zero or greater' });
+    }
+
+    // Вставляем или обновляем
     const result = await pool.query(
       `INSERT INTO cart_items (user_id, product_id, quantity)
        VALUES ($1, $2, $3)
@@ -94,10 +104,10 @@ export const updateCartItem = async (req, res) => {
     res.json({ message: 'Cart item added/updated', item: result.rows[0] });
   } catch (error) {
     console.error('Error upserting cart item:', error.message);
-    console.error(error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+
 
 
 // Удалить товар из корзины

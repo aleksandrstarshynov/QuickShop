@@ -1,14 +1,19 @@
 import express from 'express';
 import { Product } from '../models/Product.js';
+// import Product from '../models/Product.js';
 
 const router = express.Router();
 
 // Получить все продукты
 router.get('/', async (req, res) => {
   try {
-    const products = await Product.find();
-    res.json(products);
+    const limit = parseInt(req.query.limit) || 20;  // сколько товаров вернуть (по умолчанию 20)
+    const skip = parseInt(req.query.skip) || 0;     // сколько пропустить (для пагинации)
+
+    const products = await Product.find().limit(limit).skip(skip);
+    res.json({ products }); // возвращаем объект с массивом продуктов
   } catch (err) {
+    console.error('Ошибка при получении продуктов:', err);
     res.status(500).json({ message: 'Error fetching products' });
   }
 });

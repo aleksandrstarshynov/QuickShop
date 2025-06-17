@@ -66,7 +66,7 @@ const handleSearchChange = (e) => {
           columnClassName="my-masonry-grid_column"
         >
           {currentProducts
-          .filter((product) => product && product.id)
+          .filter((product) => product && product._id) 
           .map((product) => (
           <ProductCard
             key={product.id}

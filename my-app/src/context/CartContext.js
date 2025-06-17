@@ -39,11 +39,12 @@ const addToCart = async (product, quantity = 1) => {
   }
 
   const userId = user.id;
-  const updatedCart = [...cart, product];
+  const productId = product._id; 
+
   
   try {
-    await updateCartInDB(userId, product.id, quantity); // сохраняем на сервер
-    setCart(updatedCart);
+    await updateCartInDB(userId, productId, quantity); // сохраняем на сервер
+    setCart([...cart, product]);
   } catch (err) {
     console.error('Ошибка добавления в корзину', err);
   }
