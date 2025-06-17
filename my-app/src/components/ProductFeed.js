@@ -5,13 +5,15 @@ import ProductSearch from './ProductSearch.js';
 import ProductCard from './ProductCard'; 
 import Masonry from 'react-masonry-css'; 
 import { highlightedProductIds } from '../mocked_DB/highlightedProducts';
+import { useCart } from '../context/CartContext.js'; 
 
 function ProductFeed({ category = [], availability }) {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-      const [availabilityState, setAvailabilityState] = useState(availability ?? '');
+  const [availabilityState, setAvailabilityState] = useState(availability ?? '');
+  const { addToCart } = useCart();
 
 useEffect(() => {
   async function loadProducts() {
@@ -63,11 +65,13 @@ const handleSearchChange = (e) => {
           className="my-masonry-grid"
           columnClassName="my-masonry-grid_column"
         >
-          {currentProducts.map((product) => (
+          {currentProducts
+          .filter((product) => product && product.id)
+          .map((product) => (
           <ProductCard
             key={product.id}
             product={product}
-            // onAddToCart={onAddToCart}
+            onAddToCart={addToCart}
             highlightedIds={highlightedProductIds} 
         />
           ))}

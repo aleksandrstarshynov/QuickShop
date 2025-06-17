@@ -30,9 +30,19 @@ function Login() {
         // Перенаправление или сохранение токена
         
         // Сохраняем токен в localStorage (или sessionStorage)
+        console.log('data:', data);
+        console.log('data.user:', data.user);
         localStorage.setItem('token', data.token);
+        // localStorage.setItem('user', JSON.stringify(data.user)); временно запоментирует, так как ниже затычка временная
+        if (data && data.user) {
         localStorage.setItem('user', JSON.stringify(data.user));
-        login(data.token);
+        } else {
+        console.warn('⚠️ Нет user в ответе сервера!');
+        localStorage.setItem('user', JSON.stringify({ id: null })); // временно, чтобы не падало
+        }
+        // конец временной затычки
+
+        login(data.token); 
 
         // Можно перенаправить пользователя на страницу профиля или домой
         navigate('/catalog'); // если используешь react-router-dom v6
