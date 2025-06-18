@@ -19,6 +19,9 @@ function CategoryFilter({ selectedValues = [], setSelectedValues }) {
 
   if (loading) return <p>Загрузка категорий...</p>;
 
+  console.log("Категории:", categories);
+  console.log("selectedValues:", selectedValues);
+
   return (
     <div className="category-filter">
       <h3>Categories</h3>

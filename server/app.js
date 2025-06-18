@@ -15,6 +15,7 @@ import {
 } from './utils/userQueries.js'; 
 import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 
 dotenv.config(); 
 
@@ -201,6 +202,8 @@ app.post('/auth/logout', (req, res) => {
 // CART
 app.use('/api', cartRoutes);
 
+// CATEGORIES
+app.use('/api/categories', categoryRoutes);
 
 // Статическая папка для фронтенда
 app.use(express.static('my-app'));
