@@ -23,7 +23,7 @@ const ProductPage = () => {
 
   if (!product) return <div>Loading...</div>;
 
-  const discountedPrice = (product.price * (1 - product.discountPercentage / 100)).toFixed(2);
+  // const discountedPrice = (product.newPrice * (1 - product.discountPercentage / 100)).toFixed(2);
 
   const handleAddToCart = async () => {
     if (!user) {
@@ -40,25 +40,10 @@ const ProductPage = () => {
     try {
       console.log('user.id:', user?.id);
       console.log('product._id:', product?._id);
-      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/cart`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          productId: product._id, // MongoDB ID
-          quantity: 1,
-        }),
-      });
 
-      const data = await response.json();
-      console.log('Response status:', response.status);
-      console.log('Response data:', data);
-      if (response.ok) {
-        alert('Product added to cart!');
-      } else {
-        alert(`Error: ${data.message}`);
-      }
+      // Используем контекст вместо fetch
+      await addToCart(product);
+      console.log('✅ Product added to cart!');
     } catch (error) {
       console.error('Add to cart failed:', error);
       alert('Failed to add product to cart');
@@ -71,31 +56,31 @@ const ProductPage = () => {
         <button onClick={() => navigate(-1)} className="back-button">
           Back
         </button>
-        <h1 className="product-title">{product.title || product.name}</h1>
+        <h1 className="product-title">{product.productName || product.name}</h1>
       </div>
 
       <div className="product-content">
         <div className="product-image">
           <img
-            src={product.thumbnail || product.images[0]}
-            alt={product.title || product.name}
+            src={product.thumbnail || product.imageURL}
+            alt={product.productName || product.name}
           />
         </div>
 
         <div className="product-info">
-          <p className="brand-name">Brand: {product.brand}</p>
-          <p><strong>Category:</strong> {product.category}</p>
-          <p className="description">Description: {product.description}</p>
+          <p className="brand-name">Brand: {product.productBrand}</p>
+          <p><strong>Category:</strong> {product.productCategory}</p>
+          <p className="description">Description: {product.productDescription}</p>
 
           <p>
             <strong>Price:</strong>{' '}
-            <span className="old-price">€{product.price}</span>{' '}
-            <span className="new-price">€{discountedPrice}</span>{' '}
-            <small>({product.discountPercentage}% discount)</small>
+            <span className="old-price">{product.oldPrice}</span>{' '}
+            <span className="new-price">{product.newPrice}</span>{' '}
+            {/* <small>({product.discountPercentage}% discount)</small> */}
           </p>
 
-          <p><strong>Rating:</strong> {product.rating} ⭐</p>
-          <p><strong>In stock:</strong> {product.stock} pieces</p>
+          <p><strong>Rating:</strong> {product.productRating} ⭐</p>
+          <p><strong>In stock:</strong> {product.inStock ? 'Yes, available' : 'Out of stock'}</p>
 
           <div className="product-buttons">
             <button onClick={handleAddToCart}>
@@ -104,16 +89,18 @@ const ProductPage = () => {
             {/* <button onClick={() => console.log("Добавлено в избранное")} className="custom-button">Add to favorites</button> */}
           </div>
 
-          <div className="product-images-gallery">
-            {product.images.map((img, i) => (
-              <img
-                key={i}
-                src={img}
-                alt={`${product.title} ${i + 1}`}
-                onClick={() => window.open(img, '_blank')}
-              />
-            ))}
-          </div>
+          {Array.isArray(product.images) && product.images.length > 0 && (
+            <div className="product-images-gallery">
+              {product.images.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt={`${product.productName} ${i + 1}`}
+                  onClick={() => window.open(img, '_blank')}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

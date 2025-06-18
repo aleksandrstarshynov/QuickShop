@@ -56,10 +56,17 @@ const Cart = () => {
   if (loading) return <div>Loading cart...</div>;
   if (!userId) return <div>Please log in to see your cart.</div>;
 
-  const totalPrice = cart.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0
-  );
+  // const totalPrice = cart.reduce(
+  //   (sum, item) => sum + item.product.price * item.quantity,
+  //   0
+  // );
+
+    const totalPrice = cart.reduce((sum, item) => {
+    const price = Number(item.product?.newPrice);  // Убедись, что это нужное поле
+    const quantity = Number(item.quantity);
+    return sum + (price * quantity || 0);  // Если price или quantity NaN, вернёт 0
+  }, 0);
+
 
   return (
     <div>
@@ -108,7 +115,7 @@ const Cart = () => {
           <tfoot>
             <tr>
               <td colSpan="3"><strong>Total:</strong></td>
-              <td>€{totalPrice.toFixed(2)}</td>
+              <td><strong>€{totalPrice.toFixed(2)}</strong></td>
               <td></td>
             </tr>
           </tfoot>
