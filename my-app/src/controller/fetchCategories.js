@@ -1,17 +1,17 @@
-/**
- * 
- * @returns {Promise<Array<string>>} Массив строк с названиями категорий.
- */
-export async function fetchCategories() {
-  const url = 'https://dummyjson.com/products/categories';
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
 
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Ошибка при получении категорий');
-    const data = await response.json();
-    return data; 
-  } catch (error) {
-    console.error('Ошибка при получении категорий:', error);
-    return [];
+export const fetchCategories = async () => {
+  const res = await fetch(`${API_BASE}/api/categories`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    throw new Error('Ошибка при загрузке категорий');
   }
-}
+
+  return res.json();
+};

@@ -36,10 +36,10 @@ const [availability, setAvailability] = useState('');
         selectedValues={tempCategory}
         setSelectedValues={setTempCategory}
         />
-  <AvailabilityFilter
+  {/* <AvailabilityFilter
     availability={tempAvailability}
     setAvailability={setTempAvailability}
-  />
+  /> */}
     </>
     </div>
   );
