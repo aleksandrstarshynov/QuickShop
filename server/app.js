@@ -207,7 +207,12 @@ app.use(express.static('my-app'));
 
 
 // Запуск сервера
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000, 
+  socketTimeoutMS: 45000,        
+})
   .then(() => {
     console.log('MongoDB connected');
 

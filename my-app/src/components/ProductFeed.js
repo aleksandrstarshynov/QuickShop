@@ -69,7 +69,7 @@ const handleSearchChange = (e) => {
           .filter((product) => product && product._id) 
           .map((product) => (
           <ProductCard
-            key={product.id}
+            key={product._id}
             product={product}
             onAddToCart={addToCart}
             highlightedIds={highlightedProductIds} 
