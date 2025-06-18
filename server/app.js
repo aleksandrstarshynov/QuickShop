@@ -14,6 +14,7 @@ import {
   deleteUser
 } from './utils/userQueries.js'; 
 import productRoutes from './routes/productRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
 
 dotenv.config(); 
 
@@ -36,6 +37,10 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log(`Request: ${req.method} ${req.url}`);
+  next();
+});
 
 // РЕГИСТРАЦИЯ
 app.post("/auth/register", async (req, res) => {
@@ -95,7 +100,19 @@ app.post('/auth/login', async (req, res) => {
     console.log('Пароль совпадает?', correctPassword);
 
     const token = jsonwebtoken.sign({ id: user.id, name: user.username }, SECRET);
-    res.status(201).json({ token });
+    res.status(201).json({
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        phone: user.phone,
+        dateofbirth: user.dateofbirth,
+        created_at: user.created_at,
+      }
+    });
     console.log('Токен создан:', token);
   } catch (err) {
     console.error("Login error:", err);
@@ -181,6 +198,8 @@ app.post('/auth/logout', (req, res) => {
 // .then(() => console.log('MongoDB connected'))
 // .catch(err => console.error('MongoDB connection error:', err));
 
+// CART
+app.use('/api', cartRoutes);
 
 
 // Статическая папка для фронтенда
@@ -188,7 +207,12 @@ app.use(express.static('my-app'));
 
 
 // Запуск сервера
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000, 
+  socketTimeoutMS: 45000,        
+})
   .then(() => {
     console.log('MongoDB connected');
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Filters from '../components/Filters';
 import ProductFeed from "../components/ProductFeed.js" 
+import { useCart } from '../context/CartContext';
 
 
 function Catalog() {
@@ -8,6 +9,7 @@ function Catalog() {
   const [category, setCategory] = useState([]);
   const [availability, setAvailability] = useState(''); 
   const [tempAvailability, setTempAvailability] = useState('');
+  const { addToCart } = useCart();
 
 
   return (

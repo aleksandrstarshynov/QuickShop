@@ -1,43 +1,43 @@
+import axios from 'axios';
+
+const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
+
+const api = axios.create({
+  baseURL: API_BASE,
+});
+
 /**
- * Получает список товаров с DummyJSON API с пагинацией.
+ * Получить список товаров с пагинацией и по категории (если поддерживается сервером).
  * @param {Object} options
  * @param {string} options.category - Название категории (необязательно).
- * @param {number} options.limit - Сколько товаров получить (по умолчанию 20, максимум 100).
+ * @param {number} options.limit - Сколько товаров получить (по умолчанию 20).
  * @param {number} options.skip - Сколько товаров пропустить (например, для пагинации).
  * @returns {Promise<Array>} Массив объектов товаров.
  */
-export async function fetchProductDB({ category = "", limit = 20, skip = 0 } = {}) {
-  const baseUrl = "https://dummyjson.com/products";
-
-  const isCategoryValid = typeof category === 'string' && category.trim() !== "";
-  const url = isCategoryValid
-    ? `${baseUrl}/category/${category}?limit=${limit}&skip=${skip}`
-    : `${baseUrl}?limit=${limit}&skip=${skip}`;
-
+export async function fetchProductDB({ category = '', limit = 20, skip = 0 } = {}) {
   try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.products || [];
+    const params = { limit, skip };
+    if (category) params.category = category;
+
+    const response = await api.get('/products', { params });
+    return response.data.products || []; // предполагается, что сервер возвращает { products: [...] }
   } catch (error) {
-    console.error("Ошибка при получении данных:", error);
+    console.error('Ошибка при получении продуктов:', error);
     return [];
   }
 }
 
 /**
- * Получает один товар по ID.
+ * Получить один товар по ID.
  * @param {string|number} id - ID товара.
  * @returns {Promise<Object|null>} Объект товара или null при ошибке.
  */
 export async function fetchProductById(id) {
-  const baseUrl = "https://dummyjson.com/products";
   try {
-    const response = await fetch(`${baseUrl}/${id}`);
-    if (!response.ok) throw new Error('Продукт не найден');
-    const data = await response.json();
-    return data;
+    const response = await api.get(`/products/${id}`);
+    return response.data;
   } catch (error) {
-    console.error("Ошибка при получении товара по id:", error);
+    console.error('Ошибка при получении товара по ID:', error);
     return null;
   }
 }

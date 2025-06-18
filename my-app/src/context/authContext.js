@@ -6,12 +6,13 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const decoded = jwtDecode(token.token);
+        const decoded = jwtDecode(token);
         setIsLoggedIn(true);
         setUser(decoded); // decoded.username или decoded.name
       } catch (err) {
