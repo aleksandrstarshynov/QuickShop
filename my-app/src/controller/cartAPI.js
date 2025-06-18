@@ -16,7 +16,7 @@ export const fetchCartFromDB = async (userId) => {
 // Добавить 1 товар (прибавить к корзине)
 export const addToCartInDB = async (userId, productId) => {
   try {
-    const response = await fetch(`${API_BASE}/api/cart/add`, {
+    const response = await fetch(`${API_BASE}/api/cart`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, productId, quantity: 1 }),

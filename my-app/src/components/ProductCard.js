@@ -6,6 +6,7 @@ const ProductCard = ({ product, onAddToCart, highlightedIds = [] }) => {
   const handleAddToCartClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
+console.log("product in addToCart click:", product);
 
     if (!product) {
       console.error('product is undefined!');

@@ -5,10 +5,12 @@ const API = axios.create({
 });
 
 // Добавить новый продукт
-export const addProduct = (productData, token) =>
-  API.post('/products', productData, {
+export const addProduct = (productData, token) => {
+  console.log("BASE_URL:", process.env.REACT_APP_API_BASE_URL);
+  return API.post('/products', productData, {
     headers: { Authorization: `Bearer ${token}` },
   });
+};
 
 // Получить все продукты
 export const getProducts = () => API.get('/products');

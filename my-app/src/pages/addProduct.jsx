@@ -29,6 +29,7 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Создание товара началось");
     setFormErrors({});
     setServerMessage('');
 

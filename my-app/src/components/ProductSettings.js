@@ -1,4 +1,3 @@
-// src/components/ProductActions.js
 import React, { useState } from 'react';
 import { getProductById, updateProduct, deleteProduct } from '../services/productService';
 
