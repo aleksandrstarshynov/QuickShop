@@ -7,9 +7,9 @@ const api = axios.create({
 });
 
 /**
- * Получить список товаров с пагинацией и по категории (если поддерживается сервером).
+ * Получить список товаров с пагинацией и по категориям (если поддерживается сервером).
  * @param {Object} options
- * @param {string} options.category - Название категории (необязательно).
+ * @param {string|string[]} options.category - Название категории или массив категорий (необязательно).
  * @param {number} options.limit - Сколько товаров получить (по умолчанию 20).
  * @param {number} options.skip - Сколько товаров пропустить (например, для пагинации).
  * @returns {Promise<Array>} Массив объектов товаров.
@@ -17,10 +17,17 @@ const api = axios.create({
 export async function fetchProductDB({ category = '', limit = 20, skip = 0 } = {}) {
   try {
     const params = { limit, skip };
-    if (category) params.category = category;
+
+    if (Array.isArray(category)) {
+      // если пришёл массив, склеиваем в строку через запятую
+      params.category = category.join(',');
+    } else if (category) {
+      // если строка — передаём как есть
+      params.category = category;
+    }
 
     const response = await api.get('/products', { params });
-    return response.data.products || []; // предполагается, что сервер возвращает { products: [...] }
+    return response.data.products || [];
   } catch (error) {
     console.error('Ошибка при получении продуктов:', error);
     return [];

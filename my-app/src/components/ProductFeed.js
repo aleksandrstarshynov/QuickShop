@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { fetchProductDB, fetchProductById } from '../controller/fetchProductDB';
+import { useState } from 'react';
 import Pagination from './Pagination';
 import ProductSearch from './ProductSearch.js';
 import ProductCard from './ProductCard'; 
@@ -7,43 +6,25 @@ import Masonry from 'react-masonry-css';
 import { highlightedProductIds } from '../mocked_DB/highlightedProducts';
 import { useCart } from '../context/CartContext.js'; 
 
-function ProductFeed({ category = [], availability }) {
-  const [products, setProducts] = useState([]);
+function ProductFeed({ products = [] }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const [availabilityState, setAvailabilityState] = useState(availability ?? '');
   const { addToCart } = useCart();
 
-useEffect(() => {
-  async function loadProducts() {
-    const data = await fetchProductDB({ category });
-    setProducts(data);
-  }
-  loadProducts();
-}, [category]);
+  // Фильтрация по поиску
+  const filteredBySearch = products.filter(product =>
+    product.productName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-const filteredProducts = products.filter(product => {
-    const categoryMatch =
-      !category || category.length === 0 || category.includes(product.category);
-
-    const availabilityMatch =
-      availabilityState === '' ||
-      (availabilityState === 'in_stock' && product.availability === 'in_stock') ||
-      (availabilityState === 'preorder' && product.availability === 'preorder');
-
-    return categoryMatch && availabilityMatch;
-  });
-
-
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredBySearch.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
+  const currentProducts = filteredBySearch.slice(startIndex, startIndex + itemsPerPage);
 
-const handleSearchChange = (e) => {
-  setSearchTerm(e.target.value);
-  setCurrentPage(1);
-};
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -66,15 +47,15 @@ const handleSearchChange = (e) => {
           columnClassName="my-masonry-grid_column"
         >
           {currentProducts
-          .filter((product) => product && product._id) 
-          .map((product) => (
-          <ProductCard
-            key={product._id}
-            product={product}
-            onAddToCart={addToCart}
-            highlightedIds={highlightedProductIds} 
-        />
-          ))}
+            .filter(product => product && product._id)
+            .map(product => (
+              <ProductCard
+                key={product._id}
+                product={product}
+                onAddToCart={addToCart}
+                highlightedIds={highlightedProductIds}
+              />
+            ))}
         </Masonry>
       ) : (
         <p>No products found</p>

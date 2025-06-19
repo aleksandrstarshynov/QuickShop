@@ -1,22 +1,40 @@
 import express from 'express';
 import Product from '../models/Product.js';
 // import Product from '../models/Product.js';
+import { normalizeCategoryString } from '../utils/normalizeCategory.js';
 
 const router = express.Router();
 
 // Получить все продукты
 router.get('/', async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 20;  // сколько товаров вернуть (по умолчанию 20)
-    const skip = parseInt(req.query.skip) || 0;     // сколько пропустить (для пагинации)
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = parseInt(req.query.skip) || 0;
+    const { category } = req.query;
+
+    if (category) {
+      const filterCategories = category.split(',').map(c => c.trim().toLowerCase());
+
+      let products = await Product.find().limit(limit).skip(skip);
+
+      products = products.filter(product => {
+        if (!product.productCategory) return false;
+        const productCats = normalizeCategoryString(product.productCategory);
+        return filterCategories.some(cat => productCats.includes(cat));
+      });
+
+      return res.json({ products });
+    }
 
     const products = await Product.find().limit(limit).skip(skip);
-    res.json({ products }); // возвращаем объект с массивом продуктов
+    res.json({ products });
   } catch (err) {
     console.error('Ошибка при получении продуктов:', err);
     res.status(500).json({ message: 'Error fetching products' });
   }
 });
+
+
 
 // Получить все продукты, созданные конкретным пользователем
 router.get('/user/:userId', async (req, res) => {
