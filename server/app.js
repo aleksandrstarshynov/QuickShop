@@ -134,7 +134,7 @@ app.get('/auth/profile', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.status(200).json({ message: `Hello, ${user.username}` });
+    res.status(200).json(user);
   } catch (err) {
     res.status(401).json({ message: err.message });
   }

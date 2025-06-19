@@ -10,6 +10,11 @@ export const loginUser = (credentials) => API.post('/auth/login', credentials);
 export const getProfile = (token) =>
   API.get('/auth/profile', { headers: { Authorization: `Bearer ${token}` } });
 
+export const fetchUserProfile = (token) =>
+  API.get('/auth/profile', {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  
 export const logoutUser = () => API.post('/auth/logout');
 
 export const updateUserData = (userData, token) =>

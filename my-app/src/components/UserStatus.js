@@ -1,55 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import userData from '../mocked_DB/users.json'
+import React, { useEffect, useState } from 'react';
+import { fetchUserProfile } from '../services/authService'; 
 
 function UserStatus() {
   const [user, setUser] = useState(null);
 
-//   useEffect(() => {
-//     fetch('/api/user')
-//       .then(response => response.json())
-//       .then(data => setUser(data));
-//   }, []);
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetchUserProfile(token);
+        console.log("📦 Ответ от API:", response.data);
+        setUser(response.data);
+      } catch (error) {
+        console.error('Ошибка при загрузке данных пользователя:', error);
+      }
+    };
 
-// Temporary mocked data
-useEffect(() => {
-    // Вместо реального запроса мы используем мокированные данные
-    setUser(userData); // Задаем данные из файла в состояние
-  }, []); // Пустой массив зависимостей — загрузка данных только один раз при монтировании
-// End of calling temporary data
+    loadUser();
+  }, []);
 
-   if (!user) {
-     return <div>Loading the user data...</div>;
-   }
+  if (!user) return <p>Loading user data...</p>;
 
   return (
     <div className="user-status">
       <h2>User data</h2>
-      <p>Name: {user[0].userName}</p>
-      <p>Email: {user[0].email}</p>
-      <p>UserStatus: {user[0].status}</p>
-      <p>Role: {user[0].role}</p>
-      <p>Last visit: {user[0].lastVisit}</p>
-       <p>Country: {user[0].Country}</p>
-      <p>City: {user[0].City}</p>
-      <p>Skills: {user[0].Skills}</p>
-
+      <p><strong>Username:</strong> {user.username}</p>
+      <p><strong>Email:</strong> {user.email}</p>
+      <p><strong>Firstname:</strong> {user.firstname}</p>
+      <p><strong>Lastname:</strong> {user.lastname}</p>
+      <p><strong>Date of birth:</strong> {user.dateofbirth}</p>
+      <p><strong>Phone:</strong> {user.phone}</p>
     </div>
   );
-
-// Returns the hole list of users
-//   return (
-//     <div>
-//       <h2>Список пользователей</h2>
-//       {users.map((user, index) => (
-//         <div key={index}>
-//           <p><strong>Имя:</strong> {user.name}</p>
-//           <p><strong>Email:</strong> {user.email}</p>
-//         </div>
-//       ))}
-//     </div>
-//   );
-
-
 }
 
 export default UserStatus;

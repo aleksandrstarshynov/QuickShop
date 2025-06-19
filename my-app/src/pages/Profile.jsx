@@ -1,12 +1,13 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import UserStatus from '../components/UserStatus';
 import { deleteUser, logoutUser } from '../services/authService';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import avatar404 from '../images/404.png';
 import AddProduct from './addProduct';
 import { addProduct } from '../services/productService';
 import ProductActions from '../components/ProductSettings';
 import { useAuth } from '../context/authContext';
+import { fetchUserProfile } from '../services/authService';
 
 function Profile() {
   const navigate = useNavigate();
@@ -78,6 +79,23 @@ function Profile() {
     }
   };
 
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+      const loadProfile = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetchUserProfile(token);
+          console.log("🎯 User profile from backend:", response.data);
+          setUserData(response.data); // предполагаем, что в ответе уже нужные поля
+        } catch (err) {
+          console.error('Failed to load profile:', err);
+        }
+      };
+
+      loadProfile();
+    }, []);
+
   return (
     <>
       <style>
@@ -148,7 +166,10 @@ function Profile() {
             <div className="profile">
               <div className="profile-data">
                 <div className="profile-data_left">
-                  <img alt="user avatar" src={avatar404} />
+                  <img
+                      alt="user avatar"
+                      src={userData?.avatarUrl || avatar404}
+                  />
                 </div>
                 <div className="profile-data_right">
                   <UserStatus />
