@@ -6,12 +6,14 @@ import avatar404 from '../images/404.png';
 import AddProduct from './addProduct';
 import { addProduct } from '../services/productService';
 import ProductActions from '../components/ProductSettings';
+import { useAuth } from '../context/authContext';
 
 function Profile() {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const tab = searchParams.get('tab') || 'profile'; // 👈 default tab
+  const tab = searchParams.get('tab') || 'profile'; // default tab
+  const { user } = useAuth(); // получаем текущего пользователя
 
   const [formData, setFormData] = useState({
     productName: '',
@@ -63,10 +65,14 @@ function Profile() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await addProduct(formData, token);
+      const productWithAuthor = {
+      ...formData,
+      authorId: user.id, // добавляем ID пользователя
+      };
+      const response = await addProduct(productWithAuthor, token);
       console.log('Product added:', response);
       setServerMessage('Product added successfully');
-    } catch (err) {
+    }  catch (err) {
       console.error(err);
       setServerMessage('Failed to add product');
     }

@@ -1,6 +1,6 @@
 import pool from '../utils/db.js'; 
 import { ObjectId } from 'mongodb';
-import { Product } from '../models/product.js'; 
+import Product from '../models/Product.js'; 
 import mongoose from 'mongoose';
 
 
