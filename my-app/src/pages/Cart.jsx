@@ -93,7 +93,7 @@ const Cart = () => {
                     <span>{item.product.productName}</span>
                   </div>
                 </td>
-                <td>€{item.product.newPrice.toFixed(2)}</td>
+                <td>€{Number(item.product?.newPrice).toFixed(2)}</td>
                 <td>
                   <input
                     type="number"

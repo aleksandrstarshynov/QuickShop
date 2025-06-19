@@ -1,5 +1,5 @@
 import express from 'express';
-import { Product } from '../models/Product.js';
+import Product from '../models/Product.js';
 // import Product from '../models/Product.js';
 
 const router = express.Router();
@@ -18,15 +18,66 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Получить все продукты, созданные конкретным пользователем
+router.get('/user/:userId', async (req, res) => {
+  try {
+    const products = await Product.find({ authorId: req.params.userId });
+    res.json(products); 
+  } catch (err) {
+    console.error('Ошибка при получении продуктов пользователя:', err);
+    res.status(500).json({ message: 'Error fetching user products' });
+  }
+});
+
 // Добавить новый продукт
 router.post('/', async (req, res) => {
-  console.log('Получено тело запроса:', req.body);
+  console.log('📦 POST /products -> получено тело запроса:', req.body);
+
+  const {
+    productName,
+    productBrand,
+    productCategory,
+    productDescription,
+    oldPrice,
+    newPrice,
+    productRating,
+    inStock,
+    availableQuantity,
+    imageURL,
+    secondaryImageURL,
+    authorId
+  } = req.body;
+
+  // Валидация обязательных полей
+  if (!productName || !productBrand || !oldPrice || !newPrice || !authorId) {
+    return res.status(400).json({
+      message: '❌ Обязательные поля: productName, productBrand, oldPrice, newPrice, authorId',
+    });
+  }
+
   try {
-    const product = await Product.create(req.body);
-    res.status(201).json(product);
+    const newProduct = new Product({
+      productName,
+      productBrand,
+      productCategory,
+      productDescription,
+      oldPrice,
+      newPrice,
+      productRating,
+      inStock,
+      availableQuantity,
+      imageURL,
+      secondaryImageURL,
+      authorId,
+      createdAt: new Date(), // можно опустить — выставляется схемой
+    });
+
+    const savedProduct = await newProduct.save();
+    console.log('✅ Новый продукт создан:', savedProduct._id);
+    res.status(201).json(savedProduct);
   } catch (err) {
-    console.error(err);
-    res.status(400).json({ message: 'Error creating product' });
+    console.error('❌ Ошибка при создании продукта:', err);
+    res.status(500).json({ message: 'Ошибка при создании продукта' });
   }
 });
 
