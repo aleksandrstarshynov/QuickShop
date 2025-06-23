@@ -1,0 +1,56 @@
+.login-page {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.login-page__title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.login-page__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-page__input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-page__button {
+  padding: 10px;
+  background: rgb(4,175,175);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login-page__button:hover {
+  opacity: 0.9;
+}
+
+.login-page__register-link {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.login-page__register-link a {
+  color: rgb(4,175,175);
+  text-decoration: none;
+}
+
+.login-page__register-link a:hover {
+  text-decoration: underline;
+}

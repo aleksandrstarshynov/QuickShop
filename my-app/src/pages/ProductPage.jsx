@@ -83,7 +83,7 @@ const ProductPage = () => {
           <p><strong>In stock:</strong> {product.inStock ? 'Yes, available' : 'Out of stock'}</p>
 
           <div className="product-buttons">
-            <button onClick={handleAddToCart}>
+            <button className="custom-button" onClick={handleAddToCart}>
               Добавить в корзину
             </button>
             {/* <button onClick={() => console.log("Добавлено в избранное")} className="custom-button">Add to favorites</button> */}
