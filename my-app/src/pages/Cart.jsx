@@ -4,6 +4,7 @@ import {
   updateCartInDB,
   deleteCartItemFromDB,
 } from '../controller/cartAPI.js'; 
+import '../styles/Cart.css';
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
@@ -55,11 +56,8 @@ const Cart = () => {
 
   if (loading) return <div>Loading cart...</div>;
   if (!userId) return <div>Please log in to see your cart.</div>;
-
-  // const totalPrice = cart.reduce(
-  //   (sum, item) => sum + item.product.price * item.quantity,
-  //   0
-  // );
+  if (loading) return <div className="cart-page__empty">Loading cart...</div>;
+  if (!userId) return <div className="cart-page__empty">Please log in to see your cart.</div>;
 
     const totalPrice = cart.reduce((sum, item) => {
     const price = Number(item.product?.newPrice);  // Убедись, что это нужное поле
@@ -69,12 +67,13 @@ const Cart = () => {
 
 
   return (
-    <div>
-      <h1>Your Cart</h1>
+      <div className="cart-page">
+      <h1 className="cart-page__title">Your Cart</h1>
+
       {cart.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <p className="cart-page__empty">Your cart is empty.</p>
       ) : (
-        <table>
+        <table className="cart-page__table">
           <thead>
             <tr>
               <th>Product</th><th>Price</th><th>Quantity</th><th>Total</th><th>Action</th>
@@ -106,7 +105,12 @@ const Cart = () => {
                 </td>
                 <td>€{(item.product.newPrice * item.quantity).toFixed(2)}</td>
                 <td>
-                  <button onClick={() => removeFromCart(item.product._id)}>Remove</button>
+                  <button
+                    className="cart-page__button"
+                    onClick={() => removeFromCart(item.product._id)}
+                  >
+                    Remove
+                  </button>
                 </td>
               </tr>
             ))}

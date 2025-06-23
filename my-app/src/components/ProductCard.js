@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../index.css';
+// import '../index.css';
+import '../styles/ProductCard.css';
 
 const ProductCard = ({ product, onAddToCart, highlightedIds = [] }) => {
   const handleAddToCartClick = (e) => {
@@ -29,23 +30,30 @@ console.log("product in addToCart click:", product);
   const isTall = highlightedIds.includes(Number(product._id));
 
   return (
-    <>
+    <div className="product-card-container">
       <Link to={`/product/${product._id}`} className="product-card-link">
         <div className={`product-card ${isTall ? 'tall-card' : ''}`}>
           <h3>{product.productName}</h3>
-          <img src={product.imageURL ?? 'https://via.placeholder.com/150'} alt={product.productName} />
+          <img
+            src={product.imageURL ?? 'https://via.placeholder.com/150'}
+            alt={product.productName}
+          />
           <p>{product.productBrand ?? 'No brand'}</p>
-          <p style={{ color: 'red', fontSize: '20px', fontWeight: 'bold' }}>
+          <p className="product-card__price">
             €{discountedPrice}
           </p>
-          <p><strong>In stock:</strong> {product.inStock ? 'Yes' : 'No'}</p>
+          <p>
+            <strong>In stock:</strong> {product.inStock ? 'Yes' : 'No'}
+          </p>
         </div>
       </Link>
+
       <button className="custom-button" onClick={handleAddToCartClick}>
         Add to Basket
       </button>
-    </>
+    </div>
   );
+
 };
 
 export default ProductCard;
