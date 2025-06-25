@@ -1,0 +1,44 @@
+.success-page {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.success-page h1 {
+  font-size: 1.75rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.success-page p {
+  font-size: 1rem;
+  color: #555;
+  margin: 0.5rem 0;
+}
+
+.success-page .details {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.success-page button {
+  margin-top: 1.5rem;
+  width: 100%;
+  background-color: #017b79;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.success-page button:hover {
+  background-color: #005f5d;
+}

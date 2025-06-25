@@ -5,12 +5,14 @@ import {
   deleteCartItemFromDB,
 } from '../controller/cartAPI.js'; 
 import '../styles/Cart.css';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
   const userStr = localStorage.getItem('user');
   const userId = userStr ? JSON.parse(userStr).id : null;
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!userId) return;
@@ -125,6 +127,9 @@ const Cart = () => {
           </tfoot>
         </table>
       )}
+     <button onClick={() => navigate('/checkout')}>
+      Перейти к оплате
+    </button>     
     </div>
   );
 };

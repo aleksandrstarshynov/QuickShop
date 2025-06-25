@@ -208,6 +208,72 @@ app.use('/api/categories', categoryRoutes);
 // Статическая папка для фронтенда
 app.use(express.static('my-app'));
 
+//STRIP
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// Создать Checkout Session
+
+app.post('/create-checkout-session', async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          product_data: { name: 'Товар №1' },
+          unit_amount: 5000, // 50.00 USD в центах
+        },
+        quantity: 1,
+      }],
+      mode: 'payment',
+      success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin}/cancel`,
+    });
+    res.json({ sessionId: session.id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// get Checkout Session
+app.get('/checkout-session', async (req, res) => {
+  const session = await stripe.checkout.sessions.retrieve(req.query.sessionId);
+  res.json(session);
+});
+
+// роут для создания PaymentIntent
+app.post('/create-payment-intent', async (req, res) => {
+  try {
+    const { items } = req.body;
+
+    // Считаем общую сумму в центах только один раз
+    const amount = items.reduce((sum, item) => {
+      const price = item.product?.newPrice;
+      return sum + (price ? price * item.quantity * 100 : 0);
+    }, 0);
+
+    if (amount <= 0) {
+      return res.status(400).json({ error: 'Invalid cart total' });
+    }
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: 'usd',
+      metadata: { integration_check: 'accept_a_payment' },
+    });
+
+    return res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (err) {
+    console.error('Error creating PaymentIntent:', err);
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+
+// const PORT = process.env.PORT || 4242;
+// app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
 // Запуск сервера
 mongoose.connect(process.env.MONGODB_URI, {

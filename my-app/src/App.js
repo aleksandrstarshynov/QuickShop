@@ -20,7 +20,13 @@ import React, { useState } from 'react';
 import ProductIdea from './components/ProductIdea';
 import CategoryPreview from './components/CategoryPreview';
 import MainSearch from './components/MainSearch';
+import {loadStripe} from '@stripe/stripe-js';
+import {Elements} from '@stripe/react-stripe-js';
+import CheckoutForm from './components/CheckoutForm';
+import Success from './pages/Success'; 
 
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 function App() {
   return (
@@ -43,6 +49,15 @@ function App() {
             <Route path="/edit-profile" element={<EditProfile />} />
             <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/cart" element={<Cart />} />
+            <Route
+              path="/checkout"
+              element={
+                <Elements stripe={stripePromise}>
+                  <CheckoutForm />
+                </Elements>
+              }
+            />
+            <Route path="/success" element={<Success />} />
           </Routes>
         {/* </Router> */}
     </CartProvider>
