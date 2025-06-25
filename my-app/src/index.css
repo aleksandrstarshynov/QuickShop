@@ -32,10 +32,13 @@ body{
 }
 
 .main-container {
-  display:flex;
-  flex-direction: row;
+   display:flex;
+  flex-direction: column; 
   /* justify-content: space-between; */
-  background-color:#fff;
+  /* background-color:#531010; */
+  overflow-x: auto; 
+  flex-wrap: wrap;   
+  margin-bottom: 30px;
 }
 
 .filters{

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import ProfileBar from './components/ProfileBar';
 import Discount from './components/Discount';
@@ -17,12 +17,15 @@ import ProductCard from './components/ProductCard';
 import Cart from './pages/Cart';
 import { CartProvider } from './context/CartContext'; 
 import React, { useState } from 'react';
+import ProductIdea from './components/ProductIdea';
+import CategoryPreview from './components/CategoryPreview';
+import MainSearch from './components/MainSearch';
 
 
 function App() {
   return (
     <CartProvider>
-        <Router>
+        {/* <Router> */}
           {/* Общие компоненты, которые видны на всех страницах */}
           <Header />
 
@@ -41,7 +44,7 @@ function App() {
             <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/cart" element={<Cart />} />
           </Routes>
-        </Router>
+        {/* </Router> */}
     </CartProvider>
   );
 }
@@ -53,12 +56,17 @@ function Home() {
 
   return (
     <>
-      <Discount />
+      {/* <Discount /> */}
+      <MainSearch />
       <div className="main-container">
         {/* <ProfileBar /> */}
-        <PromoBlock />
+        {/* <PromoBlock /> */}
+        <ProductIdea />
+        <CategoryPreview category="Abstract expressionism" />
+        <CategoryPreview category="Watercolor" />
+        <CategoryPreview category="urban sketching" />
       </div>
-      <div className="best-feed">
+      {/* <div className="best-feed">
         <h2>Best sellers of the week</h2>
         <div className="best-card-grid">
           {purchases.length > 0 ? (
@@ -68,8 +76,8 @@ function Home() {
           ) : (
             <p>Loading...</p>
           )}
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
     </>
   );
 }
