@@ -1,0 +1,25 @@
+.category-preview {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.category-preview__title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+
+.category-preview__images {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.category-preview__image {
+  width: 10%;
+  height: auto;
+  object-fit: cover;
+}

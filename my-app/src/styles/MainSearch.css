@@ -1,0 +1,28 @@
+.try-search {
+  width: 90%;
+  margin: 40px auto;
+  text-align: center;
+}
+
+.try-search__form {
+  display: flex;
+  gap: 8px;
+}
+
+.try-search__input {
+  flex: 0 0 80%;      
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.try-search__button {
+  flex: 0 0 20%;      
+  padding: 10px 0;     
+  background: rgb(4,175,175);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

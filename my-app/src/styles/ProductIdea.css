@@ -1,0 +1,50 @@
+/* 1. Контейнер растягиваем адаптивно, без !important */
+.product-idea {
+  width: 80%;
+  max-width: 1200px;       /* не даёт слишком широким экранам разрываться */
+  box-sizing: border-box;  /* учитываем padding/border в width */
+  margin: 20px auto;       /* центрируем и даём отступ сверху/снизу */
+  padding: 20px;           /* внутренняя «подушка» */
+  outline: 1px dashed red; /* для отладки — потом можно убрать */
+}
+
+/* 2. Заголовок */
+.product-idea__title {
+  font-size: 1.3rem;
+  font-weight: normal;
+  margin-bottom: 20px;
+}
+
+/* 3. Контент: изображение + текст */
+.product-idea__content {
+  display: flex;
+  flex-wrap: wrap;         /* разрешаем перенос при узком экране */
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* 4. Изображение займёт до 30% (но не больше) */
+.product-idea__image {
+  flex: 0 0 30%;
+  max-width: 10%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 4px;
+  margin-top:10px;
+}
+
+/* 5. Описание займёт остальную часть (не менее 200px) */
+.product-idea__description {
+  flex: 1 1 60%;
+  min-width: 200px;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+/* 6. Первый текстовый блок (intro) */
+.product-idea__block--first {
+  font-size: 1.1rem;
+  font-weight: normal;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
