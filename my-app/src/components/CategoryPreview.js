@@ -1,3 +1,4 @@
+// src/components/CategoryPreview.js
 import React, { useState, useEffect } from 'react';
 import '../styles/CategoryPreview.css';
 
@@ -10,19 +11,15 @@ export default function CategoryPreview({ category }) {
 
   useEffect(() => {
     async function fetchImages() {
-      // Raw category as passed
+      // Оригинальная строка категории
       const raw = category.trim();
       console.log('[CategoryPreview] raw category prop:', raw);
 
-      // Tokenize: commas or whitespace
-      const tokens = raw.includes(',')
-        ? raw.split(/\s*,\s*/)
-        : raw.split(/\s+/);
-      console.log('[CategoryPreview] tokens:', tokens);
-
-      const queryCategory = tokens.map(t => t.toLowerCase()).join(',');
+      // Преобразуем всю строку в lowercase — сервер потом фильтрует по normalizeCategoryString
+      const queryCategory = raw.toLowerCase();
       console.log('[CategoryPreview] queryCategory:', queryCategory);
 
+      // Формируем URL запроса
       const url = `${BASE}/products?category=${encodeURIComponent(queryCategory)}&limit=4&skip=0`;
       console.log('[CategoryPreview] Fetch URL:', url);
 
@@ -32,6 +29,7 @@ export default function CategoryPreview({ category }) {
         if (!response.ok) {
           throw new Error(`Server returned ${response.status}: ${response.statusText}`);
         }
+
         const json = await response.json();
         console.log('[CategoryPreview] Raw JSON:', json);
 
@@ -43,12 +41,13 @@ export default function CategoryPreview({ category }) {
 
         setImages(urls);
       } catch (err) {
-        console.error('[CategoryPreview] Error fetching products for', raw, err);
+        console.error('[CategoryPreview] Error fetching products for', queryCategory, err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     }
+
     fetchImages();
   }, [category]);
 

@@ -1,9 +1,12 @@
 .category-preview {
-  width: 100%;
+  width: 80%;
   max-width: 1200px;
   margin: 20px auto;
   box-sizing: border-box;
   padding: 20px;
+  border: rgb(3, 95, 83) 1px solid;
+  border-radius: 16px;
+  margin-bottom: 10px;
 }
 
 .category-preview__title {
@@ -15,7 +18,9 @@
 .category-preview__images {
   display: flex;
   justify-content: center;
-  gap: 16px;
+  gap: 8px;
+  width: 50%;
+  margin: auto;
 }
 
 .category-preview__image {

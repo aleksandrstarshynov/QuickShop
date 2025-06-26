@@ -8,33 +8,41 @@ const router = express.Router();
 // Получить все продукты
 router.get('/', async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 20;
-    const skip = parseInt(req.query.skip) || 0;
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip  = parseInt(req.query.skip,  10) || 0;
     const { category } = req.query;
 
-    if (category) {
-      const filterCategories = category.split(',').map(c => c.trim().toLowerCase());
+    // 1. Забираем ВСЕ товары (или по user/:id)
+    let products = await Product.find();
 
-      let products = await Product.find().limit(limit).skip(skip);
+    // 2. Если передана категория — фильтруем in-memory
+    if (category) {
+      const filterCategories = category
+        .split(',')
+        .map(c => c.trim().toLowerCase());
 
       products = products.filter(product => {
         if (!product.productCategory) return false;
-        const productCats = normalizeCategoryString(product.productCategory);
-        return filterCategories.some(cat => productCats.includes(cat));
-      });
 
-      return res.json({ products });
+        const rawCat = product.productCategory.trim().toLowerCase();
+        const productCats = normalizeCategoryString(product.productCategory);
+
+        // точное совпадение всей фразы или совпадение по любому токену
+        return filterCategories.some(cat =>
+          cat === rawCat || productCats.includes(cat)
+        );
+      });
     }
 
-    const products = await Product.find().limit(limit).skip(skip);
-    res.json({ products });
+    // 3. Пагинация уже отфильтрованного списка
+    const paginated = products.slice(skip, skip + limit);
+
+    return res.json({ products: paginated });
   } catch (err) {
     console.error('Ошибка при получении продуктов:', err);
     res.status(500).json({ message: 'Error fetching products' });
   }
 });
-
-
 
 // Получить все продукты, созданные конкретным пользователем
 router.get('/user/:userId', async (req, res) => {
@@ -49,7 +57,7 @@ router.get('/user/:userId', async (req, res) => {
 
 // Добавить новый продукт
 router.post('/', async (req, res) => {
-  console.log('📦 POST /products -> получено тело запроса:', req.body);
+  console.log(' POST /products -> получено тело запроса:', req.body);
 
   const {
     productName,
