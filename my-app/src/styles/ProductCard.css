@@ -1,26 +1,19 @@
 .product-card-container {
-  /* рамка вокруг карточки + кнопки */
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 16px;
-  /* подложка (если нужно оставить голубой фон) */
   background: #e6f7fb;
-  /* выравнивание по центру содержимого */
   text-align: center;
 
-  /* при нескольких карточках — отступы */
   margin: 12px;
-  /* фиксированная ширина, если надо */
   width: 280px;
 }
 
 .product-card-container .product-card {
-  /* чтобы сама карточка не растягивалась во всю ширину контейнера */
   margin: 0 auto 12px;
 }
 
 .product-card-container .custom-button {
-  /* кнопка — блочный элемент с авто-отступами для центрирования */
   display: block;
   margin: 0 auto;
   padding: 8px 16px;

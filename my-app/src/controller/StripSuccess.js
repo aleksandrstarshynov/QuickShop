@@ -6,16 +6,16 @@ function Success({ location }) {
   const sessionId = params.get('session_id');
 
   useEffect(() => {
-    fetch(`http://localhost:4242/checkout-session?sessionId=${sessionId}`)
+    fetch(`http://localhost:4242/checkout-session?sessionId=${sessionId}`)  //TODO
       .then(res => res.json())
       .then(data => setSession(data));
   }, [sessionId]);
 
-  if (!session) return <p>Загрузка...</p>;
+  if (!session) return <p>Loading...</p>;
   return (
     <div>
-      <h1>Спасибо за покупку!</h1>
-      <p>Статус: {session.payment_status}</p>
+      <h1>Thank you for your purchase!</h1>
+      <p>Status: {session.payment_status}</p>
     </div>
   );
 }

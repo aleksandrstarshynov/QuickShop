@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import '../index.css';
 import '../styles/ProductCard.css';
 
 const ProductCard = ({ product, onAddToCart, highlightedIds = [] }) => {
@@ -17,16 +16,10 @@ console.log("product in addToCart click:", product);
     onAddToCart(product);
   };
 
-  // В базе discountPercentage отсутствует, считаем его 0
   const discountPercentage = 0;
 
-  // Цена со скидкой — просто newPrice, тк скидки нет
-  // Если в будущем появится скидка, можно раскомментировать следующую строку
-  // const discountedPrice = (product.newPrice * (1 - discountPercentage / 100)).toFixed(2);
   const discountedPrice = Number(product.newPrice).toFixed(2);
 
-  // Сравниваем highlightedIds с числовым _id продукта — приводим _id к числу для проверки
-  // Если у тебя _id — строка нечисловая, переделай highlightedIds под строки
   const isTall = highlightedIds.includes(Number(product._id));
 
   return (

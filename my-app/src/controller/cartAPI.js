@@ -1,11 +1,11 @@
 const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 
-// Получить корзину по userId
+// Get cart by userId
 export const fetchCartFromDB = async (userId) => {
   console.log('API_BASE =', API_BASE);
   try {
     const response = await fetch(`${API_BASE}/api/cart/${userId}`);
-    if (!response.ok) throw new Error('Ошибка загрузки корзины');
+    if (!response.ok) throw new Error('Error loading cart');
     return await response.json();
   } catch (err) {
     console.error(err);
@@ -13,7 +13,7 @@ export const fetchCartFromDB = async (userId) => {
   }
 };
 
-// Добавить 1 товар (прибавить к корзине)
+// Add 1 item (add to cart)
 export const addToCartInDB = async (userId, productId) => {
   try {
     const response = await fetch(`${API_BASE}/api/cart`, {
@@ -24,8 +24,8 @@ export const addToCartInDB = async (userId, productId) => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('Ошибка при добавлении в корзину:', errorData);
-      throw new Error('Ошибка при добавлении в корзину');
+      console.error('Error adding to cart:', errorData);
+      throw new Error('Error adding to cart');
     }
 
     return await response.json();
@@ -35,7 +35,7 @@ export const addToCartInDB = async (userId, productId) => {
   }
 };
 
-// Обновить количество товара в корзине
+// Update quantity of items in cart
 export const updateCartInDB = async (userId, productId, quantity) => {
   try {
     const response = await fetch(`${API_BASE}/api/cart`, {
@@ -46,8 +46,8 @@ export const updateCartInDB = async (userId, productId, quantity) => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error('Ошибка при обновлении корзины:', errorData);
-      throw new Error('Ошибка при обновлении корзины');
+      console.error('Error updating cart:', errorData);
+      throw new Error('Error updating cart');
     }
 
     return await response.json();
@@ -58,13 +58,13 @@ export const updateCartInDB = async (userId, productId, quantity) => {
 };
 
 
-// Удалить товар из корзины
+// Remove item from cart
 export const deleteCartItemFromDB = async (userId, productId) => {
   try {
     const response = await fetch(`${API_BASE}/api/cart/${userId}/${productId}`, {
       method: 'DELETE',
     });
-    if (!response.ok) throw new Error('Ошибка при удалении товара');
+    if (!response.ok) throw new Error('Error while deleting item');
     return await response.json();
   } catch (err) {
     console.error(err);

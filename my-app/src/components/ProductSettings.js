@@ -3,14 +3,14 @@ import { getProductById, getProducts, updateProduct, deleteProduct } from '../se
 import { useAuth } from '../context/authContext';
 
 const ProductActions = () => {
-  const { user } = useAuth(); // 🔐 получаем текущего пользователя
+  const { user } = useAuth(); // get the current user
   const [productId, setProductId] = useState('');
   const [productData, setProductData] = useState(null);
   const [userProducts, setUserProducts] = useState([]);
   const [message, setMessage] = useState('');
   const token = localStorage.getItem('token');
 
-  // Получить продукт по ID
+  // Get product by ID
   const handleGetById = async () => {
     try {
       const response = await getProductById(productId);
@@ -21,10 +21,10 @@ const ProductActions = () => {
     }
   };
 
-  // Получить все продукты автора
+  // Get all products from the author
   const handleGetAllByAuthor = async () => {
     try {
-      const response = await getProducts(); // Получаем все
+      const response = await getProducts(); 
       const filtered = response.data.products.filter(p => p.authorId === String(user.id));
       setUserProducts(filtered);
       setMessage(`🔍 Найдено товаров: ${filtered.length}`);
@@ -33,33 +33,33 @@ const ProductActions = () => {
     }
   };
 
-  // Редактировать поля
+  // Edit fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Обновить продукт
+  // Update product
   const handleEdit = async () => {
     try {
       const response = await updateProduct(productId, productData, token);
       setProductData(response.data);
-      setMessage('✅ Product updated');
+      setMessage(' Product updated');
     } catch (error) {
       setMessage('❌ Error updating product');
     }
   };
 
-  // Удалить продукт
+  // Remove product
   const handleDelete = async () => {
-    if (!productId) return setMessage('Введите ID продукта');
-    const confirmed = window.confirm(`Удалить товар с ID: ${productId}?`);
+    if (!productId) return setMessage('Enter product ID');
+    const confirmed = window.confirm(`Delete item with ID: ${productId}?`);
     if (!confirmed) return;
 
     try {
       await deleteProduct(productId, token);
       setProductData(null);
-      setMessage(`🗑️ Product ${productId} deleted`);
+      setMessage(` Product ${productId} deleted`);
       setProductId('');
     } catch (error) {
       console.error(error);
@@ -79,18 +79,18 @@ const ProductActions = () => {
       />
 
       <div style={{ marginTop: '10px' }}>
-        <button onClick={handleGetById}>📥 Получить продукт</button>
-        <button onClick={handleGetAllByAuthor}>📋 Все товары автора</button>
-        <button onClick={handleEdit}>💾 Сохранить изменения</button>
-        <button onClick={handleDelete}>🗑️ Удалить продукт</button>
+        <button onClick={handleGetById}>Get the product</button>
+        <button onClick={handleGetAllByAuthor}>All products by the author</button>
+        <button onClick={handleEdit}>Save changes</button>
+        <button onClick={handleDelete}>Remove product</button>
       </div>
 
       {message && <p style={{ marginTop: '10px' }}>{message}</p>}
 
-      {/* Редактируемый продукт */}
+      {/* Editable product */}
       {productData && (
         <div style={{ marginTop: '20px' }}>
-          <h4>Редактировать продукт</h4>
+          <h4>Edit product</h4>
           <input name="productName" value={productData.productName || ''} onChange={handleChange} placeholder="Product Name" />
           <input name="productBrand" value={productData.productBrand || ''} onChange={handleChange} placeholder="Brand" />
           <input name="productCategory" value={productData.productCategory || ''} onChange={handleChange} placeholder="Category" />
@@ -106,10 +106,10 @@ const ProductActions = () => {
         </div>
       )}
 
-      {/* Список всех товаров автора */}
+      {/* List of all products by the author */}
       {userProducts.length > 0 && (
         <div style={{ marginTop: '30px' }}>
-          <h4>Все товары автора</h4>
+          <h4>All products by the author</h4>
           <ul>
             {userProducts.map(prod => (
               <li key={prod._id}>

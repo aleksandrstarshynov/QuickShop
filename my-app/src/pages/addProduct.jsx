@@ -29,11 +29,10 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Создание товара началось");
     setFormErrors({});
     setServerMessage('');
 
-    // Простая валидация
+    // validation
     const errors = {};
     if (!formData.productName) errors.productName = 'Product name is required';
     if (!formData.productBrand) errors.productBrand = 'Brand is required';
@@ -48,22 +47,21 @@ const AddProduct = () => {
 try {
   const response = await addProduct(formData);
 
-  // В axios успешный ответ попадает сюда (status 2xx)
+  // successful response
   console.log('Product added:', response.data);
   setServerMessage('Product added successfully');
 
 } catch (error) {
-  // В axios ошибки попадают сюда
+  // В axios errors
+
   if (error.response) {
-    // Сервер ответил с ошибкой, можно прочитать текст или json
     console.error('Server error:', error.response.data);
     setServerMessage(`Server error: ${error.response.data.message || 'Unknown error'}`);
   } else if (error.request) {
-    // Запрос отправлен, но ответ не получен
+
     console.error('No response received:', error.request);
     setServerMessage('No response from server');
   } else {
-    // Ошибка в настройках запроса
     console.error('Error setting up request:', error.message);
     setServerMessage('Request setup error');
   }

@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema({
   newPrice: { type: String, required: true },
   productRating: { type: String },
   inStock: { type: Boolean, default: true },
-  availableQuantity: { type: Number, default: 1 },       // Кол-во в наличии
+  availableQuantity: { type: Number, default: 1 },  
   imageURL: { type: String },
   secondaryImageURL: { type: String },
   authorId: { type: String, required: true },            // ID из PostgreSQL

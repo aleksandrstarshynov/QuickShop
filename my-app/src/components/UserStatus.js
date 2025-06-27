@@ -9,10 +9,10 @@ function UserStatus() {
       try {
         const token = localStorage.getItem('token');
         const response = await fetchUserProfile(token);
-        console.log("📦 Ответ от API:", response.data);
+        console.log("Response from API:", response.data);
         setUser(response.data);
       } catch (error) {
-        console.error('Ошибка при загрузке данных пользователя:', error);
+        console.error('Error loading user data:', error);
       }
     };
 

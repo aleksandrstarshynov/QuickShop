@@ -12,7 +12,7 @@ function ProductFeed({ products = [] }) {
   const itemsPerPage = 10;
   const { addToCart } = useCart();
 
-  // Фильтрация по поиску
+  // Filter by search
   const filteredBySearch = products.filter(product =>
     product.productName.toLowerCase().includes(searchTerm.toLowerCase())
   );

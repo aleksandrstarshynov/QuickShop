@@ -4,7 +4,7 @@ const API = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
 });
 
-// Добавить новый продукт
+// Add new product
 export const addProduct = (productData, token) => {
   console.log("BASE_URL:", process.env.REACT_APP_API_BASE_URL);
   return API.post('/products', productData, {
@@ -12,19 +12,19 @@ export const addProduct = (productData, token) => {
   });
 };
 
-// Получить все продукты
+// Get all products
 export const getProducts = () => API.get('/products');
 
-// Получить один продукт по ID
+// Get one product by ID
 export const getProductById = (id) => API.get(`/products/${id}`);
 
-// Обновить продукт по ID
+// Update product by ID
 export const updateProduct = (id, productData, token) =>
   API.put(`/products/${id}`, productData, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-// Удалить продукт по ID
+// Delete product by ID
 export const deleteProduct = (id, token) =>
   API.delete(`/products/${id}`, {
     headers: { Authorization: `Bearer ${token}` },

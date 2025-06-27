@@ -14,14 +14,14 @@ export const CartProvider = ({ children }) => {
 const [cart, setCart] = useState([]);
 const [loading, setLoading] = useState(true);
 
-  // Получаем userId из localStorage
+  // Get userId from localStorage
   const getUserId = () => {
     const storedUser = localStorage.getItem('user');
     const user = storedUser ? JSON.parse(storedUser) : null;
     return user?.id || null;
   };
 
-  // Получаем корзину из базы
+  // We get the basket from the database
   const loadCart = async () => {
     const userId = getUserId();
     if (!userId) {
@@ -33,17 +33,17 @@ const [loading, setLoading] = useState(true);
       const cartFromServer = await fetchCartFromDB(userId);
       setCart(cartFromServer);
     } catch (error) {
-      console.error('Ошибка загрузки корзины:', error);
+      console.error('Error loading cart:', error);
     } finally {
     setLoading(false); 
   }
   };
 
-  // Добавляем товар в корзину
+  // Adding the product to the cart
   const addToCart = async (product) => {
     const userId = getUserId();
     if (!userId) {
-      alert('Пожалуйста, войдите, чтобы добавить товар в корзину');
+      alert('Please sign in to add this item to your cart.');
       return;
     }
 
@@ -52,23 +52,23 @@ const [loading, setLoading] = useState(true);
 
     try {
       if (existingItem) {
-        // Если товар уже есть — увеличиваем количество
+        // If the product is already available, we increase the quantity
         const newQuantity = existingItem.quantity + 1;
         await updateCartInDB(userId, productId, newQuantity);
       } else {
-        // Если товара нет — добавляем его
+        // If the product is not there, we add it
         await addToCartInDB(userId, productId);
       }
 
-      // Обновляем корзину с сервера
+      // Updating the basket from the server
       const updatedCart = await fetchCartFromDB(userId);
       setCart(updatedCart);
     } catch (err) {
-      console.error('Ошибка добавления в корзину:', err);
+      console.error('Error adding to cart:', err);
     }
   };
 
-  // Обновляем количество товара
+  // Updating the quantity of goods
   const updateQuantity = async (productId, newQuantity) => {
     const userId = getUserId();
     if (!userId || newQuantity < 1) return;
@@ -83,11 +83,11 @@ const [loading, setLoading] = useState(true);
         )
       );
     } catch (err) {
-      console.error('Ошибка обновления количества:', err);
+      console.error('Error updating quantity:', err);
     }
   };
 
-  // Удаляем товар из корзины
+  // Removing the item from the cart
   const removeFromCart = async (productId) => {
     const userId = getUserId();
     if (!userId) return;
@@ -96,11 +96,11 @@ const [loading, setLoading] = useState(true);
       await deleteCartItemFromDB(userId, productId);
       setCart(prevCart => prevCart.filter(item => item.product._id !== productId));
     } catch (err) {
-      console.error('Ошибка удаления из корзины:', err);
+      console.error('Error deleting from recycle bin:', err);
     }
   };
 
-  // Загружаем корзину при монтировании и фокусе
+  // Loading the basket on mount and focus
   useEffect(() => {
     loadCart();
 

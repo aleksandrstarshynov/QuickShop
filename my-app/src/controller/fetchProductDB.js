@@ -7,44 +7,43 @@ const api = axios.create({
 });
 
 /**
- * Получить список товаров с пагинацией и по категориям (если поддерживается сервером).
+ * Get a list of products with pagination and by category (if supported by the server).
  * @param {Object} options
- * @param {string|string[]} options.category - Название категории или массив категорий (необязательно).
- * @param {number} options.limit - Сколько товаров получить (по умолчанию 20).
- * @param {number} options.skip - Сколько товаров пропустить (например, для пагинации).
- * @returns {Promise<Array>} Массив объектов товаров.
+ * @param {string|string[]} options.category - Category name or array of categories (optional).
+ * @param {number} options.limit - How many items to get (default 20).
+ * @param {number} options.skip - How many products to skip (for example, for pagination).
+ * @returns {Promise<Array>} Array of product objects.
  */
 export async function fetchProductDB({ category = '', limit = 20, skip = 0 } = {}) {
   try {
     const params = { limit, skip };
 
     if (Array.isArray(category)) {
-      // если пришёл массив, склеиваем в строку через запятую
+      // if an array arrived, we glue it into a string separated by commas
       params.category = category.join(',');
     } else if (category) {
-      // если строка — передаём как есть
       params.category = category;
     }
 
     const response = await api.get('/products', { params });
     return response.data.products || [];
   } catch (error) {
-    console.error('Ошибка при получении продуктов:', error);
+    console.error('Error while receiving products:', error);
     return [];
   }
 }
 
 /**
- * Получить один товар по ID.
- * @param {string|number} id - ID товара.
- * @returns {Promise<Object|null>} Объект товара или null при ошибке.
+ * Get one product by ID.
+ * @param {string|number} id - Product ID.
+ * @returns {Promise<Object|null>} The product object, or null on error.
  */
 export async function fetchProductById(id) {
   try {
     const response = await api.get(`/products/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Ошибка при получении товара по ID:', error);
+    console.error('Error receiving product by ID:', error);
     return null;
   }
 }

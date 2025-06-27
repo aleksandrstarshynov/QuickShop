@@ -13,12 +13,12 @@ function Catalog() {
 
   useEffect(() => {
     async function fetchProducts() {
-      // Собираем query параметры для фильтров
+      // Collecting query parameters for filters
       const params = new URLSearchParams();
       if (category.length > 0) params.append('category', category.join(','));
       if (availability) params.append('availability', availability);
 
-      const res = await fetch(`http://localhost:4000/products?${params.toString()}`);
+      const res = await fetch(`http://localhost:4000/products?${params.toString()}`);  //TODO
       const data = await res.json();
       setProducts(data.products || []);
     }
@@ -28,7 +28,6 @@ function Catalog() {
   return (
     <>
       <main className="catalog-header">
-        {/* Заголовок каталога */}
       </main>
       <div className="catalog-container">
         <div className="filter-side-block">
@@ -40,7 +39,7 @@ function Catalog() {
           />
             <button
               className="custom-button" style={{ marginTop: '30px' }} onClick={() => {
-                console.log('Категории для фильтрации:', tempCategory);
+                console.log('Categories to filter:', tempCategory);
                 setCategory(tempCategory);
                 setAvailability(tempAvailability);
               }}

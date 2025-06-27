@@ -28,7 +28,6 @@ const Register = () => {
     const errors = {};
     if (!formData.username) errors.username = 'Username is required';
     if (!formData.password) errors.password = 'Password is required';
-    // можно добавить валидацию остальных полей...
     if (Object.keys(errors).length) {
       setFormErrors(errors);
       return;
