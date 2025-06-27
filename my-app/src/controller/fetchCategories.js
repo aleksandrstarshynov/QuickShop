@@ -10,7 +10,7 @@ export const fetchCategories = async () => {
   });
 
   if (!res.ok) {
-    throw new Error('Ошибка при загрузке категорий');
+    throw new Error('Error loading categories');
   }
 
   return res.json();

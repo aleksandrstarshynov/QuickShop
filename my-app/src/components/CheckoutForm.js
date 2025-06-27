@@ -1,4 +1,3 @@
-// src/components/CheckoutForm.js
 import React, { useEffect, useState } from 'react';
 import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { useCart } from '../context/CartContext';
@@ -28,12 +27,12 @@ export default function CheckoutForm() {
   const [processing, setProcessing] = useState(false);
   const [succeeded, setSucceeded] = useState(false);
 
-  // Запрашиваем clientSecret
+  // Request clientSecret
   useEffect(() => {
     if (!cart?.length) return;
     (async () => {
       try {
-        const resp = await fetch('http://localhost:4000/create-payment-intent', {
+        const resp = await fetch('http://localhost:4000/create-payment-intent', {  //TODO
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items: cart }),
@@ -41,7 +40,7 @@ export default function CheckoutForm() {
         const { clientSecret } = await resp.json();
         setClientSecret(clientSecret);
       } catch {
-        setError('Не удалось инициировать платёж');
+        setError('Failed to initiate payment');
       }
     })();
   }, [cart]);
@@ -57,7 +56,7 @@ export default function CheckoutForm() {
     setError('');
 
     if (!stripe || !elements) {
-      setError('Stripe не готов');
+      setError('Stripe is not ready');
       setProcessing(false);
       return;
     }
@@ -73,9 +72,7 @@ export default function CheckoutForm() {
       setProcessing(false);
     } else if (paymentIntent.status === 'succeeded') {
       setSucceeded(true);
-      // очистим корзину (опционально)
       await reloadCart();
-      // перенаправим на success-страницу
       navigate('/success', { state: { paymentIntent } });
     }
   };
@@ -84,20 +81,20 @@ export default function CheckoutForm() {
 
   return succeeded ? (
     <div className="checkout-form">
-      <h2>Спасибо за покупку!</h2>
-      <p>Ваш платёж на сумму €{total.toFixed(2)} успешно завершён.</p>
-      <button onClick={() => navigate('/')}>Вернуться на главную</button>
+      <h2>Thank you for your purchase!</h2>
+      <p>Your payment in the amount of €{total.toFixed(2)} successfully completed.</p>
+      <button onClick={() => navigate('/')}>Return to home page</button>
     </div>
   ) : (
     <form className="checkout-form" onSubmit={handleSubmit}>
-      <label>Данные карты</label>
+      <label>Card details</label>
       <CardElement className="StripeElement" options={CARD_ELEMENT_OPTIONS} />
       {error && <div className="error">{error}</div>}
       <button
         type="submit"
         disabled={!stripe || !elements || !clientSecret || processing}
       >
-        {processing ? 'Обработка…' : `Оплатить €${total.toFixed(2)}`}
+        {processing ? 'Processing…' : `Pay €${total.toFixed(2)}`}
       </button>
     </form>
   );

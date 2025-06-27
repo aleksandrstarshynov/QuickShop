@@ -14,7 +14,7 @@ function Profile() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const tab = searchParams.get('tab') || 'profile'; // default tab
-  const { user } = useAuth(); // получаем текущего пользователя
+  const { user } = useAuth(); // get the current user
 
   const [formData, setFormData] = useState({
     productName: '',
@@ -68,7 +68,7 @@ function Profile() {
       const token = localStorage.getItem('token');
       const productWithAuthor = {
       ...formData,
-      authorId: user.id, // добавляем ID пользователя
+      authorId: user.id, // add user ID
       };
       const response = await addProduct(productWithAuthor, token);
       console.log('Product added:', response);
@@ -87,7 +87,7 @@ function Profile() {
           const token = localStorage.getItem('token');
           const response = await fetchUserProfile(token);
           console.log("🎯 User profile from backend:", response.data);
-          setUserData(response.data); // предполагаем, что в ответе уже нужные поля
+          setUserData(response.data); 
         } catch (err) {
           console.error('Failed to load profile:', err);
         }

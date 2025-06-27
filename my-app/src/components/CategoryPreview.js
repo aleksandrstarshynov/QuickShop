@@ -1,4 +1,3 @@
-// src/components/CategoryPreview.js
 import React, { useState, useEffect } from 'react';
 import '../styles/CategoryPreview.css';
 
@@ -11,15 +10,13 @@ export default function CategoryPreview({ category }) {
 
   useEffect(() => {
     async function fetchImages() {
-      // Оригинальная строка категории
       const raw = category.trim();
       console.log('[CategoryPreview] raw category prop:', raw);
 
-      // Преобразуем всю строку в lowercase — сервер потом фильтрует по normalizeCategoryString
       const queryCategory = raw.toLowerCase();
       console.log('[CategoryPreview] queryCategory:', queryCategory);
 
-      // Формируем URL запроса
+      // Forming a request URL
       const url = `${BASE}/products?category=${encodeURIComponent(queryCategory)}&limit=4&skip=0`;
       console.log('[CategoryPreview] Fetch URL:', url);
 

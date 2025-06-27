@@ -5,7 +5,6 @@ import UserStatus from './UserStatus.js';
 function ProfileBar() {
 return (
         <div>
-            {/* <h1>Добро пожаловать!</h1> */}
             <Profile
                 userName={profileData.userName}
                 // role={profileData.role}
