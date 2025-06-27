@@ -13,7 +13,8 @@ const productSchema = new mongoose.Schema({
   imageURL: { type: String },
   secondaryImageURL: { type: String },
   authorId: { type: String, required: true },            // ID из PostgreSQL
-  createdAt: { type: Date, default: Date.now },          
+  createdAt: { type: Date, default: Date.now },   
+  highlighted: { type: Number,  default: 0 },       
 });
 
 const Product = mongoose.model('Product', productSchema);

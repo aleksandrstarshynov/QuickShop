@@ -3,7 +3,6 @@ import Pagination from './Pagination';
 import ProductSearch from './ProductSearch.js';
 import ProductCard from './ProductCard'; 
 import Masonry from 'react-masonry-css'; 
-import { highlightedProductIds } from '../mocked_DB/highlightedProducts';
 import { useCart } from '../context/CartContext.js'; 
 
 function ProductFeed({ products = [] }) {
@@ -40,6 +39,7 @@ function ProductFeed({ products = [] }) {
   return (
     <div className="product-feed">
       <ProductSearch searchTerm={searchTerm} onChange={handleSearchChange} />
+
       {currentProducts.length > 0 ? (
         <Masonry
           breakpointCols={breakpointColumnsObj}
@@ -48,14 +48,22 @@ function ProductFeed({ products = [] }) {
         >
           {currentProducts
             .filter(product => product && product._id)
-            .map(product => (
-              <ProductCard
-                key={product._id}
-                product={product}
-                onAddToCart={addToCart}
-                highlightedIds={highlightedProductIds}
-              />
-            ))}
+            .map(product => {
+              const isTall = product.highlighted === '1';
+              const cardClass = isTall
+                ? 'product-card tall-card'
+                : 'product-card';
+
+              return (
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                  onAddToCart={addToCart}
+                  className={cardClass}
+                />
+              );
+            })
+          }
         </Masonry>
       ) : (
         <p>No products found</p>

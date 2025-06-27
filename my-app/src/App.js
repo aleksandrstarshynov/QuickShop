@@ -8,7 +8,7 @@ import Catalog from './pages/Catalog';
 import Profile from './pages/Profile';
 import About from './pages/About';
 import Offices from './pages/Offices';
-import PromoBlock from './components/PromoBlock';
+// import PromoBlock from './components/PromoBlock';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import EditProfile from './pages/EditProfile';

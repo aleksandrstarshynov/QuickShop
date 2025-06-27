@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import '../styles/ProductCard.css';
 
 const ProductCard = ({ product, onAddToCart, highlightedIds = [] }) => {
+  const isTall = product.highlighted === '1';
+
   const handleAddToCartClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -20,7 +22,7 @@ console.log("product in addToCart click:", product);
 
   const discountedPrice = Number(product.newPrice).toFixed(2);
 
-  const isTall = highlightedIds.includes(Number(product._id));
+  // const isTall = highlightedIds.includes(Number(product._id));
 
   return (
     <div className="product-card-container">

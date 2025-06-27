@@ -1,9 +1,9 @@
 // import CategoriesFilter from "./CategoriesFilter.js";
-import LanguageFilter from "./LanguageFilter.js";
+// import LanguageFilter from "./LanguageFilter.js";
  import FileFormatFilter from "./FileFormatFilter.js";
 // import DeliveryFilter from "./DeliveryFilter.js";
 import CategoryFilter from './CategoryFilter.js';
-import AvailabilityFilter from './AvailabilityFilter';
+// import AvailabilityFilter from './AvailabilityFilter';
 import React, { useState } from 'react';
 
 

@@ -7,39 +7,35 @@ const router = express.Router();
 // Get all products
 router.get('/', async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit, 10) || 10;
-    const skip  = parseInt(req.query.skip,  10) || 0;
-    const { category } = req.query;
+    // <-- Открывающая фигурная скобка функции-обработчика здесь
 
-    // 1. We take ALL goods (or by user/:id)
-    let products = await Product.find();
+    // 1) получаем plain-объекты из Mongo с вашими полями
+    let products = await Product.find().lean();
 
-    // 2. If a category is passed, we filter in-memory
-    if (category) {
-      const filterCategories = category
+    // 2) логируем первый элемент, чтобы проверить имя и значение поля
+    console.log('First product from DB:', products[0]);
+
+    // 3) остальная фильтрация по категории
+    if (req.query.category) {
+      const filterCategories = req.query.category
         .split(',')
         .map(c => c.trim().toLowerCase());
-
       products = products.filter(product => {
-        if (!product.productCategory) return false;
-
-        const rawCat = product.productCategory.trim().toLowerCase();
-        const productCats = normalizeCategoryString(product.productCategory);
-
-        // exact match of the whole phrase or match on any token
-        return filterCategories.some(cat =>
-          cat === rawCat || productCats.includes(cat)
-        );
+        /* ваш код фильтра */
       });
     }
 
-    // 3. Pagination of an already filtered list
+    // 4) пагинация
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip  = parseInt(req.query.skip,  10) || 0;
     const paginated = products.slice(skip, skip + limit);
 
+    // 5) возвращаем из функции-обработчика
     return res.json({ products: paginated });
+
   } catch (err) {
     console.error('Error while receiving products:', err);
-    res.status(500).json({ message: 'Error fetching products' });
+    return res.status(500).json({ message: 'Error fetching products' });
   }
 });
 
