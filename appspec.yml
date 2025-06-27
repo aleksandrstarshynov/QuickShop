@@ -1,8 +1,6 @@
-# appspec.yml
 version: 0.0
 os: linux
 
-# Копируем папки server и frontend в /home/ec2-user/app
 files:
   - source: server
     destination: /home/ec2-user/app/server
@@ -10,19 +8,23 @@ files:
     destination: /home/ec2-user/app/frontend
 
 hooks:
-  # Устанавливаем зависимости бэкенда до копирования
+  # Останавливаем старый сервер перед копированием
   BeforeInstall:
-    - location: scripts/install_server_deps.sh
+    - location: scripts/stop_server.sh
       timeout: 300
 
-  # Устанавливаем зависимости фронтенда и собираем React
+  # Копирование файлов происходит автоматически здесь
+
+  # Устанавливаем зависимости и собираем фронтенд/бэкенд
   AfterInstall:
+    - location: scripts/install_server_deps.sh
+      timeout: 300
     - location: scripts/install_frontend_deps.sh
       timeout: 300
     - location: scripts/build_frontend.sh
       timeout: 300
 
-  # Запускаем Node.js-сервер (например, через pm2 или systemd)
+  # Запускаем новый сервер
   ApplicationStart:
     - location: scripts/start_server.sh
       timeout: 300
