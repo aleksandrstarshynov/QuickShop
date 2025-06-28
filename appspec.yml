@@ -3,11 +3,13 @@ os: linux
 
 files:
   - source: server
+
     destination: /home/ec2-user/quickshop/server
   - source: frontend
     destination: /home/ec2-user/quickshop/my-app
 
 hooks:
+
   BeforeInstall:
     - location: scripts/stop_server.sh
       timeout: 300
