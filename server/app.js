@@ -29,9 +29,16 @@ app.use((req, res, next) => {
 });
 
 // CORS
+const allowed = [
+  'http://localhost:3000',
+  'http://51.20.55.140'
+];
 app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
+  origin: (origin, cb) => {
+    if (!origin || allowed.includes(origin)) cb(null, true);
+    else cb(new Error('Not allowed by CORS'));
+  },
+  credentials: true
 }));
 
 app.use(express.json());

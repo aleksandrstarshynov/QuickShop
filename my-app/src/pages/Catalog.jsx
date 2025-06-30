@@ -3,6 +3,8 @@ import Filters from '../components/Filters';
 import ProductFeed from "../components/ProductFeed.js";
 import { useCart } from '../context/CartContext';
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
+
 function Catalog() {
   const [tempCategory, setTempCategory] = useState([]);
   const [tempAvailability, setTempAvailability] = useState('');
@@ -18,7 +20,7 @@ function Catalog() {
       if (category.length > 0) params.append('category', category.join(','));
       if (availability) params.append('availability', availability);
 
-      const res = await fetch(`http://localhost:4000/products?${params.toString()}`);  //TODO
+      const res = await fetch(`${API_BASE}/products?${params.toString()}`);  
       const data = await res.json();
       setProducts(data.products || []);
     }

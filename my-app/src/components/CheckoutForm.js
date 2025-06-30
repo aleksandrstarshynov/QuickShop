@@ -4,6 +4,8 @@ import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import '../styles/CheckoutForm.css';
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
+
 const CARD_ELEMENT_OPTIONS = {
   style: {
     base: {
@@ -32,7 +34,7 @@ export default function CheckoutForm() {
     if (!cart?.length) return;
     (async () => {
       try {
-        const resp = await fetch('http://localhost:4000/create-payment-intent', {  //TODO
+        const resp = await fetch(`${API_BASE}/create-payment-intent`, {  
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items: cart }),

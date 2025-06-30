@@ -6,7 +6,7 @@ function Success({ location }) {
   const sessionId = params.get('session_id');
 
   useEffect(() => {
-    fetch(`http://localhost:4242/checkout-session?sessionId=${sessionId}`)  //TODO
+    fetch(`${API_BASE}/checkout-session?sessionId=${sessionId}`)
       .then(res => res.json())
       .then(data => setSession(data));
   }, [sessionId]);
