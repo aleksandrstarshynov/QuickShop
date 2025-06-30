@@ -4,6 +4,8 @@ import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import '../styles/CheckoutForm.css';
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
+
 const CARD_ELEMENT_OPTIONS = {
   style: {
     base: {

@@ -17,10 +17,10 @@ function CategoryFilter({ selectedValues = [], setSelectedValues }) {
       });
   }, []);
 
-  if (loading) return <p>Загрузка категорий...</p>;
+  if (loading) return <p>Loading Category</p>;
 
-  console.log("Категории:", categories);
-  console.log("selectedValues:", selectedValues);
+  // console.log("Категории:", categories);
+  // console.log("selectedValues:", selectedValues);
 
   return (
     <div className="category-filter">
