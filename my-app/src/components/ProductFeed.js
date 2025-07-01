@@ -1,19 +1,23 @@
 import { useState } from 'react';
 import Pagination from './Pagination';
-import ProductSearch from './ProductSearch.js';
-import ProductCard from './ProductCard'; 
-import Masonry from 'react-masonry-css'; 
-import { useCart } from '../context/CartContext.js'; 
 
-function ProductFeed({ products = [] }) {
+import ProductSearch from './ProductSearch';
+import ProductCard from './ProductCard';
+import Masonry from 'react-masonry-css';
+import { highlightedProductIds } from '../mocked_DB/highlightedProducts';
+import { useCart } from '../context/CartContext';
+
+
+function ProductFeed({ products }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
   const { addToCart } = useCart();
 
-  // Filter by search
+
+  const itemsPerPage = 10;
+
   const filteredBySearch = products.filter(product =>
-    product.productName.toLowerCase().includes(searchTerm.toLowerCase())
+    product.productName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredBySearch.length / itemsPerPage);
@@ -38,7 +42,10 @@ function ProductFeed({ products = [] }) {
 
   return (
     <div className="product-feed">
-      <ProductSearch searchTerm={searchTerm} onChange={handleSearchChange} />
+      <div className="search-bar mb-4">
+        <ProductSearch searchTerm={searchTerm} onChange={handleSearchChange} />
+      </div>
+
 
       {currentProducts.length > 0 ? (
         <Masonry
@@ -46,24 +53,16 @@ function ProductFeed({ products = [] }) {
           className="my-masonry-grid"
           columnClassName="my-masonry-grid_column"
         >
-          {currentProducts
-            .filter(product => product && product._id)
-            .map(product => {
-              const isTall = product.highlighted === '1';
-              const cardClass = isTall
-                ? 'product-card tall-card'
-                : 'product-card';
 
-              return (
-                <ProductCard
-                  key={product._id}
-                  product={product}
-                  onAddToCart={addToCart}
-                  className={cardClass}
-                />
-              );
-            })
-          }
+          {currentProducts.map(product => (
+            <ProductCard
+              key={product._id}
+              product={product}
+              onAddToCart={addToCart}
+              highlightedIds={highlightedProductIds}
+            />
+          ))}
+
         </Masonry>
       ) : (
         <p>No products found</p>

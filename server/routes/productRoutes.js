@@ -4,44 +4,41 @@ import { normalizeCategoryString } from '../utils/normalizeCategory.js';
 
 const router = express.Router();
 
-// Get all products
+
+// Get all products (filtered by slug)
 router.get('/', async (req, res) => {
   try {
-    // <-- Открывающая фигурная скобка функции-обработчика здесь
+    const limit = parseInt(req.query.limit, 10) || 10;
+    const skip = parseInt(req.query.skip, 10) || 0;
+    const { categories } = req.query;
 
-    // 1) получаем plain-объекты из Mongo с вашими полями
-    let products = await Product.find().lean();
+    console.log('👉 Категории из запроса:', categories);
 
-    // 2) логируем первый элемент, чтобы проверить имя и значение поля
-    console.log('First product from DB:', products[0]);
+    let filter = {};
 
-    // 3) остальная фильтрация по категории
-    if (req.query.category) {
-      const filterCategories = req.query.category
+    if (categories) {
+      const selectedSlugs = categories
         .split(',')
-        .map(c => c.trim().toLowerCase());
-      products = products.filter(product => {
-        /* ваш код фильтра */
-      });
+        .map(slug => slug.trim().toLowerCase());
+
+      filter.productCategorySlug = { $in: selectedSlugs };
     }
 
-    // 4) пагинация
-    const limit = parseInt(req.query.limit, 10) || 10;
-    const skip  = parseInt(req.query.skip,  10) || 0;
-    const paginated = products.slice(skip, skip + limit);
-
-    // 5) возвращаем из функции-обработчика
-    return res.json({ products: paginated });
-
+    console.log('🧪 Mongo filter:', filter);
+    
+    const products = await Product.find(filter).skip(skip).limit(limit);
+    return res.json({ products });
   } catch (err) {
-    console.error('Error while receiving products:', err);
-    return res.status(500).json({ message: 'Error fetching products' });
+    console.error('❌ Error while receiving products:', err);
+    res.status(500).json({ message: 'Error fetching products' });
+
   }
 });
 
 // Get all products created by a specific user
 router.get('/user/:userId', async (req, res) => {
   try {
+    console.log("🔍 Фильтр:", filter);
     const products = await Product.find({ authorId: req.params.userId });
     res.json(products); 
   } catch (err) {
@@ -76,11 +73,21 @@ router.post('/', async (req, res) => {
     });
   }
 
+  // Generation of slug from the first category
+  const categoryName = Array.isArray(productCategory)
+    ? productCategory[0]
+    : productCategory;
+
+  const categorySlug = categoryName
+    ? categoryName.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '')
+    : '';
+
   try {
     const newProduct = new Product({
       productName,
       productBrand,
       productCategory,
+      productCategorySlug: categorySlug, 
       productDescription,
       oldPrice,
       newPrice,
@@ -90,11 +97,11 @@ router.post('/', async (req, res) => {
       imageURL,
       secondaryImageURL,
       authorId,
-      createdAt: new Date(), 
-    });
+      });
 
     const savedProduct = await newProduct.save();
-    console.log(' New product created:', savedProduct._id);
+    console.log('New product created:', savedProduct._id);
+
     res.status(201).json(savedProduct);
   } catch (err) {
     console.error('❌ Error creating product:', err);
@@ -119,7 +126,9 @@ router.put('/:id', async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true } // return updated document
+
+      { new: true } // return the updated document
+
     );
     if (!updatedProduct) return res.status(404).json({ message: 'Product not found' });
     res.json(updatedProduct);
