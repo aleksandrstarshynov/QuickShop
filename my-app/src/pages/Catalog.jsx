@@ -1,56 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import Filters from '../components/Filters';
-import ProductFeed from "../components/ProductFeed.js";
-import { useCart } from '../context/CartContext';
+import ProductFeed from "../components/ProductFeed";
 
 function Catalog() {
-  const [tempCategory, setTempCategory] = useState([]);
-  const [tempAvailability, setTempAvailability] = useState('');
   const [category, setCategory] = useState([]);
   const [availability, setAvailability] = useState('');
   const [products, setProducts] = useState([]);
-  const { addToCart } = useCart();
 
   useEffect(() => {
     async function fetchProducts() {
-      // Собираем query параметры для фильтров
       const params = new URLSearchParams();
-      if (category.length > 0) params.append('category', category.join(','));
-      if (availability) params.append('availability', availability);
+      
+      // 👇 отправляем каждую категорию отдельно
+      if (category.length > 0) {
+        category.forEach(slug => params.append('categories', slug));
+      }
 
-      const res = await fetch(`http://localhost:4000/products?${params.toString()}`);
+      if (availability) {
+        params.append('availability', availability);
+      }
+
+      console.log("🔍 URL:", `http://localhost:4000/products?${params.toString()}`); //TODO
+      const res = await fetch(`http://localhost:4000/products?${params.toString()}`);//TODO
       const data = await res.json();
       setProducts(data.products || []);
     }
+
     fetchProducts();
   }, [category, availability]);
 
   return (
-    <>
-      <main className="catalog-header">
-        {/* Заголовок каталога */}
-      </main>
-      <div className="catalog-container">
-        <div className="filter-side-block">
-          <Filters
-            tempCategory={tempCategory}
-            setTempCategory={setTempCategory}
-            tempAvailability={tempAvailability}
-            setTempAvailability={setTempAvailability}
-          />
-            <button
-              className="custom-button" style={{ marginTop: '30px' }} onClick={() => {
-                console.log('Категории для фильтрации:', tempCategory);
-                setCategory(tempCategory);
-                setAvailability(tempAvailability);
-              }}
-            >
-              Apply
-            </button>
-        </div>
-        <ProductFeed products={products} onAddToCart={addToCart} />
+    <div className="catalog-container">
+      <div className="filter-side-block">
+        <Filters
+          selectedCategories={category}
+          onCategoryChange={setCategory}
+          selectedAvailability={availability}
+          onAvailabilityChange={setAvailability}
+        />
       </div>
-    </>
+      <div className="product-feed-container">
+      <ProductFeed products={products} />
+    </div>
+    </div>
   );
 }
 

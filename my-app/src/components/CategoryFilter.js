@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { fetchCategories } from '../controller/fetchCategories';
+import React, { useEffect, useState } from 'react';
 
-function CategoryFilter({ selectedValues = [], setSelectedValues }) {
+function CategoryFilter({ selectedValues, setSelectedValues }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCategories()
+    fetch('http://localhost:4000/api/categories') //TODO
+      .then(res => res.json())
       .then(data => {
         setCategories(data);
         setLoading(false);
@@ -17,27 +17,27 @@ function CategoryFilter({ selectedValues = [], setSelectedValues }) {
       });
   }, []);
 
-  if (loading) return <p>Загрузка категорий...</p>;
+  const toggleCategory = (slug, checked) => {
+    if (checked) {
+      setSelectedValues(prev => [...prev, slug]);
+    } else {
+      setSelectedValues(prev => prev.filter(s => s !== slug));
+    }
+  };
 
-  console.log("Категории:", categories);
-  console.log("selectedValues:", selectedValues);
+  if (loading) return <p>Loading categories...</p>;
 
   return (
     <div className="category-filter">
-      <h3>Categories</h3>
+      <h3 className="text-lg font-semibold mb-2">Categories</h3>
       {categories.map(category => (
-        <label key={category.slug} style={{ display: 'block', marginBottom: '0.5rem' }}>
+        <label key={category.slug} className="block mb-2 cursor-pointer">
           <input
             type="checkbox"
             value={category.slug}
             checked={selectedValues.includes(category.slug)}
-            onChange={e => {
-              if (e.target.checked) {
-                setSelectedValues([...selectedValues, category.slug]);
-              } else {
-                setSelectedValues(selectedValues.filter(c => c !== category.slug));
-              }
-            }}
+            onChange={e => toggleCategory(category.slug, e.target.checked)}
+            className="mr-2"
           />
           {category.name}
         </label>
@@ -45,4 +45,5 @@ function CategoryFilter({ selectedValues = [], setSelectedValues }) {
     </div>
   );
 }
+
 export default CategoryFilter;
