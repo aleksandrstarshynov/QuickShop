@@ -2,41 +2,41 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/ProductCard.css';
 
-const ProductCard = ({ product, onAddToCart, highlightedIds = [] }) => {
-  const isTall = product.highlighted === '1';
+const ProductCard = ({ product, onAddToCart, className = '' }) => {
 
   const handleAddToCartClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-console.log("product in addToCart click:", product);
 
+    // 🛒 Защита от клика по пустому товару
     if (!product) {
       console.error('product is undefined!');
       return;
     }
-    console.log('Добавляем в корзину product:', product);
+
+    // ✅ Добавление в корзину
     onAddToCart(product);
   };
 
-  const discountPercentage = 0;
 
+  // 💸 Скидки пока не поддерживаются — просто форматируем цену
   const discountedPrice = Number(product.newPrice).toFixed(2);
 
-  // const isTall = highlightedIds.includes(Number(product._id));
+  // 🟩 Выделение товара (высокая карточка)
+  const isTall = product.highlighted === '1';
+
 
   return (
     <div className="product-card-container">
       <Link to={`/product/${product._id}`} className="product-card-link">
-        <div className={`product-card ${isTall ? 'tall-card' : ''}`}>
+        <div className={`product-card ${isTall ? 'tall-card' : ''} ${className}`}>
           <h3>{product.productName}</h3>
           <img
             src={product.imageURL ?? 'https://via.placeholder.com/150'}
             alt={product.productName}
           />
           <p>{product.productBrand ?? 'No brand'}</p>
-          <p className="product-card__price">
-            €{discountedPrice}
-          </p>
+          <p className="product-card__price">€{discountedPrice}</p>
           <p>
             <strong>In stock:</strong> {product.inStock ? 'Yes' : 'No'}
           </p>
@@ -48,7 +48,6 @@ console.log("product in addToCart click:", product);
       </button>
     </div>
   );
-
 };
 
 export default ProductCard;
