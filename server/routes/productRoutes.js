@@ -4,6 +4,7 @@ import { normalizeCategoryString } from '../utils/normalizeCategory.js';
 
 const router = express.Router();
 
+
 // Get all products (filtered by slug)
 router.get('/', async (req, res) => {
   try {
@@ -30,6 +31,7 @@ router.get('/', async (req, res) => {
   } catch (err) {
     console.error('❌ Error while receiving products:', err);
     res.status(500).json({ message: 'Error fetching products' });
+
   }
 });
 
@@ -99,6 +101,7 @@ router.post('/', async (req, res) => {
 
     const savedProduct = await newProduct.save();
     console.log('New product created:', savedProduct._id);
+
     res.status(201).json(savedProduct);
   } catch (err) {
     console.error('❌ Error creating product:', err);
@@ -123,7 +126,9 @@ router.put('/:id', async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       req.body,
+
       { new: true } // return the updated document
+
     );
     if (!updatedProduct) return res.status(404).json({ message: 'Product not found' });
     res.json(updatedProduct);

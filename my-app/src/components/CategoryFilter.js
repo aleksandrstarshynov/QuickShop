@@ -17,6 +17,7 @@ function CategoryFilter({ selectedValues, setSelectedValues }) {
       });
   }, []);
 
+
   const toggleCategory = (slug, checked) => {
     if (checked) {
       setSelectedValues(prev => [...prev, slug]);
@@ -26,6 +27,7 @@ function CategoryFilter({ selectedValues, setSelectedValues }) {
   };
 
   if (loading) return <p>Loading categories...</p>;
+
 
   return (
     <div className="category-filter">

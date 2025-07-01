@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-// import { User } from './models/Users.js';
 import mongoose from 'mongoose'; 
 import bcrypt from 'bcrypt';
 import { getDecodedUser } from './utils/getDecodedUser.js'; 
@@ -29,12 +28,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Настроить CORS
+// CORS
+const allowed = [
+  'http://localhost:3000',
+  'http://51.20.55.140'
+];
 app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true,
-  // methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  // allowedHeaders: ['Content-Type', 'Authorization']
+  origin: (origin, cb) => {
+    if (!origin || allowed.includes(origin)) cb(null, true);
+    else cb(new Error('Not allowed by CORS'));
+  },
+  credentials: true
 }));
 
 app.use(express.json());
@@ -43,7 +47,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// РЕГИСТРАЦИЯ
+// REGISTRATION
 app.post("/auth/register", async (req, res) => {
   const { username, password, firstname, lastname, email, phone, dateofbirth } = req.body;
 
@@ -77,7 +81,7 @@ app.post("/auth/register", async (req, res) => {
 }
 });
 
-// ЛОГИН
+// LOGIN
 app.post('/auth/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -88,17 +92,10 @@ app.post('/auth/login', async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    console.log('Введённое имя:', username);
-    console.log('Введённый пароль:', password);
-    console.log('Найден пользователь:', user);
-    console.log('Хэш из базы:', user.password);
-    console.log('Перед сравнением пароля');
     const correctPassword = await bcrypt.compare(password, user.password);
     if (!correctPassword) {
       return res.status(401).json({ message: "Invalid username/password" });
     }
-
-    console.log('Пароль совпадает?', correctPassword);
 
     const token = jsonwebtoken.sign({ id: user.id, name: user.username }, SECRET);
     res.status(201).json({
@@ -114,14 +111,13 @@ app.post('/auth/login', async (req, res) => {
         created_at: user.created_at,
       }
     });
-    console.log('Токен создан:', token);
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
-// ПРОФИЛЬ
+// PROFILE
 app.get('/auth/profile', async (req, res) => {
   try {
     const decodedUser = getDecodedUser(req, SECRET);
@@ -140,7 +136,7 @@ app.get('/auth/profile', async (req, res) => {
   }
 });
 
-// ОБНОВЛЕНИЕ
+// UPDATE
 app.put('/auth/update', async (req, res) => {
   const { username, password, firstname, lastname, email, phone, dateofbirth } = req.body;
 
@@ -168,7 +164,7 @@ app.put('/auth/update', async (req, res) => {
   }
 });
 
-// УДАЛЕНИЕ
+// REMOVAL
 app.delete('/auth/delete', async (req, res) => {
   try {
     const decodedUser = getDecodedUser(req, SECRET);
@@ -184,7 +180,7 @@ app.delete('/auth/delete', async (req, res) => {
   }
 });
 
-// Логаут (токен просто удаляется на клиенте)
+// Logout (the token is simply deleted on the client)
 app.post('/auth/logout', (req, res) => {
   res.status(200).json({ message: "User logged out" });
 });
@@ -192,12 +188,6 @@ app.post('/auth/logout', (req, res) => {
 
 // PRODUCTS
  app.use('/products', productRoutes);
-// mongoose.connect(process.env.MONGODB_URI, {
-//   // useNewUrlParser: true,
-//   // useUnifiedTopology: true,
-// })
-// .then(() => console.log('MongoDB connected'))
-// .catch(err => console.error('MongoDB connection error:', err));
 
 // CART
 app.use('/api', cartRoutes);
@@ -205,15 +195,14 @@ app.use('/api', cartRoutes);
 // CATEGORIES
 app.use('/api/categories', categoryRoutes);
 
-// Статическая папка для фронтенда
+// Static folder for frontend
 app.use(express.static('my-app'));
 
 //STRIP
 import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Создать Checkout Session
-
+// Create Checkout Session
 app.post('/create-checkout-session', async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.create({
@@ -222,7 +211,7 @@ app.post('/create-checkout-session', async (req, res) => {
         price_data: {
           currency: 'usd',
           product_data: { name: 'Товар №1' },
-          unit_amount: 5000, // 50.00 USD в центах
+          unit_amount: 5000, // in cents
         },
         quantity: 1,
       }],
@@ -243,12 +232,11 @@ app.get('/checkout-session', async (req, res) => {
   res.json(session);
 });
 
-// роут для создания PaymentIntent
+// route to create PaymentIntent
 app.post('/create-payment-intent', async (req, res) => {
   try {
     const { items } = req.body;
 
-    // Считаем общую сумму в центах только один раз
     const amount = items.reduce((sum, item) => {
       const price = item.product?.newPrice;
       return sum + (price ? price * item.quantity * 100 : 0);
@@ -271,11 +259,7 @@ app.post('/create-payment-intent', async (req, res) => {
   }
 });
 
-
-// const PORT = process.env.PORT || 4242;
-// app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
-
-// Запуск сервера
+// Starting the server
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -286,7 +270,7 @@ mongoose.connect(process.env.MONGODB_URI, {
     console.log('MongoDB connected');
 
     app.listen(4000, () => {
-      console.log('🚀 Сервер запущен на порту 4000');
+      console.log('🚀 The server is running on port 4000');
     });
   })
   .catch(err => {

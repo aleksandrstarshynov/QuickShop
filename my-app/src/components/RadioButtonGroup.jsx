@@ -9,7 +9,7 @@ const RadioGroup = ({ title, options, selectedValue, onChange }) => {
           <input
             type="radio"
             id={option.value}
-            name={title} // Радио-кнопки с одинаковым name объединяются в группу
+            name={title} // Radio buttons with the same name are combined into a group
             value={option.value}
             checked={selectedValue === option.value}
             onChange={() => onChange(option.value)}

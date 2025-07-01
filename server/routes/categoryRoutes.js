@@ -6,10 +6,8 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const raw = await Product.find({});
-    console.log('Все товары:', raw);
 
     const categories = await Product.distinct('productCategory');
-    console.log('Категории из distinct:', categories);
 
     const result = categories.map(cat => ({
       name: cat,
@@ -18,8 +16,8 @@ router.get('/', async (req, res) => {
 
     res.json(result);
   } catch (err) {
-    console.error('Ошибка при получении категорий:', err);
-    res.status(500).json({ message: 'Ошибка сервера' });
+    console.error('Error getting categories:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

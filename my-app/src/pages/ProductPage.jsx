@@ -9,7 +9,6 @@ const ProductPage = () => {
   const { id } = useParams();  
   const [product, setProduct] = useState(null);
   const { addToCart } = useCart();
-  // const { userId } = useUser(); 
   const { user } = useAuth();
   console.log('user:', user);
 
@@ -23,17 +22,15 @@ const ProductPage = () => {
 
   if (!product) return <div>Loading...</div>;
 
-  // const discountedPrice = (product.newPrice * (1 - product.discountPercentage / 100)).toFixed(2);
-
   const handleAddToCart = async () => {
     if (!user) {
-      alert('Вы должны войти в аккаунт, чтобы добавить товар в корзину');
+      alert('You must be logged in to add this item to your cart.');
       return;
     }
 
     const userId = user.id;
     if (!userId) {
-      alert('Ошибка: не удалось определить ID пользователя');
+      alert('Error: Unable to determine user ID');
       return;
     }
 
@@ -41,9 +38,8 @@ const ProductPage = () => {
       console.log('user.id:', user?.id);
       console.log('product._id:', product?._id);
 
-      // Используем контекст вместо fetch
       await addToCart(product);
-      console.log('✅ Product added to cart!');
+      console.log('Product added to cart!');
     } catch (error) {
       console.error('Add to cart failed:', error);
       alert('Failed to add product to cart');
@@ -76,7 +72,6 @@ const ProductPage = () => {
             <strong>Price:</strong>{' '}
             <span className="old-price">{product.oldPrice}</span>{' '}
             <span className="new-price">{product.newPrice}</span>{' '}
-            {/* <small>({product.discountPercentage}% discount)</small> */}
           </p>
 
           <p><strong>Rating:</strong> {product.productRating} ⭐</p>
@@ -84,9 +79,8 @@ const ProductPage = () => {
 
           <div className="product-buttons">
             <button className="custom-button" onClick={handleAddToCart}>
-              Добавить в корзину
+              Add to cart
             </button>
-            {/* <button onClick={() => console.log("Добавлено в избранное")} className="custom-button">Add to favorites</button> */}
           </div>
 
           {Array.isArray(product.images) && product.images.length > 0 && (

@@ -8,7 +8,7 @@ import Catalog from './pages/Catalog';
 import Profile from './pages/Profile';
 import About from './pages/About';
 import Offices from './pages/Offices';
-import PromoBlock from './components/PromoBlock';
+// import PromoBlock from './components/PromoBlock';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import EditProfile from './pages/EditProfile';
@@ -36,10 +36,9 @@ function App() {
           <Header />
 
           <Routes>
-            {/* Главная страница с дополнительными компонентами */}
             <Route path="/" element={<Home />} />
             
-            {/* Страницы, которые не требуют дополнительных компонентов */}
+            {/* Pages that do not require additional components */}
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/about" element={<About />} />
@@ -71,7 +70,6 @@ function Home() {
 
   return (
     <>
-      {/* <Discount /> */}
       <MainSearch />
       <div className="main-container">
         {/* <ProfileBar /> */}
@@ -81,18 +79,6 @@ function Home() {
         <CategoryPreview category="Watercolor" />
         <CategoryPreview category="urban sketching" />
       </div>
-      {/* <div className="best-feed">
-        <h2>Best sellers of the week</h2>
-        <div className="best-card-grid">
-          {purchases.length > 0 ? (
-            purchases.map(product => (
-              <ProductCard key={product.id} product={product} />
-            ))
-          ) : (
-            <p>Loading...</p>
-          )}
-        </div> */}
-      {/* </div> */}
     </>
   );
 }

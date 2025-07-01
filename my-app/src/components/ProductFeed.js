@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import Pagination from './Pagination';
+
 import ProductSearch from './ProductSearch';
 import ProductCard from './ProductCard';
 import Masonry from 'react-masonry-css';
 import { highlightedProductIds } from '../mocked_DB/highlightedProducts';
 import { useCart } from '../context/CartContext';
 
+
 function ProductFeed({ products }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const { addToCart } = useCart();
+
 
   const itemsPerPage = 10;
 
@@ -43,7 +46,9 @@ function ProductFeed({ products }) {
         <ProductSearch searchTerm={searchTerm} onChange={handleSearchChange} />
       </div>
 
+
       {currentProducts.length > 0 ? (
+
 <Masonry
   breakpointCols={breakpointColumnsObj}
   className="my-masonry-grid"
@@ -62,6 +67,7 @@ function ProductFeed({ products }) {
     );
   })}
 </Masonry>
+
       ) : (
         <p>No products found</p>
       )}
