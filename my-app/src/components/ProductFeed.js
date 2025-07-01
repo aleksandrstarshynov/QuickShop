@@ -44,20 +44,24 @@ function ProductFeed({ products }) {
       </div>
 
       {currentProducts.length > 0 ? (
-        <Masonry
-          breakpointCols={breakpointColumnsObj}
-          className="my-masonry-grid"
-          columnClassName="my-masonry-grid_column"
-        >
-          {currentProducts.map(product => (
-            <ProductCard
-              key={product._id}
-              product={product}
-              onAddToCart={addToCart}
-              highlightedIds={highlightedProductIds}
-            />
-          ))}
-        </Masonry>
+<Masonry
+  breakpointCols={breakpointColumnsObj}
+  className="my-masonry-grid"
+  columnClassName="my-masonry-grid_column"
+>
+  {currentProducts.map(product => {
+    const isTall = product.highlighted === '1';
+    return (
+      <ProductCard
+        key={product._id}
+        product={product}
+        onAddToCart={addToCart}
+        highlightedIds={highlightedProductIds}
+        className={isTall ? 'product-card tall-card' : 'product-card'}
+      />
+    );
+  })}
+</Masonry>
       ) : (
         <p>No products found</p>
       )}
