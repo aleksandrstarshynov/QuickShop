@@ -62,9 +62,9 @@ const Cart = () => {
   if (!userId) return <div className="cart-page__empty">Please log in to see your cart.</div>;
 
     const totalPrice = cart.reduce((sum, item) => {
-    const price = Number(item.product?.newPrice);  // Убедись, что это нужное поле
+    const price = Number(item.product?.newPrice);  
     const quantity = Number(item.quantity);
-    return sum + (price * quantity || 0);  // Если price или quantity NaN, вернёт 0
+    return sum + (price * quantity || 0);  
   }, 0);
 
 
@@ -128,7 +128,7 @@ const Cart = () => {
         </table>
       )}
      <button onClick={() => navigate('/checkout')}>
-      Перейти к оплате
+      Proceed to payment
     </button>     
     </div>
   );

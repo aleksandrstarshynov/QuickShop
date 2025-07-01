@@ -1,6 +1,6 @@
 import React from "react";
 import CheckboxGroup from "./CheckboxGroup";
-import { filters } from "../mocked_DB/filters";
+// import { filters } from "../mocked_DB/filters";
 
 const DeliveryFilter = ({ selected, onChange }) => {
   const deliveryFilter = filters.find((filter) => filter.name === "Delivery");

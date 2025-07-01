@@ -4,7 +4,7 @@ import Product from '../models/Product.js';
 import mongoose from 'mongoose';
 
 
-// Добавить товар в корзину
+// Add product to cart
 export const addToCart = async (req, res) => {
   const { userId, productId, quantity } = req.body; 
   console.log('Incoming request:', req.body);
@@ -31,27 +31,23 @@ export const addToCart = async (req, res) => {
   }
 };
 
-// Получить корзину пользователя
+// Get user's cart
 export const getCart = async (req, res) => {
   const userId = req.params.userId;
 
   try {
-    // Получаем из Postgres массив product_id и quantity
+    // We get the product_id and quantity array from Postgres
     const pgResult = await pool.query(
       'SELECT product_id, quantity FROM cart_items WHERE user_id = $1',
       [userId]
     );
 
-    console.log('Данные из PostgreSQL:', pgResult.rows); // Логируем результат запроса
-
-    // Преобразуем product_id в ObjectId для поиска в MongoDB
+    // Convert product_id to ObjectId for MongoDB search
     const productIds = pgResult.rows.map(row => new mongoose.Types.ObjectId(row.product_id));
 
     const products = await Product.find({ _id: { $in: productIds } }).exec();
 
-    console.log('Товары из MongoDB:', products); // Логируем загруженные товары
-
-    // Соединяем данные из Postgres (quantity) и Mongo (product info)
+    // Connecting data from Postgres (quantity) and Mongo (product info)
     const cart = pgResult.rows.map(row => {
       const product = products.find(p => p._id.toString() === row.product_id.toString());
       return {
@@ -60,8 +56,6 @@ export const getCart = async (req, res) => {
       };
     });
 
-    console.log('Сформированная корзина:', cart); // Проверяем финальные данные перед отправкой
-
     res.json(cart);
   } catch (error) {
     console.error('Error fetching cart:', error.stack);
@@ -69,7 +63,7 @@ export const getCart = async (req, res) => {
   }
 };
 
-// Изменить количество товара
+// Change quantity of product
 export const updateCartItem = async (req, res) => {
   const { userId, productId, quantity } = req.body;
 
@@ -79,7 +73,7 @@ export const updateCartItem = async (req, res) => {
 
   try {
     if (quantity === 0) {
-      // Удаляем товар из корзины
+      // Removing the item from the cart
       await pool.query(
         `DELETE FROM cart_items WHERE user_id = $1 AND product_id = $2`,
         [userId, productId]
@@ -91,7 +85,6 @@ export const updateCartItem = async (req, res) => {
       return res.status(400).json({ message: 'Quantity must be zero or greater' });
     }
 
-    // Вставляем или обновляем
     const result = await pool.query(
       `INSERT INTO cart_items (user_id, product_id, quantity)
        VALUES ($1, $2, $3)
@@ -108,9 +101,7 @@ export const updateCartItem = async (req, res) => {
   }
 };
 
-
-
-// Удалить товар из корзины
+// Remove item from cart
 export const deleteCartItem = async (req, res) => {
   const { userId, productId } = req.params;
 

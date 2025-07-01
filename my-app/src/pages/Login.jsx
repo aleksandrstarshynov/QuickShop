@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext.js';
-import '../styles/Login.css'; // <-- важно!
+import '../styles/Login.css'; 
 
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
@@ -26,11 +26,11 @@ function Login() {
         login(data.token);
         navigate('/catalog');
       } else {
-        alert(data.message || data.error || 'Ошибка входа');
+        alert(data.message || data.error || 'Login error');
       }
     } catch (error) {
-      console.error('Ошибка при входе:', error);
-      alert('Сервер недоступен');
+      console.error('Error logging in:', error);
+      alert('The server is unavailable');
     }
   };
 
@@ -41,7 +41,7 @@ function Login() {
         <input
           className="login-page__input"
           type="text"
-          placeholder="Имя пользователя"
+          placeholder="Username"
           value={username}
           onChange={e => setUsername(e.target.value)}
           required
@@ -49,7 +49,7 @@ function Login() {
         <input
           className="login-page__input"
           type="password"
-          placeholder="Пароль"
+          placeholder="Password"
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
@@ -59,9 +59,8 @@ function Login() {
         </button>
       </form>
 
-      {/* Вот эта строка */}
       <p className="login-page__register-link">
-        Нет аккаунта? <Link to="/register">Зарегистрируйтесь</Link>
+        Нет аккаунта? <Link to="/register">Register</Link>
       </p>
     </div>
   );

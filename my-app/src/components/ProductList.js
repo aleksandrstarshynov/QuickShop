@@ -13,7 +13,7 @@ const ProductList = () => {
 
   const handleNext = () => setPage(prev => prev + 1);
   const handlePrev = () => setPage(prev => Math.max(prev - 1, 0));
-  // console.log(laptops);
+
   return (
     <div>
       <h2>Список ноутбуков</h2>
@@ -27,9 +27,9 @@ const ProductList = () => {
         ))}
       </ul>
       <div style={{ marginTop: '1rem' }}>
-        <button onClick={handlePrev} disabled={page === 0}>Назад</button>
-        <span style={{ margin: '0 1rem' }}>Страница: {page + 1}</span>
-        <button onClick={handleNext} disabled={laptops.length < limit}>Вперёд</button>
+        <button onClick={handlePrev} disabled={page === 0}>Back</button>
+        <span style={{ margin: '0 1rem' }}>Page: {page + 1}</span>
+        <button onClick={handleNext} disabled={laptops.length < limit}>Forward</button>
       </div>
     </div>
   );

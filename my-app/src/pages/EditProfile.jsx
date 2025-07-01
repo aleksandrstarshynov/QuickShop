@@ -13,7 +13,7 @@ const EditProfile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Проверяем наличие токена
+    // Checking for the presence of a token
     const token = localStorage.getItem('token');
     if (!token) {
       setError('Token is missing. Please log in again.');
@@ -31,14 +31,13 @@ try {
     setMessage('Profile updated successfully');
     setError('');
 
-    // Обновляем localStorage значениями из формы, так как сервер не возвращает обновлённые данные
+    // We update localStorage with the values ​​from the form, since the server does not return updated data
     if (formData.username) {
       localStorage.setItem('username_after_login', formData.username);
     }
     if (formData.email) {
-      localStorage.setItem('email_after_login', formData.email); // если есть email
+      localStorage.setItem('email_after_login', formData.email); 
     }
-    // и так далее для других полей...
 
   } else {
     setError('Failed to update profile.');

@@ -3,10 +3,6 @@ import '../styles/ProductIdea.css';
 import exampleImage1 from '../images/exmpl_img_1.jpg';
 import exampleImage2 from '../images/exmpl_img_2.png';
 
-/**
- * Компонент ProductIdea
- * Отображает информацию о продукте и две иллюстрации с описаниями.
- */
 export default function ProductIdea() {
   return (
     <section className="product-idea">
