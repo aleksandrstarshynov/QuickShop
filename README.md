@@ -27,6 +27,7 @@
   - PostgreSQL (users)  
   - Qdrant *(release 2, for vector search)*  
 - **AI / Embeddings**: [SentenceTransformers](https://github.com/UKPLab/sentence-transformers) (model: all-MiniLM-l6-v2)
+- **Third-Party services**: Stripe, Cloudinary (release 2), PostNL (release 2). 
 
 ## Installation & Running Locally
 
