@@ -1,17 +1,65 @@
 # QuickShop
-My name is Oleksandr Starshynov, "QuickShop" is the pet-project
 
-##Idea
-Online store with vector search: developed basic functionality for an online store and am integrating Qdrant to search for products by visual and emotional features in order to improve the quality of search and change the user experience.
+Production Link: http://51.20.55.140/
 
-## Tech area
-### Front-end:
-React, Css, Javascript, Figma
-### Back-end:
-Node.js + Express, React-Masonry-css, Bcrypt
-### Databases:
-MongoBD, PostgreSQL, RestAPI, Swagger
-### 3rd-party servises:
-Strip
-### Deployment:
-CI/CD + GitHub Actions, AWS EC2
+**QuickShop** is an online art store (first release: paintings only) that combines a traditional catalog with upcoming “intelligent” search by image content, mood, and color palette.
+
+## Idea
+
+Online store with vector search: developed basic functionality for an online store and am integrating Qdrant to search for products by visual and emotional features in order to improve the quality of search and transform the user experience.
+
+## Key Features
+
+- **Product Catalog**  
+  Intuitive browsing of paintings with a responsive, masonry-style feed.  
+- **Category Search**  
+  Filter by painting style (Renaissance, Impressionism, Contemporary, etc.).  
+- **Intelligent Search** *(releas2,next)*  
+  Semantic search by what’s depicted, emotional impact, and dominant color palette—powered by Qdrant vector embeddings.  
+- **Ordering & Delivery**  
+  Place orders and arrange deliveries within the Netherlands (releas1–releas2).
+
+## Technologies & Dependencies
+
+- **Frontend**: React, CSS, [react-masonry-css](https://github.com/paulcollett/react-masonry-css)  
+- **Backend**: Node.js, Express, Bcrypt, RESTful API  
+- **Databases**:  
+  - MongoDB (products)  
+  - PostgreSQL (users)  
+  - Qdrant *(releas2, for vector search)*  
+- **AI / Embeddings**: [SentenceTransformers](https://github.com/UKPLab/sentence-transformers) (model: all-MiniLM-l6-v2)
+
+## Installation & Running Locally
+
+The entire project is in one repository, split into two folders:
+
+```
+# 1. Clone the repository
+git clone https://github.com/your-username/quickshop.git
+cd quickshop
+
+# 2. Frontend
+cd my-app
+npm install
+npm start
+
+# 3. Backend (in a separate terminal)
+cd ../server
+npm install
+npm start
+```
+- Both services will be available locally (default ports **3000** and **5000**).
+
+## Production
+
+- Hosted on AWS EC2 with PM2 process management.
+- Production Link: http://51.20.55.140/
+
+## Author
+
+- An individual project by Oleksandr Starshinov, created to practice web development and AI integration skills.
+
+## 📄 License
+
+- This project is licensed under the **MIT License**.  
+- See the [LICENSE](LICENSE) file for details.  
