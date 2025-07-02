@@ -1,12 +1,11 @@
-# QuickShop
-
-Production Link: http://51.20.55.140/
+# QuickShop. 
+##Release 1
+- Production Link: http://51.20.55.140/
 
 **QuickShop** is an online art store (first release: paintings only) that combines a traditional catalog with upcoming “intelligent” search by image content, mood, and color palette.
 
 ## Idea
-
-Online store with vector search: developed basic functionality for an online store and am integrating Qdrant to search for products by visual and emotional features in order to improve the quality of search and transform the user experience.
+- Online store with vector search: developed basic functionality for an online store and am integrating Qdrant to search for products by visual and emotional features in order to improve the quality of search and transform the user experience.
 
 ## Key Features
 
@@ -14,10 +13,10 @@ Online store with vector search: developed basic functionality for an online sto
   Intuitive browsing of paintings with a responsive, masonry-style feed.  
 - **Category Search**  
   Filter by painting style (Renaissance, Impressionism, Contemporary, etc.).  
-- **Intelligent Search** *(releas2,next)*  
+- **Intelligent Search** *(release 2,next)*  
   Semantic search by what’s depicted, emotional impact, and dominant color palette—powered by Qdrant vector embeddings.  
 - **Ordering & Delivery**  
-  Place orders and arrange deliveries within the Netherlands (releas1–releas2).
+  Place orders and arrange deliveries within the Netherlands (release 1–release 2).
 
 ## Technologies & Dependencies
 
@@ -26,7 +25,7 @@ Online store with vector search: developed basic functionality for an online sto
 - **Databases**:  
   - MongoDB (products)  
   - PostgreSQL (users)  
-  - Qdrant *(releas2, for vector search)*  
+  - Qdrant *(release 2, for vector search)*  
 - **AI / Embeddings**: [SentenceTransformers](https://github.com/UKPLab/sentence-transformers) (model: all-MiniLM-l6-v2)
 
 ## Installation & Running Locally
@@ -48,11 +47,11 @@ cd ../server
 npm install
 npm start
 ```
-- Both services will be available locally (default ports **3000** and **5000**).
+- Both services will be available locally (default ports **3000** and **4000**).
 
 ## Production
 
-- Hosted on AWS EC2 with PM2 process management.
+- Hosted on AWS+Nginxs, EC2 with PM2 process management.
 - Production Link: http://51.20.55.140/
 
 ## Author
