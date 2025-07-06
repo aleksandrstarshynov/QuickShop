@@ -81,20 +81,19 @@ function Profile() {
 
     const [userData, setUserData] = useState(null);
 
-    useEffect(() => {
-      const loadProfile = async () => {
-        try {
-          const token = localStorage.getItem('token');
-          const response = await fetchUserProfile(token);
-          console.log("🎯 User profile from backend:", response.data);
-          setUserData(response.data); 
-        } catch (err) {
-          console.error('Failed to load profile:', err);
-        }
-      };
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const response = await fetchUserProfile()
+        console.log("🎯 User profile from backend:", response.data)
+        setUserData(response.data)
+      } catch (err) {
+        console.error('Failed to load profile:', err)
+      }
+    }
 
-      loadProfile();
-    }, []);
+    loadProfile()
+}, []);
 
   return (
     <>
