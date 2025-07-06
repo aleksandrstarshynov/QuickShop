@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/authContext.js';
-import '../styles/Login.css'; 
-
-const baseUrl = process.env.REACT_APP_API_BASE_URL;
+import { useAuth }           from '../context/authContext.js';
+import { loginUser }         from '../services/authService.js';
+import '../styles/Login.css';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -11,35 +10,25 @@ function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async e => {
     e.preventDefault();
     try {
-      const response = await fetch(`${baseUrl}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user || { id: null }));
-        login(data.token);
-        navigate('/catalog');
-      } else {
-        alert(data.message || data.error || 'Login error');
-      }
-    } catch (error) {
-      console.error('Error logging in:', error);
-      alert('The server is unavailable');
+      const { data } = await loginUser({ username, password });
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      login(data.token);
+      navigate('/catalog');
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || 'Login error');
     }
   };
 
   return (
     <div className="login-page">
-      <h2 className="login-page__title">Вход</h2>
-      <form className="login-page__form" onSubmit={handleLogin}>
+      <h2>Вход</h2>
+      <form onSubmit={handleLogin}>
         <input
-          className="login-page__input"
           type="text"
           placeholder="Username"
           value={username}
@@ -47,20 +36,16 @@ function Login() {
           required
         />
         <input
-          className="login-page__input"
           type="password"
           placeholder="Password"
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
         />
-        <button className="login-page__button" type="submit">
-          Войти
-        </button>
+        <button type="submit">Login</button>
       </form>
-
-      <p className="login-page__register-link">
-        Нет аккаунта? <Link to="/register">Register</Link>
+      <p>
+        Have no account? <Link to="/register">Register</Link>
       </p>
     </div>
   );

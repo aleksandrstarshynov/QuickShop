@@ -4,18 +4,23 @@ function CategoryFilter({ selectedValues, setSelectedValues }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch('http://localhost:4000/api/categories') //TODO
-      .then(res => res.json())
-      .then(data => {
-        setCategories(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setCategories([]);
-        setLoading(false);
-      });
-  }, []);
+  const API_BASE = process.env.REACT_APP_API_BASE_URL;
+  
+useEffect(() => {
+  const url = new URL('/api/categories', API_BASE).toString();
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      setCategories(data);
+    })
+    .catch(() => {
+      setCategories([]);
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+}, []);
 
 
   const toggleCategory = (slug, checked) => {

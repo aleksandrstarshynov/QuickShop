@@ -24,8 +24,9 @@ function Catalog() {
         params.append('availability', availability);
       }
 
-      console.log("🔍 URL:", `http://localhost:4000/products?${params.toString()}`); //TODO
-      const res = await fetch(`http://localhost:4000/products?${params.toString()}`);//TODO
+      const res = await fetch(
+        `${API_BASE.replace(/\/+$/,'')}/products?${params.toString()}`
+      );
 
       const data = await res.json();
       setProducts(data.products || []);
