@@ -37,16 +37,6 @@ function Profile() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-      localStorage.removeItem('token');
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
-      alert('Logout failed');
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -181,7 +171,7 @@ function Profile() {
                 <Link to="/edit-profile">Update profile</Link>
                 <br />
                 <button onClick={handleDelete} className="red-button">Delete user</button>
-                <button onClick={handleLogout} className="red-button">Log out</button>
+                {/* <button onClick={handleLogout} className="red-button">Log out</button> */}
               </div>
             </div>
           )}

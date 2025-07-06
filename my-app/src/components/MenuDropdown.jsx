@@ -1,9 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { logoutUser } from '../services/authService';
+import '../index.css';
 
 const UserDropdown = ({ user }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate(); 
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      localStorage.removeItem('token');
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      alert('Logout failed');
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -28,8 +42,12 @@ const UserDropdown = ({ user }) => {
 
       {open && (
         <ul className="dropdown-menu">
-          <li><Link to="/profile">Профиль</Link></li>
-          <li><Link to="/logout">Выйти</Link></li>
+          <li><Link to="/profile">Profile</Link></li>
+          <li>
+            <button onClick={handleLogout} className="dropdown-button">
+              Logout
+            </button>
+          </li>
         </ul>
       )}
     </div>
