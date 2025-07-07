@@ -51,8 +51,9 @@ body{
   border-radius: 16px;
   background-color: #affaf4;
   border: 1px solid #026567;
+  min-height: 90vh;     
+  box-sizing: border-box; 
 }
-
 
 .profile{
   padding: 10px;

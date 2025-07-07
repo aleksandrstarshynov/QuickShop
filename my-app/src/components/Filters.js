@@ -1,13 +1,9 @@
-
 import React from 'react';
 import CategoryFilter from './CategoryFilter';
 
-
 function Filters({
-  selectedCategories,
-  onCategoryChange,
-  selectedAvailability,
-  onAvailabilityChange
+  selectedCategories,     
+  onCategoryChange,       
 }) {
   return (
     <div className="filters">

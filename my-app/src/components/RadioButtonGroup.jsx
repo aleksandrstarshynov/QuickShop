@@ -1,24 +1,28 @@
-import React from "react";
 
-const RadioGroup = ({ title, options, selectedValue, onChange }) => {
-  return (
-    <div>
-      <h3>{title}</h3>
-      {options.map((option) => (
-        <div key={option.value}>
+import '../styles/RadioGroup.css';
+
+const RadioGroup = ({ options, value, onChange, name, disabled = false }) => (
+  <div className="radio-group">
+    {options.map(opt => {
+      const isChecked = value === opt.value;
+      return (
+        <label
+          key={opt.value}
+          className={`radio-option${disabled ? ' disabled' : ''}`}
+        >
           <input
             type="radio"
-            id={option.value}
-            name={title} // Radio buttons with the same name are combined into a group
-            value={option.value}
-            checked={selectedValue === option.value}
-            onChange={() => onChange(option.value)}
+            name={name}
+            value={opt.value}
+            checked={isChecked}
+            onChange={() => onChange(opt.value)}
+            disabled={disabled}
           />
-          <label htmlFor={option.value}>{option.label}</label>
-        </div>
-      ))}
-    </div>
-  );
-};
+          <span className="radio-label">{opt.label}</span>
+        </label>
+      );
+    })}
+  </div>
+);
 
 export default RadioGroup;
