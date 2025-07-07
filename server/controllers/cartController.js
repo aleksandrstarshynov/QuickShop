@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 // Add product to cart
 export const addToCart = async (req, res) => {
   const { userId, productId, quantity } = req.body; 
-  console.log('Incoming request:', req.body);
+  // console.log('Incoming request:', req.body);
 
   if (!userId || !productId || !quantity) {
     return res.status(400).json({ message: 'Missing userId, productId or quantity' });
@@ -23,7 +23,7 @@ export const addToCart = async (req, res) => {
       [userId, productId, quantity]
     );
 
-    console.log('DB response:', result.rows[0]); 
+    // console.log('DB response:', result.rows[0]); 
     res.status(201).json({ message: 'Item added to cart', item: result.rows[0] });
   } catch (error) {
     console.error('Error adding to cart:', error);
@@ -65,6 +65,7 @@ export const getCart = async (req, res) => {
 
 // Change quantity of product
 export const updateCartItem = async (req, res) => {
+  console.log('🛠️  PUT /api/cart payload:', req.body);
   const { userId, productId, quantity } = req.body;
 
   if (!userId || !productId || quantity == null) {
@@ -103,6 +104,7 @@ export const updateCartItem = async (req, res) => {
 
 // Remove item from cart
 export const deleteCartItem = async (req, res) => {
+  console.log('🛠️  DELETE /api/cart params:', req.params);
   const { userId, productId } = req.params;
 
   try {
