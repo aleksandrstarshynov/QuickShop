@@ -25,7 +25,6 @@ import CheckoutForm from './components/CheckoutForm';
 import Success from './pages/Success'; 
 import SimpleTextBlock from './components/SimpleTextBlock';
 
-
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 function App() {

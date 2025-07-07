@@ -55,14 +55,15 @@ function ProductFeed({ products }) {
   columnClassName="my-masonry-grid_column"
 >
   {currentProducts.map(product => {
-    const isTall = product.highlighted === '1';
+    // Теперь верно обрабатываем число 1
+    const isTall = product.highlighted == 1;
+
     return (
       <ProductCard
         key={product._id}
         product={product}
         onAddToCart={addToCart}
-        highlightedIds={highlightedProductIds}
-        className={isTall ? 'product-card tall-card' : 'product-card'}
+        className={`product-card${isTall ? ' tall-card' : ''}`}
       />
     );
   })}

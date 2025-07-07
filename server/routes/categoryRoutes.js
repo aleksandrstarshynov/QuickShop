@@ -1,24 +1,27 @@
+
 import express from 'express';
-import Product from '../models/Product.js'; 
+import Product from '../models/Product.js';
+import slugify from 'slugify';  
 
 const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const raw = await Product.find({});
+    
+    const rawCategories = await Product.distinct('productCategory');
+    
+    rawCategories.sort((a, b) => a.localeCompare(b, 'ru', { sensitivity: 'base' }));
 
-    const categories = await Product.distinct('productCategory');
-
-    const result = categories.map(cat => ({
-      name: cat,
-      slug: cat.toLowerCase().replace(/\s+/g, '-'),
+    const result = rawCategories.map(name => ({
+      name,
+      slug: slugify(name, { lower: true, strict: true }),
     }));
 
-    res.json(result);
+    return res.json(result);
   } catch (err) {
     console.error('Error getting categories:', err);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 });
 
-export default router;
+export const categoriesRouter = router;
