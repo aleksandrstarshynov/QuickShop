@@ -35,8 +35,8 @@ function ProductFeed({ products }) {
 
   const breakpointColumnsObj = {
     default: 4,
-    1100: 3,
-    700: 2,
+    1000: 3,
+    800: 2,
     500: 1,
   };
 

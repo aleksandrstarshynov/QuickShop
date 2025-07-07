@@ -156,12 +156,16 @@ a:clicked{
   display: -ms-flexbox; 
   display: flex;
   margin-left: -16px; 
-  width: auto;
+  /* width: auto;  this was default option */
+  width: 100% !important;  
 }
 
 .my-masonry-grid_column {
   padding-left: 16px; 
   background-clip: padding-box;
+  flex: 1 0 0;                 
+  display: flex;               
+  flex-direction: column;
 }
 
 .product-card {
@@ -752,4 +756,9 @@ background-color: rgb(204, 206, 206);
   color: #ffffff;          
   text-decoration: underline;
   cursor: pointer;
+}
+
+.center-button {
+  display: block;        
+  margin: 20px auto 0;  
 }
