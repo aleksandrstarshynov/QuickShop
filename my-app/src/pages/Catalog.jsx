@@ -14,7 +14,6 @@ function Catalog() {
 
       const params = new URLSearchParams();
       
-      // 👇 отправляем каждую категорию отдельно
       if (category.length > 0) {
         category.forEach(slug => params.append('categories', slug));
       }

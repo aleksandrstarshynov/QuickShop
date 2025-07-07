@@ -14,7 +14,7 @@ import {
 } from './utils/userQueries.js'; 
 import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
-import categoryRoutes from './routes/categoryRoutes.js';
+import { categoriesRouter } from './routes/categoryRoutes.js';
 
 dotenv.config(); 
 
@@ -209,7 +209,7 @@ app.post('/auth/logout', (req, res) => {
 app.use('/api', cartRoutes);
 
 // CATEGORIES
-app.use('/api/categories', categoryRoutes);
+app.use('/api/categories',  categoriesRouter);
 
 // Static folder for frontend
 app.use(express.static('my-app'));
