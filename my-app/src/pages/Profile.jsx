@@ -30,6 +30,10 @@ function Profile() {
     try {
       const token = localStorage.getItem('token');
       await deleteUser(token);
+          localStorage.removeItem('token');
+          localStorage.removeItem('username_after_login');
+          localStorage.removeItem('email_after_login');
+
       navigate('/');
     } catch (error) {
       console.error('Failed to delete profile', error);

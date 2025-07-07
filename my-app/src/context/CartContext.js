@@ -11,35 +11,37 @@ const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-const [cart, setCart] = useState([]);
-const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Get userId from localStorage
+  // Retrieve userId from localStorage
   const getUserId = () => {
     const storedUser = localStorage.getItem('user');
     const user = storedUser ? JSON.parse(storedUser) : null;
     return user?.id || null;
   };
 
-  // We get the basket from the database
+  // Load cart from the database
   const loadCart = async () => {
     const userId = getUserId();
     if (!userId) {
+      setCart([]);
       setLoading(false);
       return;
     }
 
     try {
+      setLoading(true);
       const cartFromServer = await fetchCartFromDB(userId);
       setCart(cartFromServer);
     } catch (error) {
       console.error('Error loading cart:', error);
     } finally {
-    setLoading(false); 
-  }
+      setLoading(false);
+    }
   };
 
-  // Adding the product to the cart
+  // Add a product to the cart
   const addToCart = async (product) => {
     const userId = getUserId();
     if (!userId) {
@@ -51,74 +53,75 @@ const [loading, setLoading] = useState(true);
     const existingItem = cart.find(item => item.product._id === productId);
 
     try {
+      setLoading(true);
       if (existingItem) {
-        // If the product is already available, we increase the quantity
         const newQuantity = existingItem.quantity + 1;
         await updateCartInDB(userId, productId, newQuantity);
       } else {
-        // If the product is not there, we add it
         await addToCartInDB(userId, productId);
       }
-
-      // Updating the basket from the server
-      const updatedCart = await fetchCartFromDB(userId);
-      setCart(updatedCart);
-    } catch (err) {
-      console.error('Error adding to cart:', err);
+      const fresh = await fetchCartFromDB(userId);
+      setCart(fresh);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Updating the quantity of goods
+  // Update the quantity of a cart item
   const updateQuantity = async (productId, newQuantity) => {
     const userId = getUserId();
     if (!userId || newQuantity < 1) return;
 
     try {
+      setLoading(true);
       await updateCartInDB(userId, productId, newQuantity);
-      setCart(prevCart =>
-        prevCart.map(item =>
-          item.product._id === productId
-            ? { ...item, quantity: newQuantity }
-            : item
-        )
-      );
+      const fresh = await fetchCartFromDB(userId);
+      setCart(fresh);
     } catch (err) {
       console.error('Error updating quantity:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Removing the item from the cart
+  // Remove an item from the cart
   const removeFromCart = async (productId) => {
     const userId = getUserId();
     if (!userId) return;
 
     try {
+      setLoading(true);
       await deleteCartItemFromDB(userId, productId);
-      setCart(prevCart => prevCart.filter(item => item.product._id !== productId));
+      const fresh = await fetchCartFromDB(userId);
+      setCart(fresh);
     } catch (err) {
-      console.error('Error deleting from recycle bin:', err);
+      console.error('Error deleting from cart:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Loading the basket on mount and focus
+  // Initial load and reload on window focus
   useEffect(() => {
     loadCart();
-
     const handleFocus = () => loadCart();
     window.addEventListener('focus', handleFocus);
-
     return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
   return (
-      <CartContext.Provider value={{
+    <CartContext.Provider
+      value={{
         cart,
+        loading,
         addToCart,
-        removeFromCart,
         updateQuantity,
+        removeFromCart,
         reloadCart: loadCart,
-        loading
-      }}>
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
