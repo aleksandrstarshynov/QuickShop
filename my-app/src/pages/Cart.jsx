@@ -83,7 +83,7 @@ const Cart = () => {
         </tfoot>
       </table>
       <button
-        className="cart-page__checkout"
+        className="custom-button center-button"
         onClick={() => navigate('/checkout')}
       >
         Proceed to payment
