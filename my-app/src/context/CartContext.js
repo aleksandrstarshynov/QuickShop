@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useAuth } from '../context/authContext';
 import {
   fetchCartFromDB,
   updateCartInDB,
@@ -7,109 +8,78 @@ import {
 } from '../controller/cartAPI';
 
 const CartContext = createContext();
-
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
+  const { user } = useAuth();
+  const userId = user?.id;
+
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Retrieve userId from localStorage
-  const getUserId = () => {
-    const storedUser = localStorage.getItem('user');
-    const user = storedUser ? JSON.parse(storedUser) : null;
-    return user?.id || null;
-  };
-
-  // Load cart from the database
+  // Load cart for current user
   const loadCart = async () => {
-    const userId = getUserId();
     if (!userId) {
       setCart([]);
       setLoading(false);
       return;
     }
-
+    setLoading(true);
     try {
-      setLoading(true);
-      const cartFromServer = await fetchCartFromDB(userId);
-      setCart(cartFromServer);
+      const fresh = await fetchCartFromDB(userId);
+      setCart(fresh);
     } catch (error) {
       console.error('Error loading cart:', error);
+      setCart([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Add a product to the cart
+  // Add product and reload
   const addToCart = async (product) => {
-    const userId = getUserId();
     if (!userId) {
-      alert('Please sign in to add this item to your cart.');
+      alert('Please sign in to add items to your cart.');
       return;
     }
-
-    const productId = product._id;
-    const existingItem = cart.find(item => item.product._id === productId);
-
+    setLoading(true);
     try {
-      setLoading(true);
-      if (existingItem) {
-        const newQuantity = existingItem.quantity + 1;
-        await updateCartInDB(userId, productId, newQuantity);
-      } else {
-        await addToCartInDB(userId, productId);
-      }
-      const fresh = await fetchCartFromDB(userId);
-      setCart(fresh);
+      await addToCartInDB(userId, product._id);
+      await loadCart();
     } catch (error) {
       console.error('Error adding to cart:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
-  // Update the quantity of a cart item
+  // Update quantity and reload
   const updateQuantity = async (productId, newQuantity) => {
-    const userId = getUserId();
     if (!userId || newQuantity < 1) return;
-
+    setLoading(true);
     try {
-      setLoading(true);
       await updateCartInDB(userId, productId, newQuantity);
-      const fresh = await fetchCartFromDB(userId);
-      setCart(fresh);
-    } catch (err) {
-      console.error('Error updating quantity:', err);
-    } finally {
-      setLoading(false);
+      await loadCart();
+    } catch (error) {
+      console.error('Error updating quantity:', error);
     }
   };
 
-  // Remove an item from the cart
+  // Remove item and reload
   const removeFromCart = async (productId) => {
-    const userId = getUserId();
     if (!userId) return;
-
+    setLoading(true);
     try {
-      setLoading(true);
       await deleteCartItemFromDB(userId, productId);
-      const fresh = await fetchCartFromDB(userId);
-      setCart(fresh);
-    } catch (err) {
-      console.error('Error deleting from cart:', err);
-    } finally {
-      setLoading(false);
+      await loadCart();
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
     }
   };
 
-  // Initial load and reload on window focus
+  // Reload cart whenever the user changes
   useEffect(() => {
+    setCart([]); // clear previous user cart
     loadCart();
-    const handleFocus = () => loadCart();
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
-  }, []);
+  }, [userId]);
 
   return (
     <CartContext.Provider

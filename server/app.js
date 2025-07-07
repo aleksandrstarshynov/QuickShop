@@ -138,29 +138,45 @@ app.get('/auth/profile', async (req, res) => {
 
 // UPDATE
 app.put('/auth/update', async (req, res) => {
-  const { username, password, firstname, lastname, email, phone, dateofbirth } = req.body;
-
   try {
-    const decodedUser = getDecodedUser(req, SECRET);
-    if (!decodedUser || !decodedUser.id) {
+    const decoded = getDecodedUser(req, SECRET);
+    if (!decoded?.id) {
       return res.status(401).json({ message: 'Invalid token' });
     }
 
-    const updates = {
+    const existing = await getUserById(decoded.id);
+    if (!existing) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const {
       username,
-      password: password ? await bcrypt.hash(password, saltRounds) : undefined,
+      password,
       firstname,
       lastname,
       email,
       phone,
       dateofbirth
+    } = req.body;
+
+    const merged = {
+      username:    username    || existing.username,
+      password:    password
+                    ? await bcrypt.hash(password, saltRounds)
+                    : existing.password,
+      firstname:   firstname   ?? existing.firstname,
+      lastname:    lastname    ?? existing.lastname,
+      email:       email       ?? existing.email,
+      phone:       phone       ?? existing.phone,
+      dateofbirth: dateofbirth ?? existing.dateofbirth
     };
 
-    const updatedUser = await updateUser(decodedUser.id, updates);
-    res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+      const updated = await updateUser(decoded.id, merged);
+    return res.json({ message: 'User updated', user: updated });
+
   } catch (err) {
-    console.error("Update error:", err);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Update error:', err);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 });
 
