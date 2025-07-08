@@ -1,17 +1,19 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { logoutUser } from '../services/authService';
+import { useAuth } from '../context/authContext.js';
 import '../index.css';
 
 const UserDropdown = ({ user }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleLogout = async () => {
     try {
       await logoutUser();
-      localStorage.removeItem('token');
+      logout();
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -25,8 +27,8 @@ const UserDropdown = ({ user }) => {
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
