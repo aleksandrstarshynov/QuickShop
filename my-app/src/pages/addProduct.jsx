@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import InputField from '../components/InputField';
 import { addProduct } from '../services/productService';
+import { useAuth } from '../context/authContext';
 
 const AddProduct = () => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     productName: '',
     productBrand: '',
@@ -14,8 +16,6 @@ const AddProduct = () => {
     inStock: true,
     imageURL: '',
     secondaryImageURL: '',
-    createdAt: new Date().toISOString(),
-    authorId: '',
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -24,7 +24,7 @@ const AddProduct = () => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const finalValue = type === 'checkbox' ? checked : value;
-    setFormData({ ...formData, [name]: finalValue });
+    setFormData(prev => ({ ...prev, [name]: finalValue }));
   };
 
   const handleSubmit = async (e) => {
@@ -32,78 +32,100 @@ const AddProduct = () => {
     setFormErrors({});
     setServerMessage('');
 
-    // validation
+    // Валидация обязательных полей
     const errors = {};
-    if (!formData.productName) errors.productName = 'Product name is required';
-    if (!formData.productBrand) errors.productBrand = 'Brand is required';
-    if (!formData.newPrice) errors.newPrice = 'New price is required';
-    if (!formData.imageURL) errors.imageURL = 'Main image URL is required';
+    if (!formData.productName.trim())   errors.productName   = 'Название товара обязательно';
+    if (!formData.productBrand.trim())  errors.productBrand  = 'Бренд обязателен';
+    if (!formData.oldPrice)             errors.oldPrice      = 'Старая цена обязательна';
+    if (!formData.newPrice)             errors.newPrice      = 'Новая цена обязательна';
+    if (!formData.imageURL.trim())      errors.imageURL      = 'URL изображения обязателен';
 
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       return;
     }
 
-try {
-  const response = await addProduct(formData);
+    if (!user || !user.id) {
+      setServerMessage('Не авторизован. Невозможно добавить товар.');
+      return;
+    }
 
-  // successful response
-  console.log('Product added:', response.data);
-  setServerMessage('Product added successfully');
+    try {
+      const payload = {
+        ...formData,
+        oldPrice:   Number(formData.oldPrice),
+        newPrice:   Number(formData.newPrice),
+        authorId:   user.id,
+      };
 
-} catch (error) {
-  // В axios errors
+      const response = await addProduct(payload);
+      console.log('Product added:', response.data);
+      setServerMessage('Товар успешно добавлен');
 
-  if (error.response) {
-    console.error('Server error:', error.response.data);
-    setServerMessage(`Server error: ${error.response.data.message || 'Unknown error'}`);
-  } else if (error.request) {
-
-    console.error('No response received:', error.request);
-    setServerMessage('No response from server');
-  } else {
-    console.error('Error setting up request:', error.message);
-    setServerMessage('Request setup error');
-  }
-}
+      // Сброс формы
+      setFormData({
+        productName: '',
+        productBrand: '',
+        productCategory: '',
+        productDescription: '',
+        oldPrice: '',
+        newPrice: '',
+        productRating: '',
+        inStock: true,
+        imageURL: '',
+        secondaryImageURL: '',
+      });
+    } catch (error) {
+      if (error.response) {
+        console.error('Server error:', error.response.data);
+        setServerMessage(`Ошибка сервера: ${error.response.data.message || 'Неизвестная ошибка'}`);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+        setServerMessage('Сервер не отвечает');
+      } else {
+        console.error('Error setting up request:', error.message);
+        setServerMessage('Ошибка при настройке запроса');
+      }
+    }
   };
 
   return (
     <div className="form-wrapper">
-      <h2>Add New Product</h2>
+      <h2>Добавить товар</h2>
       <form onSubmit={handleSubmit}>
         <InputField
           name="productName"
           value={formData.productName}
           onChange={handleChange}
           error={formErrors.productName}
-          placeholder="Product Name"
+          placeholder="Название товара"
         />
         <InputField
           name="productBrand"
           value={formData.productBrand}
           onChange={handleChange}
           error={formErrors.productBrand}
-          placeholder="Brand"
+          placeholder="Бренд"
         />
         <InputField
           name="productCategory"
           value={formData.productCategory}
           onChange={handleChange}
-          placeholder="Category"
+          placeholder="Категория"
         />
         <InputField
           name="productDescription"
           value={formData.productDescription}
           onChange={handleChange}
-          placeholder="Description"
+          placeholder="Описание"
         />
         <InputField
           name="oldPrice"
           type="number"
           value={formData.oldPrice}
           onChange={handleChange}
-          placeholder="Old Price"
+          error={formErrors.oldPrice}
+          placeholder="Старая цена"
         />
         <InputField
           name="newPrice"
@@ -111,14 +133,14 @@ try {
           value={formData.newPrice}
           onChange={handleChange}
           error={formErrors.newPrice}
-          placeholder="New Price"
+          placeholder="Новая цена"
         />
         <InputField
           name="productRating"
           type="number"
           value={formData.productRating}
           onChange={handleChange}
-          placeholder="Rating (0-5)"
+          placeholder="Рейтинг (0-5)"
         />
         <label>
           <input
@@ -127,23 +149,23 @@ try {
             checked={formData.inStock}
             onChange={handleChange}
           />{' '}
-          In Stock
+          В наличии
         </label>
         <InputField
           name="imageURL"
           value={formData.imageURL}
           onChange={handleChange}
           error={formErrors.imageURL}
-          placeholder="Image URL"
+          placeholder="URL изображения"
         />
         <InputField
           name="secondaryImageURL"
           value={formData.secondaryImageURL}
           onChange={handleChange}
-          placeholder="Secondary Image URL"
+          placeholder="Доп. URL изображения"
         />
 
-        <button type="submit">Add Product</button>
+        <button type="submit">Добавить товар</button>
       </form>
 
       {serverMessage && <p>{serverMessage}</p>}

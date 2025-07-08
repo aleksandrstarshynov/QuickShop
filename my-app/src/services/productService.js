@@ -4,28 +4,41 @@ const API = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
 });
 
-// Add new product
-export const addProduct = (productData, token) => {
-  console.log("BASE_URL:", process.env.REACT_APP_API_BASE_URL);
-  return API.post('/products', productData, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+// Request interceptor to automatically attach token
+API.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
+
+// Add a new product
+export const addProduct = (productData) => {
+  return API.post('/products', productData);
 };
 
-// Get all products
-export const getProducts = () => API.get('/products');
+// all products
+export const getProducts = () => {
+  return API.get('/products');
+};
 
-// Get one product by ID
-export const getProductById = (id) => API.get(`/products/${id}`);
+// single product by ID
+export const getProductById = (id) => {
+  return API.get(`/products/${id}`);
+};
 
-// Update product by ID
-export const updateProduct = (id, productData, token) =>
-  API.put(`/products/${id}`, productData, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+// Update a product by ID
+export const updateProduct = (id, productData) => {
+  return API.put(`/products/${id}`, productData);
+};
 
-// Delete product by ID
-export const deleteProduct = (id, token) =>
-  API.delete(`/products/${id}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+// Delete a product by ID
+export const deleteProduct = (id) => {
+  return API.delete(`/products/${id}`);
+};
