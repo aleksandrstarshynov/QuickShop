@@ -1,6 +1,5 @@
 # QuickShop. 
 ##Release 1
-- Production Link: http://51.20.55.140/
 
 **QuickShop** is an online art store (first release: paintings only) that combines a traditional catalog with upcoming “intelligent” search by image content, mood, and color palette.
 
@@ -25,8 +24,8 @@
 - **Databases**:  
   - MongoDB (products)  
   - PostgreSQL (users)  
-  - Qdrant *(release 2, for vector search)*  
-- **AI / Embeddings**: [SentenceTransformers](https://github.com/UKPLab/sentence-transformers) (model: all-MiniLM-l6-v2)(release 2
+  - Qdrant (release 2, for vector search)  
+- **AI / Embeddings**: [SentenceTransformers](https://github.com/UKPLab/sentence-transformers) (model: all-MiniLM-l6-v2)(release 2)
 - **Third-Party services**: Stripe, Cloudinary (release 2), PostNL (release 2). 
 
 ## Installation & Running Locally
@@ -36,7 +35,7 @@ The entire project is in one repository, split into two folders:
 ```
 # 1. 
 Clone the repository
-git clone https://github.com/your-username/quickshop.git
+git clone https://github.com/aleksandrstarshynov/quickshop.git
 # 2.
 cd QuickShop
 
