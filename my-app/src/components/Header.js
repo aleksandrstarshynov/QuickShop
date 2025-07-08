@@ -6,6 +6,7 @@ import { useAuth } from '../context/authContext.js';
 import UserDropdown from './MenuDropdown.jsx'; 
 import { useCart } from '../context/CartContext';
 import CartIcon from '../images/cart_small.png';
+import '../styles/LoginButton.css';
 
 function Header() {
   const { isLoggedIn, user } = useAuth();
@@ -42,7 +43,7 @@ function Header() {
             </>
           ) : (
             <Link to="/login">
-              <button>Войти</button>
+              <button  className="login-button">Log In</button>
             </Link>
           )}
         </nav>
