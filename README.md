@@ -26,7 +26,7 @@
   - MongoDB (products)  
   - PostgreSQL (users)  
   - Qdrant *(release 2, for vector search)*  
-- **AI / Embeddings**: [SentenceTransformers](https://github.com/UKPLab/sentence-transformers) (model: all-MiniLM-l6-v2)
+- **AI / Embeddings**: [SentenceTransformers](https://github.com/UKPLab/sentence-transformers) (model: all-MiniLM-l6-v2)(release 2
 - **Third-Party services**: Stripe, Cloudinary (release 2), PostNL (release 2). 
 
 ## Installation & Running Locally
@@ -34,32 +34,31 @@
 The entire project is in one repository, split into two folders:
 
 ```
-# 1. Clone the repository
+# 1. 
+Clone the repository
 git clone https://github.com/your-username/quickshop.git
-cd quickshop
+# 2.
+cd QuickShop
 
-# 2. Frontend
+# 3. 
+Frontend
 cd my-app
 npm install
 npm start
+service will be available locally (default port 3000).
 
-# 3. Backend (in a separate terminal)
-cd ../server
+# 4. Backend (in a separate terminal)
+cd server
 npm install
 npm start
+service will be available locally ( port 4000).
 ```
-- Both services will be available locally (default ports **3000** and **4000**).
 
 ## Production
 
 - Hosted on AWS+Nginxs, EC2 with PM2 process management.
-- Production Link: http://51.20.55.140/
+- Production Link: http://51.20.55.140/ (state can be different from GitHub)
 
 ## Author
 
 - An individual project by Oleksandr Starshinov, created to practice web development and AI integration skills.
-
-## 📄 License
-
-- This project is licensed under the **MIT License**.  
-- See the [LICENSE](LICENSE) file for details.  
