@@ -1,5 +1,10 @@
 import nodemailer from 'nodemailer';
 
+const formatPrice = (value) => {
+  const number = parseFloat(value);
+  return isNaN(number) ? '0.00' : number.toFixed(2);
+};
+
 const sendOrderEmail = async ({ customerEmail, customerName, items, totalAmount }) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -26,15 +31,15 @@ const sendOrderEmail = async ({ customerEmail, customerName, items, totalAmount 
         <tbody>
           ${items.map(item => `
             <tr>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${item.name}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${item.name || 'Unnamed product'}</td>
               <td style="padding: 8px; text-align: center; border-bottom: 1px solid #eee;">${item.quantity}</td>
-              <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">€${item.price}</td>
+              <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">€${formatPrice(item.price)}</td>
             </tr>
           `).join('')}
         </tbody>
       </table>
       <p style="text-align: right; font-size: 16px; margin-top: 20px;">
-        <strong>Total: €${totalAmount}</strong>
+        <strong>Total: €${formatPrice(totalAmount)}</strong>
       </p>
       <p style="margin-top: 30px; font-size: 14px; color: #666;">
         If you have any questions, just reply to this email.
@@ -44,6 +49,10 @@ const sendOrderEmail = async ({ customerEmail, customerName, items, totalAmount 
       </p>
     </div>
   `;
+
+  console.log('[🧾 EMAIL DEBUG] items:', items);
+  console.log('[🧾 EMAIL DEBUG] totalAmount:', totalAmount);
+
 
   await transporter.sendMail({
     from: `"My Store" <${process.env.EMAIL_USER}>`,

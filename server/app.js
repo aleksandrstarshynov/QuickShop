@@ -255,11 +255,13 @@ app.get('/checkout-session', async (req, res) => {
 // route to create PaymentIntent
 app.post('/create-payment-intent', async (req, res) => {
   try {
-    const { items } = req.body;
+    const { items, email, name } = req.body;
 
     const amount = items.reduce((sum, item) => {
-      const price = item.product?.newPrice;
-      return sum + (price ? price * item.quantity * 100 : 0);
+      const price = parseFloat(item.price);
+      return isNaN(price) || price <= 0
+        ? sum
+        : sum + price * item.quantity * 100;
     }, 0);
 
     if (amount <= 0) {
@@ -269,6 +271,16 @@ app.post('/create-payment-intent', async (req, res) => {
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency: 'usd',
+      receipt_email: email,
+      shipping: {
+        name: name || 'Fake Name',
+        address: {
+          line1: '123 Main St',
+          city: 'Unknown',
+          country: 'US',
+          postal_code: '00000',
+        },
+      },
       metadata: { integration_check: 'accept_a_payment' },
     });
 
@@ -278,6 +290,7 @@ app.post('/create-payment-intent', async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 });
+
 
 // Starting the server
 mongoose.connect(process.env.MONGODB_URI, {
