@@ -15,6 +15,7 @@ import {
 import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import { categoriesRouter } from './routes/categoryRoutes.js';
+import orderEmailRoute from './routes/orderEmail.js';
 
 dotenv.config(); 
 
@@ -210,6 +211,9 @@ app.use('/api', cartRoutes);
 
 // CATEGORIES
 app.use('/api/categories',  categoriesRouter);
+
+// email notification routs
+app.use('/api/orders/email', orderEmailRoute);
 
 // Static folder for frontend
 app.use(express.static('my-app'));
