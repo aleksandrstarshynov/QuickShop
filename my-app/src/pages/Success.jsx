@@ -9,15 +9,19 @@ export default function Success() {
   const paymentIntent = state?.paymentIntent;
   const { cart } = useCart();
 
-    useEffect(() => {
-      if (paymentIntent && cart.length > 0) {
-        const sendOrderConfirmation = async () => {
-          try {
-            const items = cart.map(item => ({
-              name: item.product?.title || 'Unknown product',
-              quantity: item.quantity,
-              price: item.product?.price?.toFixed(2) || '0.00',
-            }));
+  useEffect(() => {
+    if (paymentIntent && cart.length > 0) {
+      const sendOrderConfirmation = async () => {
+        try {
+          const items = cart.map(item => ({
+            name: item.product?.productName || 'Unknown product',
+            quantity: item.quantity,
+            price: parseFloat(item.product?.newPrice || 0).toFixed(2),
+          }));
+
+          console.log('📦 paymentIntent:', paymentIntent);
+          console.log('📨 email:', paymentIntent.receipt_email);
+          console.log('👤 name:', paymentIntent.shipping?.name);
 
           await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/orders/email`, {
             method: 'POST',
@@ -31,14 +35,15 @@ export default function Success() {
               totalAmount: (paymentIntent.amount / 100).toFixed(2),
             }),
           });
-          } catch (error) {
-            console.error('Error sending order email:', error);
-          }
-        };
+        } catch (err) {
+          console.error('❌ Failed to send confirmation email:', err);
+        }
+      };
 
-        sendOrderConfirmation();
-      }
-    }, [paymentIntent, cart]);
+      // Вызов функции (не внутрь себя)
+      sendOrderConfirmation();
+    }
+  }, [paymentIntent, cart]);
 
   return (
     <div className="success-page">

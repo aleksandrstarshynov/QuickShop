@@ -29,26 +29,58 @@ export default function CheckoutForm() {
   const [processing, setProcessing] = useState(false);
   const [succeeded, setSucceeded] = useState(false);
 
+  const user = JSON.parse(localStorage.getItem('user'));
+
   // Request clientSecret
   useEffect(() => {
     if (!cart?.length) return;
+
+    // extra check
+      console.log("🛒 Full cart (detailed):", JSON.stringify(cart, null, 2));
+  cart.forEach((item, i) => {
+    console.log(`🧾 Item ${i + 1}:`, item);
+  });
+
+
+    const items = cart.map(item => ({
+      name: item.product?.productName || 'Unknown',
+      quantity: item.quantity,
+      price: parseFloat(item.product?.newPrice || 0).toFixed(2),
+    }));
+
+  console.log("🛒 Full cart:", cart);
+  console.log("📦 Built items:", items);
+  console.log("📧 Email:", user?.email);
+  console.log("👤 Name:", `${user?.firstname} ${user?.lastname}`);
+
     (async () => {
       try {
-        const resp = await fetch(`${API_BASE}/create-payment-intent`, {  
+        const resp = await fetch(`${API_BASE}/create-payment-intent`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: cart }),
+          body: JSON.stringify({
+            items,
+            email: user?.email,
+            name: `${user?.firstname} ${user?.lastname}`,
+          }),
         });
+
+        if (!resp.ok) {
+          const err = await resp.json();
+          throw new Error(err.error || 'Payment intent failed');
+        }
+
         const { clientSecret } = await resp.json();
         setClientSecret(clientSecret);
-      } catch {
-        setError('Failed to initiate payment');
+      } catch (err) {
+        console.error('Failed to initiate payment:', err);
+        setError('Failed to initiate payment: ' + err.message);
       }
     })();
   }, [cart]);
 
   const total = cart.reduce(
-    (sum, item) => sum + item.product.newPrice * item.quantity,
+    (sum, item) => sum + Number(item.product?.newPrice || 0) * Number(item.quantity || 1),
     0
   );
 
@@ -79,12 +111,12 @@ export default function CheckoutForm() {
     }
   };
 
-  if (!cart?.length) return <p>Корзина пуста</p>;
+  if (!cart?.length) return <p>Your cart is empty</p>;
 
   return succeeded ? (
     <div className="checkout-form">
       <h2>Thank you for your purchase!</h2>
-      <p>Your payment in the amount of €{total.toFixed(2)} successfully completed.</p>
+      <p>Your payment of €{total.toFixed(2)} was successfully completed.</p>
       <button onClick={() => navigate('/')}>Return to home page</button>
     </div>
   ) : (
