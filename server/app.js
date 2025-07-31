@@ -16,6 +16,7 @@ import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import { categoriesRouter } from './routes/categoryRoutes.js';
 import orderEmailRoute from './routes/orderEmail.js';
+import sendWelcomeEmail from './utils/sendWelcomeEmail.js';
 
 dotenv.config(); 
 
@@ -75,12 +76,18 @@ app.post("/auth/register", async (req, res) => {
       dateofbirth
     });
 
+        //Sending a welcome email
+        await sendWelcomeEmail({
+          email,
+          firstname,
+        });
+
     res.status(201).json({ message: 'User created successfully', user: newUser });
-} catch (error) {
-  console.error("Registration error:", error);
-  res.status(500).json({ error: error.message }); 
-}
-});
+      } catch (error) {
+      console.error("Registration error:", error);
+      res.status(500).json({ error: error.message }); 
+      }
+    });
 
 // LOGIN
 app.post('/auth/login', async (req, res) => {
