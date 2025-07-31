@@ -24,6 +24,8 @@ import {Elements} from '@stripe/react-stripe-js';
 import CheckoutForm from './components/CheckoutForm';
 import Success from './pages/Success'; 
 import SimpleTextBlock from './components/SimpleTextBlock';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
@@ -55,6 +57,7 @@ function App() {
               }
             />
             <Route path="/success" element={<Success />} />
+            <ToastContainer position="top-right" autoClose={3000} />
           </Routes>
         
     </CartProvider>

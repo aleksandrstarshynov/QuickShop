@@ -1,69 +1,69 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { getProductById, getProducts, updateProduct, deleteProduct } from '../services/productService';
 import { useAuth } from '../context/authContext';
+import Notification from './Notification';
 
 const ProductActions = () => {
-  const { user } = useAuth(); // get the current user
+  const { user } = useAuth();
   const [productId, setProductId] = useState('');
   const [productData, setProductData] = useState(null);
   const [userProducts, setUserProducts] = useState([]);
-  const [message, setMessage] = useState('');
+  const [notification, setNotification] = useState(null);
   const token = localStorage.getItem('token');
 
-  // Get product by ID
+  const showNotification = (message, type = 'info') => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
   const handleGetById = async () => {
     try {
       const response = await getProductById(productId);
       setProductData(response.data);
-      setMessage('✅ Product fetched');
+      showNotification('Product fetched', 'success');
     } catch (error) {
-      setMessage('❌ Error fetching product');
+      showNotification('Error fetching product', 'error');
     }
   };
 
-  // Get all products from the author
   const handleGetAllByAuthor = async () => {
     try {
-      const response = await getProducts(); 
+      const response = await getProducts();
       const filtered = response.data.products.filter(p => p.authorId === String(user.id));
       setUserProducts(filtered);
-      setMessage(`🔍 Найдено товаров: ${filtered.length}`);
+      showNotification(`Found ${filtered.length} product(s)`, 'info');
     } catch (error) {
-      setMessage('❌ Error fetching user products');
+      showNotification('Error fetching user products', 'error');
     }
   };
 
-  // Edit fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProductData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Update product
   const handleEdit = async () => {
     try {
       const response = await updateProduct(productId, productData, token);
       setProductData(response.data);
-      setMessage(' Product updated');
+      showNotification('Product updated', 'success');
     } catch (error) {
-      setMessage('❌ Error updating product');
+      showNotification('Error updating product', 'error');
     }
   };
 
-  // Remove product
   const handleDelete = async () => {
-    if (!productId) return setMessage('Enter product ID');
+    if (!productId) return showNotification('⚠️ Enter product ID', 'info');
     const confirmed = window.confirm(`Delete item with ID: ${productId}?`);
     if (!confirmed) return;
 
     try {
       await deleteProduct(productId, token);
       setProductData(null);
-      setMessage(` Product ${productId} deleted`);
       setProductId('');
+      showNotification(`Product ${productId} deleted`, 'success');
     } catch (error) {
-      console.error(error);
-      setMessage('❌ Error deleting product');
+      showNotification('Error deleting product', 'error');
     }
   };
 
@@ -84,8 +84,6 @@ const ProductActions = () => {
         <button onClick={handleEdit}>Save changes</button>
         <button onClick={handleDelete}>Remove product</button>
       </div>
-
-      {message && <p style={{ marginTop: '10px' }}>{message}</p>}
 
       {/* Editable product */}
       {productData && (
@@ -118,6 +116,15 @@ const ProductActions = () => {
             ))}
           </ul>
         </div>
+      )}
+
+      {/* Notification */}
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
       )}
     </div>
   );
