@@ -1,4 +1,5 @@
 import '../styles/SimpleTextBlock.css';
+import React from 'react';
 
 export default function SimpleTextBlock() {
   return (
