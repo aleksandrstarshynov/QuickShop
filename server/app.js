@@ -2,9 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose'; 
 import bcrypt from 'bcrypt';
-import { getDecodedUser } from './utils/getDecodedUser.js'; 
 import dotenv from 'dotenv';
+import http from 'http';
+import { Server } from 'socket.io';
 import jsonwebtoken from 'jsonwebtoken';
+
+import { getDecodedUser } from './utils/getDecodedUser.js'; 
 import {
   insertUser,
   getUserById,
@@ -17,18 +20,13 @@ import cartRoutes from './routes/cartRoutes.js';
 import { categoriesRouter } from './routes/categoryRoutes.js';
 import orderEmailRoute from './routes/orderEmail.js';
 import sendWelcomeEmail from './utils/sendWelcomeEmail.js';
+import Stripe from 'stripe';
 
 dotenv.config(); 
 
 const saltRounds = 12;
 const SECRET = process.env.JWT_SECRET; 
 const app = express();
-
-// middleware
-app.use((req, res, next) => {
-  console.log(`[${req.method}] ${req.url}`);
-  next();
-});
 
 // CORS
 const allowed = [
@@ -44,12 +42,26 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Logging
 app.use((req, res, next) => {
-  console.log(`Request: ${req.method} ${req.url}`);
+  console.log(`[${req.method}] ${req.url}`);
   next();
 });
 
-// REGISTRATION
+// MongoDB Comment Schema
+
+const commentSchema = new mongoose.Schema({
+  productId: String,
+  username: String,
+  text: String,
+  timestamp: { type: Date, default: Date.now }
+});
+const Comment = mongoose.model('Comment', commentSchema);
+
+// Auth routes
+
+
 app.post("/auth/register", async (req, res) => {
   const { username, password, firstname, lastname, email, phone, dateofbirth } = req.body;
 
@@ -76,34 +88,25 @@ app.post("/auth/register", async (req, res) => {
       dateofbirth
     });
 
-        //Sending a welcome email
-        await sendWelcomeEmail({
-          email,
-          firstname,
-        });
+    await sendWelcomeEmail({ email, firstname });
 
     res.status(201).json({ message: 'User created successfully', user: newUser });
-      } catch (error) {
-      console.error("Registration error:", error);
-      res.status(500).json({ error: error.message }); 
-      }
-    });
+  } catch (error) {
+    console.error("Registration error:", error);
+    res.status(500).json({ error: error.message }); 
+  }
+});
 
-// LOGIN
 app.post('/auth/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
     const users = await getAllUsers();
     const user = users.find(u => u.username === username);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     const correctPassword = await bcrypt.compare(password, user.password);
-    if (!correctPassword) {
-      return res.status(401).json({ message: "Invalid username/password" });
-    }
+    if (!correctPassword) return res.status(401).json({ message: "Invalid username/password" });
 
     const token = jsonwebtoken.sign({ id: user.id, name: user.username }, SECRET);
     res.status(201).json({
@@ -125,18 +128,13 @@ app.post('/auth/login', async (req, res) => {
   }
 });
 
-// PROFILE
 app.get('/auth/profile', async (req, res) => {
   try {
     const decodedUser = getDecodedUser(req, SECRET);
-    if (!decodedUser || !decodedUser.id) {
-      return res.status(401).json({ message: 'Invalid token' });
-    }
+    if (!decodedUser || !decodedUser.id) return res.status(401).json({ message: 'Invalid token' });
 
     const user = await getUserById(decodedUser.id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
     res.status(200).json(user);
   } catch (err) {
@@ -144,18 +142,13 @@ app.get('/auth/profile', async (req, res) => {
   }
 });
 
-// UPDATE
 app.put('/auth/update', async (req, res) => {
   try {
     const decoded = getDecodedUser(req, SECRET);
-    if (!decoded?.id) {
-      return res.status(401).json({ message: 'Invalid token' });
-    }
+    if (!decoded?.id) return res.status(401).json({ message: 'Invalid token' });
 
     const existing = await getUserById(decoded.id);
-    if (!existing) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    if (!existing) return res.status(404).json({ message: 'User not found' });
 
     const {
       username,
@@ -179,7 +172,7 @@ app.put('/auth/update', async (req, res) => {
       dateofbirth: dateofbirth ?? existing.dateofbirth
     };
 
-      const updated = await updateUser(decoded.id, merged);
+    const updated = await updateUser(decoded.id, merged);
     return res.json({ message: 'User updated', user: updated });
 
   } catch (err) {
@@ -188,13 +181,10 @@ app.put('/auth/update', async (req, res) => {
   }
 });
 
-// REMOVAL
 app.delete('/auth/delete', async (req, res) => {
   try {
     const decodedUser = getDecodedUser(req, SECRET);
-    if (!decodedUser || !decodedUser.id) {
-      return res.status(401).json({ message: 'Invalid token' });
-    }
+    if (!decodedUser || !decodedUser.id) return res.status(401).json({ message: 'Invalid token' });
 
     await deleteUser(decodedUser.id);
     res.status(200).json({ message: 'User deleted successfully' });
@@ -204,32 +194,20 @@ app.delete('/auth/delete', async (req, res) => {
   }
 });
 
-// Logout (the token is simply deleted on the client)
 app.post('/auth/logout', (req, res) => {
   res.status(200).json({ message: "User logged out" });
 });
 
-
-// PRODUCTS
- app.use('/products', productRoutes);
-
-// CART
+// Other routes
+app.use('/products', productRoutes);
 app.use('/api', cartRoutes);
-
-// CATEGORIES
-app.use('/api/categories',  categoriesRouter);
-
-// email notification routs
+app.use('/api/categories', categoriesRouter);
 app.use('/api/orders/email', orderEmailRoute);
-
-// Static folder for frontend
 app.use(express.static('my-app'));
 
-//STRIP
-import Stripe from 'stripe';
+// Stripe routes
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Create Checkout Session
 app.post('/create-checkout-session', async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.create({
@@ -238,7 +216,7 @@ app.post('/create-checkout-session', async (req, res) => {
         price_data: {
           currency: 'usd',
           product_data: { name: 'Товар №1' },
-          unit_amount: 5000, // in cents
+          unit_amount: 5000,
         },
         quantity: 1,
       }],
@@ -253,13 +231,11 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-// get Checkout Session
 app.get('/checkout-session', async (req, res) => {
   const session = await stripe.checkout.sessions.retrieve(req.query.sessionId);
   res.json(session);
 });
 
-// route to create PaymentIntent
 app.post('/create-payment-intent', async (req, res) => {
   try {
     const { items, email, name } = req.body;
@@ -298,8 +274,37 @@ app.post('/create-payment-intent', async (req, res) => {
   }
 });
 
+// Socket.IO
 
-// Starting the server
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: allowed,
+    credentials: true,
+  }
+});
+
+io.on('connection', (socket) => {
+  console.log('🔌 Client connected');
+
+  socket.on('joinProduct', async (productId) => {
+    socket.join(productId);
+    const comments = await Comment.find({ productId }).sort({ timestamp: 1 }).lean();
+    socket.emit('initialComments', comments);
+  });
+
+  socket.on('newComment', async ({ productId, userId, username, text }) => {
+    const comment = await Comment.create({ productId, userId, username, text });
+    io.to(productId).emit('newComment', comment);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+});
+
+
+// MongoDB + Start server
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -307,9 +312,9 @@ mongoose.connect(process.env.MONGODB_URI, {
   socketTimeoutMS: 45000,        
 })
   .then(() => {
-    console.log('MongoDB connected');
+    console.log('✅ MongoDB connected');
 
-    app.listen(4000, () => {
+    server.listen(4000, () => {
       console.log('🚀 The server is running on port 4000');
     });
   })

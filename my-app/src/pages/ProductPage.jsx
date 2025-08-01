@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { fetchProductById } from '../controller/fetchProductDB';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/authContext';
+import ProductComments from '../components/ProductComments';
 
 const ProductPage = () => {
   const navigate = useNavigate();
@@ -97,6 +98,10 @@ const ProductPage = () => {
           )}
         </div>
       </div>
+      <ProductComments
+      productId={product._id}
+      username={user?.username || 'Гость'}
+      />
     </div>
   );
 };
