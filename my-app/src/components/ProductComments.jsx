@@ -11,7 +11,7 @@ export default function ProductComments({ productId}) {
   const [comments, setComments] = useState([]);
   const [text, setText] = useState('');
 
-  // Подключаемся и присоединяемся к комнате продукта
+  // Connect and join the product room
   useEffect(() => {
     if (!productId) return;
 
@@ -31,7 +31,7 @@ export default function ProductComments({ productId}) {
     };
   }, [productId]);
 
-  // Отправка нового комментария
+  // Submitting a new comment
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!text.trim()) return;
@@ -39,7 +39,7 @@ export default function ProductComments({ productId}) {
 socket.emit('newComment', {
   productId,
   userId: user?.id,
-  username: user?.name || user?.username || user?.email || "Гость",
+  username: user?.name || user?.username || user?.email || "Guest",
   text,
 });
 
@@ -52,7 +52,7 @@ socket.emit('newComment', {
 
     {comments.length === 0 ? (
       <p style={{ color: '#777', fontStyle: 'italic' }}>
-        💬 Пока комментариев нет. Будьте первым!
+        There are no reviews of this work yet. Be the first!
       </p>
     ) : (
       <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -71,10 +71,10 @@ socket.emit('newComment', {
         rows="3"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Напишите комментарий..."
+        placeholder="Write a review"
         style={{ width: '100%', padding: '0.5rem' }}
       />
-      <button type="submit" style={{ marginTop: '0.5rem' }}>Отправить</button>
+      <button type="submit" style={{ marginTop: '0.5rem' }}>Send</button>
     </form>
   </div>
 );
