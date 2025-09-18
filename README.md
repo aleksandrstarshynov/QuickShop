@@ -1,4 +1,7 @@
 # QuickShop. 
+For access to the repository sent a request to aleksandrstarshynov@gmail.com
+
+
 ##Release 1
 
 **QuickShop** is an online art store (first release: paintings only) that combines a traditional catalog with upcoming “intelligent” search by image content, mood, and color palette.
